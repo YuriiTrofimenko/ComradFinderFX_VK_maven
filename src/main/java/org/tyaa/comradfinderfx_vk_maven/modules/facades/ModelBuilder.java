@@ -31,9 +31,13 @@ import org.tyaa.comradfinderfx_vk_maven.modules.XmlExporter;
  */
 public class ModelBuilder {
     
-    public static void buildModel(String _groupId)
+    public static String groupId;
+    
+    public static void buildModel()
     {
         //out.println("***Users model builder***");
+        
+        String _groupId = groupId;
         
         String jsonString = "";
         JsonFetcher jsonFetcher = new JsonFetcher();
