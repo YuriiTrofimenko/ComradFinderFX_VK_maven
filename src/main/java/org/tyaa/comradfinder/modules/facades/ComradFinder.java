@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.tyaa.comradfinderfx_vk_maven.modules.facades;
+package org.tyaa.comradfinder.modules.facades;
 
 import java.io.IOException;
 import static java.lang.System.out;
@@ -16,14 +16,14 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLStreamException;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.tyaa.comradfinderfx_vk_maven.MainApp;
-import org.tyaa.comradfinderfx_vk_maven.model.TypicalWords;
-import org.tyaa.comradfinderfx_vk_maven.model.VKCandidate;
-import org.tyaa.comradfinderfx_vk_maven.model.VKUser;
-import org.tyaa.comradfinderfx_vk_maven.modules.ExcelSaver;
-import org.tyaa.comradfinderfx_vk_maven.modules.JsonFetcher;
-import org.tyaa.comradfinderfx_vk_maven.modules.JsonParser;
-import org.tyaa.comradfinderfx_vk_maven.modules.XmlImporter;
+import org.tyaa.comradfinder.MainApp;
+import org.tyaa.comradfinder.model.TypicalWords;
+import org.tyaa.comradfinder.model.VKCandidate;
+import org.tyaa.comradfinder.model.VKUser;
+import org.tyaa.comradfinder.modules.ExcelSaver;
+import org.tyaa.comradfinder.modules.JsonFetcher;
+import org.tyaa.comradfinder.modules.JsonParser;
+import org.tyaa.comradfinder.modules.XmlImporter;
 import org.xml.sax.SAXException;
 
 /**

@@ -1,0 +1,461 @@
+<?xml version="1.0" encoding="utf-8"?>
+<infoitems>
+  <interest>
+    <variant id="1">
+      <value>rock</value>
+      <count>8</count>
+    </variant>
+    <variant id="2">
+      <value>проза</value>
+      <count>4</count>
+    </variant>
+    <variant id="3">
+      <value>жизни</value>
+      <count>4</count>
+    </variant>
+    <variant id="4">
+      <value>кино</value>
+      <count>3</count>
+    </variant>
+    <variant id="5">
+      <value>жизнь</value>
+      <count>5</count>
+    </variant>
+    <variant id="6">
+      <value>история</value>
+      <count>7</count>
+    </variant>
+    <variant id="7">
+      <value>литература</value>
+      <count>4</count>
+    </variant>
+    <variant id="8">
+      <value>политика</value>
+      <count>6</count>
+    </variant>
+    <variant id="9">
+      <value>дизайн</value>
+      <count>3</count>
+    </variant>
+    <variant id="10">
+      <value>философия</value>
+      <count>8</count>
+    </variant>
+  </interest>
+  <activity>
+    <variant id="0">
+      <value>секретарь</value>
+      <count>2</count>
+    </variant>
+    <variant id="1">
+      <value>организации</value>
+      <count>3</count>
+    </variant>
+    <variant id="2">
+      <value>абсолютное</value>
+      <count>2</count>
+    </variant>
+    <variant id="3">
+      <value>новый</value>
+      <count>2</count>
+    </variant>
+    <variant id="4">
+      <value>союз</value>
+      <count>3</count>
+    </variant>
+    <variant id="5">
+      <value>социалистической</value>
+      <count>3</count>
+    </variant>
+    <variant id="6">
+      <value>фронт</value>
+      <count>2</count>
+    </variant>
+    <variant id="7">
+      <value>ua____ua____ua_____ua_____ua____ua____ua</value>
+      <count>3</count>
+    </variant>
+    <variant id="8">
+      <value>спасти</value>
+      <count>6</count>
+    </variant>
+    <variant id="9">
+      <value>ua_________________ua_________________ua</value>
+      <count>3</count>
+    </variant>
+  </activity>
+  <about>
+    <variant id="0">
+      <value>г.р.</value>
+      <count>2</count>
+    </variant>
+    <variant id="1">
+      <value>многое</value>
+      <count>2</count>
+    </variant>
+    <variant id="2">
+      <value>воскрес!</value>
+      <count>2</count>
+    </variant>
+    <variant id="3">
+      <value>хочу</value>
+      <count>3</count>
+    </variant>
+    <variant id="4">
+      <value>больную</value>
+      <count>3</count>
+    </variant>
+    <variant id="5">
+      <value>человек.</value>
+      <count>2</count>
+    </variant>
+    <variant id="6">
+      <value>может</value>
+      <count>2</count>
+    </variant>
+    <variant id="7">
+      <value>мануйленко</value>
+      <count>2</count>
+    </variant>
+    <variant id="8">
+      <value>смертельно</value>
+      <count>3</count>
+    </variant>
+    <variant id="9">
+      <value>спасти</value>
+      <count>2</count>
+    </variant>
+  </about>
+  <books>
+    <variant id="0">
+      <value>коммунистической</value>
+      <count>3</count>
+    </variant>
+    <variant id="1">
+      <value>закалялась</value>
+      <count>2</count>
+    </variant>
+    <variant id="2">
+      <value>энгельса</value>
+      <count>2</count>
+    </variant>
+    <variant id="3">
+      <value>"манифест</value>
+      <count>2</count>
+    </variant>
+    <variant id="4">
+      <value>курс</value>
+      <count>2</count>
+    </variant>
+    <variant id="5">
+      <value>книги</value>
+      <count>4</count>
+    </variant>
+    <variant id="6">
+      <value>сталь"</value>
+      <count>2</count>
+    </variant>
+    <variant id="7">
+      <value>маркса</value>
+      <count>2</count>
+    </variant>
+    <variant id="8">
+      <value>"песнь</value>
+      <count>2</count>
+    </variant>
+    <variant id="9">
+      <value>"как</value>
+      <count>2</count>
+    </variant>
+  </books>
+  <music>
+    <variant id="0">
+      <value>ария</value>
+      <count>2</count>
+    </variant>
+    <variant id="1">
+      <value>ансамбль</value>
+      <count>2</count>
+    </variant>
+    <variant id="2">
+      <value>victor</value>
+      <count>2</count>
+    </variant>
+    <variant id="3">
+      <value>дмитрий</value>
+      <count>2</count>
+    </variant>
+    <variant id="4">
+      <value>boys</value>
+      <count>2</count>
+    </variant>
+    <variant id="5">
+      <value>bassotti</value>
+      <count>2</count>
+    </variant>
+    <variant id="6">
+      <value>александр</value>
+      <count>2</count>
+    </variant>
+    <variant id="7">
+      <value>beatles</value>
+      <count>2</count>
+    </variant>
+    <variant id="8">
+      <value>nina</value>
+      <count>2</count>
+    </variant>
+    <variant id="9">
+      <value>сергей</value>
+      <count>3</count>
+    </variant>
+  </music>
+  <movies>
+    <variant id="0">
+      <value>терминатор</value>
+      <count>2</count>
+    </variant>
+    <variant id="1">
+      <value>войны</value>
+      <count>2</count>
+    </variant>
+    <variant id="2">
+      <value>советские</value>
+      <count>3</count>
+    </variant>
+    <variant id="3">
+      <value>"они</value>
+      <count>2</count>
+    </variant>
+    <variant id="4">
+      <value>родину"</value>
+      <count>2</count>
+    </variant>
+    <variant id="5">
+      <value>среди</value>
+      <count>4</count>
+    </variant>
+    <variant id="6">
+      <value>летят</value>
+      <count>2</count>
+    </variant>
+    <variant id="7">
+      <value>одни</value>
+      <count>2</count>
+    </variant>
+    <variant id="8">
+      <value>иван</value>
+      <count>3</count>
+    </variant>
+    <variant id="9">
+      <value>некоторые</value>
+      <count>2</count>
+    </variant>
+  </movies>
+  <political>
+    <variant id="0">
+      <value>1</value>
+      <count>17</count>
+    </variant>
+    <variant id="1">
+      <value>2</value>
+      <count>10</count>
+    </variant>
+    <variant id="2">
+      <value>3</value>
+      <count>5</count>
+    </variant>
+    <variant id="3">
+      <value>5</value>
+      <count>1</count>
+    </variant>
+    <variant id="4">
+      <value>8</value>
+      <count>1</count>
+    </variant>
+    <variant id="5">
+      <value>9</value>
+      <count>2</count>
+    </variant>
+  </political>
+  <religion>
+    <variant id="0">
+      <value>православие</value>
+      <count>4</count>
+    </variant>
+    <variant id="1">
+      <value>бога</value>
+      <count>2</count>
+    </variant>
+    <variant id="2">
+      <value>атеист</value>
+      <count>5</count>
+    </variant>
+    <variant id="3">
+      <value>атеистические</value>
+      <count>1</count>
+    </variant>
+    <variant id="4">
+      <value>телема</value>
+      <count>1</count>
+    </variant>
+    <variant id="5">
+      <value>гуманизм</value>
+      <count>5</count>
+    </variant>
+    <variant id="6">
+      <value>нужно</value>
+      <count>1</count>
+    </variant>
+    <variant id="7">
+      <value>день</value>
+      <count>1</count>
+    </variant>
+    <variant id="8">
+      <value>больше</value>
+      <count>2</count>
+    </variant>
+    <variant id="9">
+      <value>светский</value>
+      <count>3</count>
+    </variant>
+  </religion>
+  <inspiredby>
+    <variant id="0">
+      <value>техника</value>
+      <count>1</count>
+    </variant>
+    <variant id="1">
+      <value>природа</value>
+      <count>1</count>
+    </variant>
+    <variant id="2">
+      <value>хорошие</value>
+      <count>1</count>
+    </variant>
+    <variant id="3">
+      <value>жизнь</value>
+      <count>2</count>
+    </variant>
+    <variant id="4">
+      <value>вселенная</value>
+      <count>2</count>
+    </variant>
+    <variant id="5">
+      <value>песни</value>
+      <count>1</count>
+    </variant>
+    <variant id="6">
+      <value>революция</value>
+      <count>1</count>
+    </variant>
+    <variant id="7">
+      <value>интересные</value>
+      <count>1</count>
+    </variant>
+    <variant id="8">
+      <value>люди</value>
+      <count>1</count>
+    </variant>
+    <variant id="9">
+      <value>любовь</value>
+      <count>2</count>
+    </variant>
+  </inspiredby>
+  <peoplemain>
+    <variant id="0">
+      <value>1</value>
+      <count>4</count>
+    </variant>
+    <variant id="1">
+      <value>2</value>
+      <count>16</count>
+    </variant>
+    <variant id="2">
+      <value>5</value>
+      <count>3</count>
+    </variant>
+    <variant id="3">
+      <value>6</value>
+      <count>5</count>
+    </variant>
+  </peoplemain>
+  <lifemain>
+    <variant id="0">
+      <value>1</value>
+      <count>2</count>
+    </variant>
+    <variant id="1">
+      <value>2</value>
+      <count>1</count>
+    </variant>
+    <variant id="2">
+      <value>3</value>
+      <count>3</count>
+    </variant>
+    <variant id="3">
+      <value>4</value>
+      <count>1</count>
+    </variant>
+    <variant id="4">
+      <value>5</value>
+      <count>13</count>
+    </variant>
+    <variant id="5">
+      <value>6</value>
+      <count>6</count>
+    </variant>
+    <variant id="6">
+      <value>7</value>
+      <count>1</count>
+    </variant>
+    <variant id="7">
+      <value>8</value>
+      <count>1</count>
+    </variant>
+  </lifemain>
+  <smoking>
+    <variant id="0">
+      <value>1</value>
+      <count>13</count>
+    </variant>
+    <variant id="1">
+      <value>2</value>
+      <count>6</count>
+    </variant>
+    <variant id="2">
+      <value>3</value>
+      <count>3</count>
+    </variant>
+    <variant id="3">
+      <value>4</value>
+      <count>3</count>
+    </variant>
+    <variant id="4">
+      <value>5</value>
+      <count>2</count>
+    </variant>
+  </smoking>
+  <alcohol>
+    <variant id="0">
+      <value>1</value>
+      <count>10</count>
+    </variant>
+    <variant id="1">
+      <value>2</value>
+      <count>3</count>
+    </variant>
+    <variant id="2">
+      <value>3</value>
+      <count>7</count>
+    </variant>
+    <variant id="3">
+      <value>4</value>
+      <count>5</count>
+    </variant>
+    <variant id="4">
+      <value>5</value>
+      <count>2</count>
+    </variant>
+  </alcohol>
+</infoitems>

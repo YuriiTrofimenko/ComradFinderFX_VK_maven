@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.tyaa.comradfinderfx_vk_maven.modules;
+package org.tyaa.comradfinder.modules;
 
 import java.io.IOException;
 import javax.xml.stream.XMLStreamException;
-import org.tyaa.comradfinderfx_vk_maven.model.TypicalWords;
+import org.tyaa.comradfinder.model.TypicalWords;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;

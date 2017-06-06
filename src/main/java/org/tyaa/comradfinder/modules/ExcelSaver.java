@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.tyaa.comradfinderfx_vk_maven.modules;
+package org.tyaa.comradfinder.modules;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -13,8 +13,8 @@ import java.time.Instant;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import org.tyaa.comradfinderfx_vk_maven.model.VKCandidate;
-import org.tyaa.comradfinderfx_vk_maven.modules.interfaces.IResultSaver;
+import org.tyaa.comradfinder.model.VKCandidate;
+import org.tyaa.comradfinder.modules.interfaces.IResultSaver;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;

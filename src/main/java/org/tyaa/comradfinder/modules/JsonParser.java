@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.tyaa.comradfinderfx_vk_maven.modules;
+package org.tyaa.comradfinder.modules;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.tyaa.comradfinderfx_vk_maven.model.VKUser;
+import org.tyaa.comradfinder.model.VKUser;
 
 /**
  *

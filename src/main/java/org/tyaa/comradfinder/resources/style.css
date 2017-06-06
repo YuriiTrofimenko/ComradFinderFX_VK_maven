@@ -1,0 +1,32 @@
+.pane{-fx-background-color:lightgrey}
+.top-menu{-fx-background-color:lightsteelblue;-fx-background-radius:10}
+.caption{-fx-text-fill:lightslategrey}
+
+.table-column {-fx-alignment:center;-fx-font-size:10pt}
+
+/* Table columns headers with text wrap */
+
+/*.pagination .toggle-button {
+	-fx-shape:"m74.63,72.21494l14.50002,-14.49994l14.49998,14.49994l-14.49998,14.50002l-14.50002,-14.50002z";
+	-fx-background-radius:3px;
+        -fx-padding: 10 10 10 10px;
+}
+.pagination .button{
+        -fx-margin:10 10 10 10px;
+	-fx-padding:10 10 10 10px;
+	-fx-background-radius:3px;  This is used for making the Arrow Button Curve
+}*/
+
+.pagination .button{-fx-font-size:10pt;-fx-background-radius:10}
+
+.pagination .toggle-button {-fx-font-size:10pt;-fx-margin:10 10 10 10px;-fx-background-radius:10}
+
+.pagination .control-box{-fx-background-color:linear-gradient(to bottom,lightsteelblue,transparent);-fx-padding:10 10 10 10px;-fx-background-radius:10}
+
+.pagination .label {-fx-font-size:10pt}
+
+/*.error-c-text-field{-fx-border-color:red;}
+.default{}*/
+#countOld{-fx-background-color:lightgrey}
+
+/*.table-column .lightBlueColumn{-fx-background-color:lightsteelblue}*/

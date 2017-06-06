@@ -3,11 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.tyaa.comradfinderfx_vk_maven.utils;
+package org.tyaa.comradfinder.utils;
 
 import java.util.concurrent.Callable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.concurrent.Task;
 
 /**
  *
@@ -15,9 +16,9 @@ import java.util.logging.Logger;
  */
 public class BgLauncher {
     
-    private static synchronized void doInBg(Callable<Void> _func) {
+    private static synchronized Task doInBg(Callable<Void> _func) {
                 
-        Thread th = new Thread() {
+        /*Thread th = new Thread() {
             @Override
             public void run() {
                 
@@ -28,6 +29,18 @@ public class BgLauncher {
                 }
             }
         };
-        th.start();
+        th.start();*/
+        
+        return new Task() {
+            @Override
+            protected Object call() throws Exception {
+              for (int i = 0; i < 10; i++) {
+                Thread.sleep(2000);
+                updateMessage("2000 milliseconds");
+                updateProgress(i + 1, 10);
+              }
+              return true;
+            }
+        };
     }
 }

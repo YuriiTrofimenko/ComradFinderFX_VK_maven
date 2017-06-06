@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.tyaa.comradfinderfx_vk_maven.model;
+package org.tyaa.comradfinder.model;
 
 import java.util.HashMap;
 import java.util.Map;

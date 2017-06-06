@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.tyaa.comradfinderfx_vk_maven.modules.interfaces;
+package org.tyaa.comradfinder.modules.interfaces;
 
 import java.io.IOException;
 import java.util.List;
-import org.tyaa.comradfinderfx_vk_maven.model.VKCandidate;
+import org.tyaa.comradfinder.model.VKCandidate;
 
 /**
  *

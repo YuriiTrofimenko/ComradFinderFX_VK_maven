@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.tyaa.comradfinderfx_vk_maven.modules;
+package org.tyaa.comradfinder.modules;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import javanet.staxutils.IndentingXMLStreamWriter;
-import org.tyaa.comradfinderfx_vk_maven.model.TypicalWords;
+import org.tyaa.comradfinder.model.TypicalWords;
 
 /**
  *
