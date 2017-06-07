@@ -31,8 +31,10 @@ import org.controlsfx.tools.ValueExtractor;
 import org.controlsfx.validation.Severity;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
+import org.tyaa.comradfinder.model.TypicalWords;
 import org.tyaa.comradfinder.modules.facades.ModelBuilder;
 import org.tyaa.comradfinder.screensframework.ProgressForm;
+import org.tyaa.comradfinder.viewcontroller.viewmodel.VariantModel;
 
 
 /**
@@ -111,7 +113,8 @@ public class HomeController implements Initializable, ControlledScreen {
     //private WaterType mSelectedWaterType;
     //private BarrelCapacity mSelectedBarrelCapacity;
     
-//    ObservableList<WaterTypeModel> mWaterTypesObservableList;
+    //Наблюдабельный список объектов VariantModel
+    ObservableList<VariantModel> mVariantObservableList;
 //    ObservableList<BarrelCapacityModel> mBarrelCapacitiesObservableList;
     
     ScreensController myController;
@@ -145,7 +148,8 @@ public class HomeController implements Initializable, ControlledScreen {
         mBarrelCapacities = mBarrelCapacitiesDAOImpl.getAllBarrelCapacities();
         mBarrelCapacitiesSet = new HashSet<>();*/
         
-//        mWaterTypesObservableList = FXCollections.observableArrayList();
+        //Инициализация пустым наблюдабельным списком
+        mVariantObservableList = FXCollections.observableArrayList();
 //        mBarrelCapacitiesObservableList = FXCollections.observableArrayList();
 //        
 //        waterTypesListView.setItems(mWaterTypesObservableList);
@@ -563,6 +567,42 @@ public class HomeController implements Initializable, ControlledScreen {
         mBarrelCapacities = mBarrelCapacitiesDAOImpl.getAllBarrelCapacities();
         resetForm();
     }*/
+    
+    //Метод заполнения наблюдабельного списка из карт объекта TypicalWords
+    private void fillVariantObservableList(TypicalWords _typicalWords){
+        
+        _typicalWords.mInterestMap.forEach (
+                        
+            (k, v) -> {
+            
+                mVariantObservableList.add(new VariantModel("interest", k, v));
+            }
+        );
+        
+        _typicalWords.mActivityMap.forEach (
+                        
+            (k, v) -> {
+            
+                mVariantObservableList.add(new VariantModel("activity", k, v));
+            }
+        );
+        
+        _typicalWords.mAboutMap.forEach (
+                        
+            (k, v) -> {
+            
+                mVariantObservableList.add(new VariantModel("about", k, v));
+            }
+        );
+        
+        _typicalWords.mAboutMap.forEach (
+                        
+            (k, v) -> {
+            
+                mVariantObservableList.add(new VariantModel("about", k, v));
+            }
+        );
+    }
     
     private void toggleButtonsEnable(){
     
