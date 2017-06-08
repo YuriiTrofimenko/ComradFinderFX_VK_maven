@@ -595,11 +595,306 @@ public class HomeController implements Initializable, ControlledScreen {
             }
         );
         
-        _typicalWords.mAboutMap.forEach (
+        _typicalWords.mPoliticalMap.forEach (
                         
             (k, v) -> {
             
-                mVariantObservableList.add(new VariantModel("about", k, v));
+                String politicalKeyString = "";
+                
+                switch (k){
+                
+                    case 1 : {
+                    
+                        politicalKeyString = "коммунистические";
+                        break;
+                    }
+                    
+                    case 2 : {
+                    
+                        politicalKeyString = "социалистические";
+                        break;
+                    }
+                    
+                    case 3 : {
+                    
+                        politicalKeyString = "умеренные";
+                        break;
+                    }
+                    
+                    case 4 : {
+                    
+                        politicalKeyString = "либеральные";
+                        break;
+                    }
+                    
+                    case 5 : {
+                    
+                        politicalKeyString = "консервативные";
+                        break;
+                    }
+                    
+                    case 6 : {
+                    
+                        politicalKeyString = "монархические";
+                        break;
+                    }
+                    
+                    case 7 : {
+                    
+                        politicalKeyString = "ультраконсервативные";
+                        break;
+                    }
+                    
+                    case 8 : {
+                    
+                        politicalKeyString = "индифферентные";
+                        break;
+                    }
+                    
+                    case 9 : {
+                    
+                        politicalKeyString = "либертарианские";
+                        break;
+                    }
+                }
+                mVariantObservableList.add(
+                    new VariantModel("political", politicalKeyString, v));
+            }
+        );
+        
+        _typicalWords.mReligionMap.forEach (
+                        
+            (k, v) -> {
+            
+                mVariantObservableList.add(new VariantModel("religion", k, v));
+            }
+        );
+        
+        _typicalWords.mInspiredByMap.forEach (
+                        
+            (k, v) -> {
+            
+                mVariantObservableList.add(new VariantModel("inspired by", k, v));
+            }
+        );
+        
+        _typicalWords.mPeopleMainMap.forEach (
+                        
+            (k, v) -> {
+            
+                String peopleKeyString = "";
+                
+                switch (k){
+                
+                    case 1 : {
+                    
+                        peopleKeyString = "ум и креативность";
+                        break;
+                    }
+                    
+                    case 2 : {
+                    
+                        peopleKeyString = "доброта и честность";
+                        break;
+                    }
+                    
+                    case 3 : {
+                    
+                        peopleKeyString = "красота и здоровье";
+                        break;
+                    }
+                    
+                    case 4 : {
+                    
+                        peopleKeyString = "власть и богатство";
+                        break;
+                    }
+                    
+                    case 5 : {
+                    
+                        peopleKeyString = "смелость и упорство";
+                        break;
+                    }
+                    
+                    case 6 : {
+                    
+                        peopleKeyString = "юмор и жизнелюбие";
+                        break;
+                    }
+                }
+                mVariantObservableList.add(
+                    new VariantModel("people main", peopleKeyString, v));
+            }
+        );
+        
+        _typicalWords.mLifeMainMap.forEach (
+                        
+            (k, v) -> {
+            
+                String lifeMainKeyString = "";
+                
+                switch (k){
+                
+                    case 1 : {
+                    
+                        lifeMainKeyString = "семья и дети";
+                        break;
+                    }
+                    
+                    case 2 : {
+                    
+                        lifeMainKeyString = "карьера и деньги";
+                        break;
+                    }
+                    
+                    case 3 : {
+                    
+                        lifeMainKeyString = "развлечения и отдых";
+                        break;
+                    }
+                    
+                    case 4 : {
+                    
+                        lifeMainKeyString = "наука и исследования";
+                        break;
+                    }
+                    
+                    case 5 : {
+                    
+                        lifeMainKeyString = "совершенствование мира";
+                        break;
+                    }
+                    
+                    case 6 : {
+                    
+                        lifeMainKeyString = "саморазвитие";
+                        break;
+                    }
+                    
+                    case 7 : {
+                    
+                        lifeMainKeyString = "красота и искусство";
+                        break;
+                    }
+                    
+                    case 8 : {
+                    
+                        lifeMainKeyString = "слава и влияние";
+                        break;
+                    }
+                }
+                mVariantObservableList.add(
+                    new VariantModel("life main", lifeMainKeyString, v));
+            }
+        );
+        
+        _typicalWords.mSmokingMap.forEach (
+                        
+            (k, v) -> {
+            
+                String smokingKeyString = "";
+                
+                switch (k){
+                
+                    case 1 : {
+                    
+                        smokingKeyString = "резко негативное";
+                        break;
+                    }
+                    
+                    case 2 : {
+                    
+                        smokingKeyString = "негативное";
+                        break;
+                    }
+                    
+                    case 3 : {
+                    
+                        smokingKeyString = "компромиссное";
+                        break;
+                    }
+                    
+                    case 4 : {
+                    
+                        smokingKeyString = "нейтральное";
+                        break;
+                    }
+                    
+                    case 5 : {
+                    
+                        smokingKeyString = "положительное";
+                        break;
+                    }
+                }
+                mVariantObservableList.add(
+                    new VariantModel("smoking", smokingKeyString, v));
+            }
+        );
+        
+        _typicalWords.mAlcoholMap.forEach (
+                        
+            (k, v) -> {
+            
+                String alcoholKeyString = "";
+                
+                switch (k){
+                
+                    case 1 : {
+                    
+                        alcoholKeyString = "резко негативное";
+                        break;
+                    }
+                    
+                    case 2 : {
+                    
+                        alcoholKeyString = "негативное";
+                        break;
+                    }
+                    
+                    case 3 : {
+                    
+                        alcoholKeyString = "компромиссное";
+                        break;
+                    }
+                    
+                    case 4 : {
+                    
+                        alcoholKeyString = "нейтральное";
+                        break;
+                    }
+                    
+                    case 5 : {
+                    
+                        alcoholKeyString = "положительное";
+                        break;
+                    }
+                }
+                mVariantObservableList.add(
+                    new VariantModel("alcohol", alcoholKeyString, v));
+            }
+        );
+        
+        _typicalWords.mBooksMap.forEach (
+                        
+            (k, v) -> {
+            
+                mVariantObservableList.add(new VariantModel("books", k, v));
+            }
+        );
+        
+        _typicalWords.mMusicMap.forEach (
+                        
+            (k, v) -> {
+            
+                mVariantObservableList.add(new VariantModel("music", k, v));
+            }
+        );
+        
+        _typicalWords.mMoviesMap.forEach (
+                        
+            (k, v) -> {
+            
+                mVariantObservableList.add(new VariantModel("movies", k, v));
             }
         );
     }
