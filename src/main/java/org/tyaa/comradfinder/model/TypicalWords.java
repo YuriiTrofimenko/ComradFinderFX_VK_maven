@@ -32,6 +32,15 @@ public class TypicalWords
     public Map<String, Integer> mMusicMap;
     public Map<String, Integer> mMoviesMap;
     
+    /*Карты соответствия кодового и текстового представлений значения
+    для полей вариантов типа Map<Integer, Integer> */
+    
+    public Map<Integer, String> mPoliticalMapping;
+    public Map<Integer, String> mPeopleMainMapping;
+    public Map<Integer, String> mLifeMainMapping;
+    public Map<Integer, String> mSmokingMapping;
+    public Map<Integer, String> mAlcoholMapping;
+    
     public TypicalWords(){
     
         mInterestMap = new HashMap<>();
@@ -49,5 +58,26 @@ public class TypicalWords
         mBooksMap = new HashMap<>();
         mMusicMap = new HashMap<>();
         mMoviesMap = new HashMap<>();
+        
+        /*Populate the mappings*/
+        
+        mPoliticalMapping = new HashMap<>();
+        mPoliticalMapping.put(1, "коммунистические");
+        mPoliticalMapping.put(2, "социалистические");
+        mPoliticalMapping.put(3, "умеренные");
+        mPoliticalMapping.put(4, "либеральные");
+        mPoliticalMapping.put(5, "консервативные");
+        mPoliticalMapping.put(6, "монархические");
+        mPoliticalMapping.put(7, "ультраконсервативные");
+        mPoliticalMapping.put(8, "индифферентные");
+        mPoliticalMapping.put(9, "либертарианские");
+        
+        mPeopleMainMapping = new HashMap<>();
+        mPeopleMainMapping.put(1, "ум и креативность");
+        mPeopleMainMapping.put(2, "доброта и честность");
+        mPeopleMainMapping.put(3, "красота и здоровье");
+        mPeopleMainMapping.put(4, "власть и богатство");
+        mPeopleMainMapping.put(5, "смелость и упорство");
+        mPeopleMainMapping.put(6, "юмор и жизнелюбие");
     }
 }

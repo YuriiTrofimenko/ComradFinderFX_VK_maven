@@ -369,7 +369,7 @@
     </variant>
     <variant id="1">
       <value>2</value>
-      <count>16</count>
+      <count>17</count>
     </variant>
     <variant id="2">
       <value>5</value>
@@ -377,13 +377,13 @@
     </variant>
     <variant id="3">
       <value>6</value>
-      <count>5</count>
+      <count>4</count>
     </variant>
   </peoplemain>
   <lifemain>
     <variant id="0">
       <value>1</value>
-      <count>2</count>
+      <count>3</count>
     </variant>
     <variant id="1">
       <value>2</value>
@@ -403,7 +403,7 @@
     </variant>
     <variant id="5">
       <value>6</value>
-      <count>6</count>
+      <count>5</count>
     </variant>
     <variant id="6">
       <value>7</value>
@@ -433,7 +433,7 @@
     </variant>
     <variant id="4">
       <value>5</value>
-      <count>2</count>
+      <count>1</count>
     </variant>
   </smoking>
   <alcohol>
@@ -451,7 +451,7 @@
     </variant>
     <variant id="3">
       <value>4</value>
-      <count>5</count>
+      <count>4</count>
     </variant>
     <variant id="4">
       <value>5</value>

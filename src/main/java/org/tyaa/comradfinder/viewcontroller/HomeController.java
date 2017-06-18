@@ -5,13 +5,20 @@
  */
 package org.tyaa.comradfinder.viewcontroller;
 
+import java.io.IOException;
 import org.tyaa.comradfinder.screensframework.ControlledScreen;
 import org.tyaa.comradfinder.screensframework.ScreensController;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javafx.collections.FXCollections;
@@ -25,16 +32,25 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.paint.Color;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLStreamException;
 import org.controlsfx.control.textfield.CustomTextField;
 import org.controlsfx.tools.ValueExtractor;
 import org.controlsfx.validation.Severity;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
 import org.tyaa.comradfinder.model.TypicalWords;
+import org.tyaa.comradfinder.modules.XmlImporter;
 import org.tyaa.comradfinder.modules.facades.ModelBuilder;
 import org.tyaa.comradfinder.screensframework.ProgressForm;
 import org.tyaa.comradfinder.viewcontroller.viewmodel.VariantModel;
+import org.xml.sax.SAXException;
 
 
 /**
@@ -51,6 +67,41 @@ public class HomeController implements Initializable, ControlledScreen {
     
     @FXML
     Button createModelButton;
+    
+    //Внедренные ссылки на исходную таблицу модели типичных слов
+    //и на ее колонки
+    @FXML
+    private TableView sourceModelTableView;
+    @FXML
+    private TableColumn srcCategoryTableColumn;
+    @FXML
+    private TableColumn srcVariantTableColumn;
+    @FXML
+    private TableColumn srcQuantityTableColumn;
+    
+    //Внедренные ссылки на рабочую таблицу модели типичных слов
+    //и на ее колонки
+    @FXML
+    private TableView workModelTableView;
+    @FXML
+    private TableColumn workCategoryTableColumn;
+    @FXML
+    private TableColumn workVariantTableColumn;
+    @FXML
+    private TableColumn workQuantityTableColumn;
+    
+    //Внедренные ссылки на таблицу пользователей,
+    //отобранных в кандидаты на приглашение в группу
+    @FXML
+    private TableView usersTableView;
+    @FXML
+    private TableColumn userIdTableColumn;
+    @FXML
+    private TableColumn fNameTableColumn;
+    @FXML
+    private TableColumn lNameTableColumn;
+    @FXML
+    private TableColumn scoreTableColumn;
     
     //
     /*@FXML
@@ -82,6 +133,7 @@ public class HomeController implements Initializable, ControlledScreen {
     @FXML
     DatePicker lastCleanDatePicker;*/
     
+    //Флаг "кнопки активны"
     private boolean mButtonsEnable;
     
     //Объекты доступа к данным
@@ -95,8 +147,11 @@ public class HomeController implements Initializable, ControlledScreen {
     //private DriversDAOImpl mDriversDAOImpl;
     //private CarsDAOImpl mCarsDAOImpl;
     
-    //Списки объектов
-    //private static List<Shop> mShops;
+    //Исходная модель типичных слов
+    private TypicalWords mSrcTypicalWords;
+    
+    //Рабочая модель типичных слов
+    private TypicalWords mWorkTypicalWords;
     //private List<Barrel> mBarrels;
     //private List<Barrel> mShopBarrels;
 //    private List<WaterType> mWaterTypes;
@@ -114,7 +169,8 @@ public class HomeController implements Initializable, ControlledScreen {
     //private BarrelCapacity mSelectedBarrelCapacity;
     
     //Наблюдабельный список объектов VariantModel
-    ObservableList<VariantModel> mVariantObservableList;
+    ObservableList<VariantModel> mSrcVariantObservableList;
+    ObservableList<VariantModel> mWorkVariantObservableList;
 //    ObservableList<BarrelCapacityModel> mBarrelCapacitiesObservableList;
     
     ScreensController myController;
@@ -149,7 +205,11 @@ public class HomeController implements Initializable, ControlledScreen {
         mBarrelCapacitiesSet = new HashSet<>();*/
         
         //Инициализация пустым наблюдабельным списком
-        mVariantObservableList = FXCollections.observableArrayList();
+        mSrcVariantObservableList = FXCollections.observableArrayList();
+        mSrcTypicalWords = new TypicalWords();
+        mWorkTypicalWords = new TypicalWords();
+        
+        sourceModelTableView.setItems(mSrcVariantObservableList);
 //        mBarrelCapacitiesObservableList = FXCollections.observableArrayList();
 //        
 //        waterTypesListView.setItems(mWaterTypesObservableList);
@@ -212,6 +272,91 @@ public class HomeController implements Initializable, ControlledScreen {
 //                }
 //            };
 //        });
+
+        /* Привязка полей источника данных типа VariantModel
+        к колонкам исходной таблицы модели типичных слов */
+        
+        srcCategoryTableColumn.setCellValueFactory(
+                new PropertyValueFactory<VariantModel, String>("category")
+        );
+        srcVariantTableColumn.setCellValueFactory(
+                new PropertyValueFactory<VariantModel, String>("variant")
+        );
+        srcQuantityTableColumn.setCellValueFactory(
+                new PropertyValueFactory<VariantModel, String>("quantity")
+        );
+        
+        /* Привязка полей источника данных типа VariantModel
+        к колонкам рабочей таблицы модели типичных слов */
+        
+        workCategoryTableColumn.setCellValueFactory(
+                new PropertyValueFactory<VariantModel, String>("category")
+        );
+        workVariantTableColumn.setCellValueFactory(
+                new PropertyValueFactory<VariantModel, String>("variant")
+        );
+        workQuantityTableColumn.setCellValueFactory(
+                new PropertyValueFactory<VariantModel, String>("quantity")
+        );
+        
+        /* Привязка полей источника данных типа ...
+        к колонкам таблицы пользователей-кандидатов */
+        
+        /*workCategoryTableColumn.setCellValueFactory(
+                new PropertyValueFactory<VariantModel, String>("category")
+        );
+        workVariantTableColumn.setCellValueFactory(
+                new PropertyValueFactory<VariantModel, String>("variant")
+        );
+        workQuantityTableColumn.setCellValueFactory(
+                new PropertyValueFactory<VariantModel, String>("quantity")
+        );*/
+        
+        //выводить цветами
+        /*srcVariantTableColumn.setCellFactory(column ->{
+            
+            return new TableCell<VariantModel, String>(){
+                @Override
+                protected void updateItem(String item, boolean empty)
+                {
+                    super.updateItem(item, empty);
+                    if (item == null || empty) {
+                        setText(null);
+                        setStyle("");
+                    } else {
+                        SimpleDateFormat formatter =
+                            new SimpleDateFormat("yyyy.MM.dd");
+                        SimpleDateFormat formatter2 =
+                            new SimpleDateFormat("dd.MM.yyyy");
+                        Date date = null;
+                        try {
+                            date = formatter.parse(item);
+                        } catch (ParseException ex) {
+                            setText("Неверный формат даты");
+                        }
+                        if (date != null) {
+                            setText(formatter2.format(date));
+                            if (
+                                (
+                                    Date.from(Instant.now()).getTime()
+                                    - date.getTime()
+                                ) < Settings.getCleaningTypicalCycleTime()
+                            ) {
+                                setTextFill(Color.BLACK);
+                            } else if(
+                                (
+                                    Date.from(Instant.now()).getTime()
+                                    - date.getTime()
+                                ) < Settings.getCleaningOverdueCycleTime()){
+                                setTextFill(Color.ORANGE);
+                            } else {
+                                setTextFill(Color.RED);
+                            }
+                        }
+                    }
+                }
+            };
+        });*/
     }    
 
     @Override
@@ -219,6 +364,8 @@ public class HomeController implements Initializable, ControlledScreen {
         myController = screenParent;
     }
     
+    //Действие отображения диалогового окна создания модели
+    //по заданной группе
     @FXML
     private void showCreateModelDialog(){
         
@@ -264,8 +411,27 @@ public class HomeController implements Initializable, ControlledScreen {
                         // and update the UI based on its value
                         buildModelTask.setOnSucceeded(event -> {
                             pForm.getDialogStage().close();
-                            //startButton.setDisable(false);
+                            //Активируем кнопки основного экрана
                             toggleButtonsEnable();
+                            //Загружаем модель типичных слов в объект Java
+                            //из только что сохраненного файла
+                            //Читаем набор типичных слов из файла XML в Java объект
+                            try {
+                                try {
+                                    mSrcTypicalWords = XmlImporter.getTypicalWords("TypicalWords.xml");
+                                } catch (SAXException ex) {
+                                    Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                                } catch (ParserConfigurationException ex) {
+                                    Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            } catch (IOException | XMLStreamException ex) {
+                                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            if (mSrcTypicalWords != null) {
+                                
+                                fillVariantObservableList(mSrcTypicalWords);
+                            }
+                            
                         });
                         
                         toggleButtonsEnable();
@@ -571,11 +737,13 @@ public class HomeController implements Initializable, ControlledScreen {
     //Метод заполнения наблюдабельного списка из карт объекта TypicalWords
     private void fillVariantObservableList(TypicalWords _typicalWords){
         
+        mSrcVariantObservableList.clear();
+        
         _typicalWords.mInterestMap.forEach (
                         
             (k, v) -> {
             
-                mVariantObservableList.add(new VariantModel("interest", k, v));
+                mSrcVariantObservableList.add(new VariantModel("interest", k, v));
             }
         );
         
@@ -583,7 +751,7 @@ public class HomeController implements Initializable, ControlledScreen {
                         
             (k, v) -> {
             
-                mVariantObservableList.add(new VariantModel("activity", k, v));
+                mSrcVariantObservableList.add(new VariantModel("activity", k, v));
             }
         );
         
@@ -591,7 +759,7 @@ public class HomeController implements Initializable, ControlledScreen {
                         
             (k, v) -> {
             
-                mVariantObservableList.add(new VariantModel("about", k, v));
+                mSrcVariantObservableList.add(new VariantModel("about", k, v));
             }
         );
         
@@ -657,7 +825,7 @@ public class HomeController implements Initializable, ControlledScreen {
                         break;
                     }
                 }
-                mVariantObservableList.add(
+                mSrcVariantObservableList.add(
                     new VariantModel("political", politicalKeyString, v));
             }
         );
@@ -666,7 +834,7 @@ public class HomeController implements Initializable, ControlledScreen {
                         
             (k, v) -> {
             
-                mVariantObservableList.add(new VariantModel("religion", k, v));
+                mSrcVariantObservableList.add(new VariantModel("religion", k, v));
             }
         );
         
@@ -674,7 +842,7 @@ public class HomeController implements Initializable, ControlledScreen {
                         
             (k, v) -> {
             
-                mVariantObservableList.add(new VariantModel("inspired by", k, v));
+                mSrcVariantObservableList.add(new VariantModel("inspired by", k, v));
             }
         );
         
@@ -722,7 +890,7 @@ public class HomeController implements Initializable, ControlledScreen {
                         break;
                     }
                 }
-                mVariantObservableList.add(
+                mSrcVariantObservableList.add(
                     new VariantModel("people main", peopleKeyString, v));
             }
         );
@@ -783,7 +951,7 @@ public class HomeController implements Initializable, ControlledScreen {
                         break;
                     }
                 }
-                mVariantObservableList.add(
+                mSrcVariantObservableList.add(
                     new VariantModel("life main", lifeMainKeyString, v));
             }
         );
@@ -826,7 +994,7 @@ public class HomeController implements Initializable, ControlledScreen {
                         break;
                     }
                 }
-                mVariantObservableList.add(
+                mSrcVariantObservableList.add(
                     new VariantModel("smoking", smokingKeyString, v));
             }
         );
@@ -869,7 +1037,7 @@ public class HomeController implements Initializable, ControlledScreen {
                         break;
                     }
                 }
-                mVariantObservableList.add(
+                mSrcVariantObservableList.add(
                     new VariantModel("alcohol", alcoholKeyString, v));
             }
         );
@@ -878,7 +1046,7 @@ public class HomeController implements Initializable, ControlledScreen {
                         
             (k, v) -> {
             
-                mVariantObservableList.add(new VariantModel("books", k, v));
+                mSrcVariantObservableList.add(new VariantModel("books", k, v));
             }
         );
         
@@ -886,7 +1054,7 @@ public class HomeController implements Initializable, ControlledScreen {
                         
             (k, v) -> {
             
-                mVariantObservableList.add(new VariantModel("music", k, v));
+                mSrcVariantObservableList.add(new VariantModel("music", k, v));
             }
         );
         
@@ -894,7 +1062,7 @@ public class HomeController implements Initializable, ControlledScreen {
                         
             (k, v) -> {
             
-                mVariantObservableList.add(new VariantModel("movies", k, v));
+                mSrcVariantObservableList.add(new VariantModel("movies", k, v));
             }
         );
     }
