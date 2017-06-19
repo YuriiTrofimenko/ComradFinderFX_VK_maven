@@ -49,6 +49,7 @@ import org.tyaa.comradfinder.model.TypicalWords;
 import org.tyaa.comradfinder.modules.XmlImporter;
 import org.tyaa.comradfinder.modules.facades.ModelBuilder;
 import org.tyaa.comradfinder.screensframework.ProgressForm;
+import org.tyaa.comradfinder.utils.Cloner;
 import org.tyaa.comradfinder.viewcontroller.viewmodel.VariantModel;
 import org.xml.sax.SAXException;
 
@@ -67,6 +68,9 @@ public class HomeController implements Initializable, ControlledScreen {
     
     @FXML
     Button createModelButton;
+    
+    @FXML
+    Button useModelButton;
     
     //Внедренные ссылки на исходную таблицу модели типичных слов
     //и на ее колонки
@@ -206,10 +210,13 @@ public class HomeController implements Initializable, ControlledScreen {
         
         //Инициализация пустым наблюдабельным списком
         mSrcVariantObservableList = FXCollections.observableArrayList();
+        mWorkVariantObservableList = FXCollections.observableArrayList();
+        
         mSrcTypicalWords = new TypicalWords();
         mWorkTypicalWords = new TypicalWords();
         
         sourceModelTableView.setItems(mSrcVariantObservableList);
+        workModelTableView.setItems(mWorkVariantObservableList);
 //        mBarrelCapacitiesObservableList = FXCollections.observableArrayList();
 //        
 //        waterTypesListView.setItems(mWaterTypesObservableList);
@@ -485,6 +492,34 @@ public class HomeController implements Initializable, ControlledScreen {
             warningAlert.showAndWait();
         }*/
         //progressIndicator.visibleProperty().set(false);
+    }
+    
+    @FXML
+    private void loadModelAction(ActionEvent event){
+    
+        if (mSrcTypicalWords != null) {
+            
+            //Глубокое клонирование исходного объекта модели типичных слов
+            //и присвоение ссылки на клон полю рабочей модели типичных слов
+            mWorkTypicalWords =
+                (TypicalWords) Cloner.deepClone(mSrcTypicalWords);
+            
+            fillVariantObservableList(mWorkTypicalWords);
+        }
+    }
+    
+    @FXML
+    private void useModelAction(ActionEvent event){
+    
+        if (mSrcTypicalWords != null) {
+            
+            //Глубокое клонирование исходного объекта модели типичных слов
+            //и присвоение ссылки на клон полю рабочей модели типичных слов
+            mWorkTypicalWords =
+                (TypicalWords) Cloner.deepClone(mSrcTypicalWords);
+            
+            fillVariantObservableList(mWorkTypicalWords);
+        }
     }
     
     /*@FXML
