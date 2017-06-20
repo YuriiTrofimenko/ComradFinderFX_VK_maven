@@ -17,6 +17,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -575,19 +576,79 @@ public class HomeController implements Initializable, ControlledScreen {
                         Class c = TypicalWords.class; 
                         Field[] publicFields = c.getFields();
                         
+                        Map<String, Integer> forEditMap = null;
+                        String forEditFieldName = null;
+                        
                         for (Field field : publicFields) {
                             
                             Class fieldType = field.getType(); 
                             System.out.println("Имя: " + field.getName()); 
                             System.out.println("Тип: " + fieldType.getName());
                             
-                            if (mButtonsEnable) {
-                                
+                            try {
+                                if (field.get(mWorkTypicalWords) instanceof Map<?,?>) {
+                                    
+                                    if (field.getName().equals("mInterestMap")
+                                        || field.getName().equals("mActivityMap")
+                                        || field.getName().equals("mAboutMap")
+                                        || field.getName().equals("mReligionMap")
+                                        || field.getName().equals("mInspiredByMap")
+                                        || field.getName().equals("mBooksMap")
+                                        || field.getName().equals("mMusicMap")
+                                        || field.getName().equals("mMoviesMap")) {
+                                        
+                                        Map<String, Integer> currentMap =
+                                            (Map)field.get(mWorkTypicalWords);
+                                        
+                                        if (currentMap != null && !currentMap.isEmpty()) {
+
+                                            if (currentMap.containsKey(oldVariantText)) {
+
+                                                //field.set(mWorkTypicalWords, editedVariantString);
+                                                
+                                                currentMap.put(editedVariantString, currentMap.remove(oldVariantText));
+                                                field.set(mWorkTypicalWords, currentMap);
+                                                fillVariantObservableList(mWorkTypicalWords, mWorkVariantObservableList);
+                                                
+                                                System.out.println(editedVariantString);
+                                                forEditMap = currentMap;
+                                                forEditFieldName = field.getName();
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                /*
+                                String oldVariantTextFromResource = (String) field.get(obj);*/
+                            } catch (IllegalArgumentException ex) {
+                                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (IllegalAccessException ex) {
+                                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        } 
+                        /*if (forEditMap != null && forEditFieldName != null) {
+                            
+                            Field field = null;
+                            
+                            try {
+                                field = c.getField(forEditFieldName);
+                            } catch (NoSuchFieldException ex) {
+                                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (SecurityException ex) {
+                                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
                             }
                             
-                            String oldVariantTextFromResource = (String) field.get(obj);
-                        } 
-
+                            if (field != null) {
+                                
+                                try {
+                                    field.set(mWorkTypicalWords, editedVariantString);
+                                } catch (IllegalArgumentException ex) {
+                                    Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                                } catch (IllegalAccessException ex) {
+                                    Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            }
+                        }*/
 
                     } else {
 
