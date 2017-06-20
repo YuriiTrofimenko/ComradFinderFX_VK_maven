@@ -5,6 +5,7 @@
  */
 package org.tyaa.comradfinder.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +15,8 @@ import java.util.Map;
  * 
  * @author Юрий
  */
-public class TypicalWords
+
+public class TypicalWords implements Serializable
 {
     public Map<String, Integer> mInterestMap;
     public Map<String, Integer> mActivityMap;

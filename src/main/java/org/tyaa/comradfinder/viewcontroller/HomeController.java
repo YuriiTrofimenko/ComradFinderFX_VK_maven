@@ -5,7 +5,9 @@
  */
 package org.tyaa.comradfinder.viewcontroller;
 
+import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import org.tyaa.comradfinder.screensframework.ControlledScreen;
 import org.tyaa.comradfinder.screensframework.ScreensController;
 import java.net.URL;
@@ -38,6 +40,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
+import javafx.stage.FileChooser;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLStreamException;
 import org.controlsfx.control.textfield.CustomTextField;
@@ -167,7 +170,7 @@ public class HomeController implements Initializable, ControlledScreen {
     //private Set<String> mBarrelCapacitiesSet;
     
     //Выбранные объекты
-    //private Shop mSelectedShop;
+    private VariantModel mSelectedVariantModel;
     //private Barrel mSelectedBarrel;
     //private WaterType mSelectedWaterType;
     //private BarrelCapacity mSelectedBarrelCapacity;
@@ -436,7 +439,7 @@ public class HomeController implements Initializable, ControlledScreen {
                             }
                             if (mSrcTypicalWords != null) {
                                 
-                                fillVariantObservableList(mSrcTypicalWords);
+                                fillVariantObservableList(mSrcTypicalWords, mSrcVariantObservableList);
                             }
                             
                         });
@@ -497,14 +500,31 @@ public class HomeController implements Initializable, ControlledScreen {
     @FXML
     private void loadModelAction(ActionEvent event){
     
-        if (mSrcTypicalWords != null) {
-            
-            //Глубокое клонирование исходного объекта модели типичных слов
-            //и присвоение ссылки на клон полю рабочей модели типичных слов
-            mWorkTypicalWords =
-                (TypicalWords) Cloner.deepClone(mSrcTypicalWords);
-            
-            fillVariantObservableList(mWorkTypicalWords);
+        FileChooser fileChooser = new FileChooser();
+        File selectedFile = fileChooser.showOpenDialog(null);
+
+        if (selectedFile != null) {
+
+            try {
+                //System.out.println("File selected: " + selectedFile.getAbsolutePath());
+                mSrcTypicalWords =
+                    XmlImporter.getTypicalWords(selectedFile.getAbsolutePath());
+                if (mSrcTypicalWords != null) {
+
+                    fillVariantObservableList(mSrcTypicalWords, mSrcVariantObservableList);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (XMLStreamException ex) {
+                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SAXException ex) {
+                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParserConfigurationException ex) {
+                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else {
+            System.out.println("File selection cancelled.");
         }
     }
     
@@ -518,7 +538,75 @@ public class HomeController implements Initializable, ControlledScreen {
             mWorkTypicalWords =
                 (TypicalWords) Cloner.deepClone(mSrcTypicalWords);
             
-            fillVariantObservableList(mWorkTypicalWords);
+            fillVariantObservableList(mWorkTypicalWords, mWorkVariantObservableList);
+        }
+    }
+    
+    @FXML
+    private void showEditVariantDlgAction(ActionEvent event){
+    
+        mSelectedVariantModel =
+            (VariantModel) workModelTableView.getSelectionModel().getSelectedItem();
+        
+        if (mSelectedVariantModel != null) {
+            
+            String oldVariantText = mSelectedVariantModel.getVariant();
+            
+            TextInputDialog dialog =
+                new TextInputDialog(oldVariantText);
+            dialog.setTitle("Изменение текста варианта");
+            dialog.setHeaderText("Какой новый текст варианта?");
+            dialog.setContentText("Введите строку длинной не менее двух символов: ");
+
+            Optional<String> result = dialog.showAndWait();
+            
+            result.ifPresent(
+                editedVariantString -> {
+                    
+                    Pattern pattern = 
+                        Pattern.compile(".{3,}");
+                    if (pattern.matcher(editedVariantString).matches()) {
+
+                        /*Optional<VariantModel> value = mWorkVariantObservableList
+                            .stream()
+                            .filter(variantModel -> variantModel.getVariant().equals(oldVariantText))
+                            .findFirst();*/
+                        
+                        Class c = TypicalWords.class; 
+                        Field[] publicFields = c.getFields();
+                        
+                        for (Field field : publicFields) {
+                            
+                            Class fieldType = field.getType(); 
+                            System.out.println("Имя: " + field.getName()); 
+                            System.out.println("Тип: " + fieldType.getName());
+                            
+                            if (mButtonsEnable) {
+                                
+                            }
+                            
+                            String oldVariantTextFromResource = (String) field.get(obj);
+                        } 
+
+
+                    } else {
+
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Ошибка");
+                        alert.setHeaderText("Изменение допустимого остатка воды не выполнено");
+                        alert.setContentText("Ошибка формата числа (максимум 9999) или число больше полного объема бочки");
+                        alert.showAndWait();
+                    }
+                }
+            );
+        } else {
+        
+            Alert warningAlert =
+                new Alert(Alert.AlertType.WARNING);
+            warningAlert.setTitle("Предупреждение");
+            warningAlert.setHeaderText("Не выбрана ни одна строка в рабочей таблице вариантов");
+            warningAlert.setContentText("Выделите одну строку в таблице вариантов");
+            warningAlert.showAndWait();
         }
     }
     
@@ -770,15 +858,18 @@ public class HomeController implements Initializable, ControlledScreen {
     }*/
     
     //Метод заполнения наблюдабельного списка из карт объекта TypicalWords
-    private void fillVariantObservableList(TypicalWords _typicalWords){
+    private void fillVariantObservableList(
+        TypicalWords _typicalWords
+        , ObservableList<VariantModel> _variantObservableList
+    ){
         
-        mSrcVariantObservableList.clear();
+        _variantObservableList.clear();
         
         _typicalWords.mInterestMap.forEach (
                         
             (k, v) -> {
             
-                mSrcVariantObservableList.add(new VariantModel("interest", k, v));
+                _variantObservableList.add(new VariantModel("interest", k, v));
             }
         );
         
@@ -786,7 +877,7 @@ public class HomeController implements Initializable, ControlledScreen {
                         
             (k, v) -> {
             
-                mSrcVariantObservableList.add(new VariantModel("activity", k, v));
+                _variantObservableList.add(new VariantModel("activity", k, v));
             }
         );
         
@@ -794,7 +885,7 @@ public class HomeController implements Initializable, ControlledScreen {
                         
             (k, v) -> {
             
-                mSrcVariantObservableList.add(new VariantModel("about", k, v));
+                _variantObservableList.add(new VariantModel("about", k, v));
             }
         );
         
@@ -860,7 +951,7 @@ public class HomeController implements Initializable, ControlledScreen {
                         break;
                     }
                 }
-                mSrcVariantObservableList.add(
+                _variantObservableList.add(
                     new VariantModel("political", politicalKeyString, v));
             }
         );
@@ -869,7 +960,7 @@ public class HomeController implements Initializable, ControlledScreen {
                         
             (k, v) -> {
             
-                mSrcVariantObservableList.add(new VariantModel("religion", k, v));
+                _variantObservableList.add(new VariantModel("religion", k, v));
             }
         );
         
@@ -877,7 +968,7 @@ public class HomeController implements Initializable, ControlledScreen {
                         
             (k, v) -> {
             
-                mSrcVariantObservableList.add(new VariantModel("inspired by", k, v));
+                _variantObservableList.add(new VariantModel("inspired by", k, v));
             }
         );
         
@@ -925,7 +1016,7 @@ public class HomeController implements Initializable, ControlledScreen {
                         break;
                     }
                 }
-                mSrcVariantObservableList.add(
+                _variantObservableList.add(
                     new VariantModel("people main", peopleKeyString, v));
             }
         );
@@ -986,7 +1077,7 @@ public class HomeController implements Initializable, ControlledScreen {
                         break;
                     }
                 }
-                mSrcVariantObservableList.add(
+                _variantObservableList.add(
                     new VariantModel("life main", lifeMainKeyString, v));
             }
         );
@@ -1029,7 +1120,7 @@ public class HomeController implements Initializable, ControlledScreen {
                         break;
                     }
                 }
-                mSrcVariantObservableList.add(
+                _variantObservableList.add(
                     new VariantModel("smoking", smokingKeyString, v));
             }
         );
@@ -1072,7 +1163,7 @@ public class HomeController implements Initializable, ControlledScreen {
                         break;
                     }
                 }
-                mSrcVariantObservableList.add(
+                _variantObservableList.add(
                     new VariantModel("alcohol", alcoholKeyString, v));
             }
         );
@@ -1081,7 +1172,7 @@ public class HomeController implements Initializable, ControlledScreen {
                         
             (k, v) -> {
             
-                mSrcVariantObservableList.add(new VariantModel("books", k, v));
+                _variantObservableList.add(new VariantModel("books", k, v));
             }
         );
         
@@ -1089,7 +1180,7 @@ public class HomeController implements Initializable, ControlledScreen {
                         
             (k, v) -> {
             
-                mSrcVariantObservableList.add(new VariantModel("music", k, v));
+                _variantObservableList.add(new VariantModel("music", k, v));
             }
         );
         
@@ -1097,7 +1188,7 @@ public class HomeController implements Initializable, ControlledScreen {
                         
             (k, v) -> {
             
-                mSrcVariantObservableList.add(new VariantModel("movies", k, v));
+                _variantObservableList.add(new VariantModel("movies", k, v));
             }
         );
     }

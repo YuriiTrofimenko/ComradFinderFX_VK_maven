@@ -138,7 +138,7 @@ public class XmlImporter
                         }
                         case "music":{
 
-                            mTypicalWords.mBooksMap.put(
+                            mTypicalWords.mMusicMap.put(
                                 currentValue
                                 , Integer.parseInt(currentCount)
                             );
@@ -146,7 +146,7 @@ public class XmlImporter
                         }
                         case "movies":{
 
-                            mTypicalWords.mBooksMap.put(
+                            mTypicalWords.mMoviesMap.put(
                                 currentValue
                                 , Integer.parseInt(currentCount)
                             );

@@ -85,7 +85,7 @@
             </AnchorPane>
          </top>
          <left>
-            <AnchorPane minWidth="333.0" prefWidth="333.0" BorderPane.alignment="CENTER">
+            <AnchorPane minWidth="500.0" BorderPane.alignment="CENTER">
                <children>
                   <TableView fx:id="sourceModelTableView" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                       <placeholder>
@@ -104,7 +104,7 @@
             </AnchorPane>
          </left>
          <center>
-            <AnchorPane minWidth="333.0" prefWidth="333.0" BorderPane.alignment="CENTER">
+            <AnchorPane minWidth="500.0" BorderPane.alignment="CENTER">
                <children>
                   <TableView fx:id="workModelTableView" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                     <placeholder>
@@ -123,7 +123,7 @@
             </AnchorPane>
          </center>
          <right>
-            <AnchorPane minWidth="333.0" prefWidth="333.0" BorderPane.alignment="CENTER">
+            <AnchorPane minWidth="500.0" BorderPane.alignment="CENTER">
                <children>
                   <TableView fx:id="usersTableView" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                     <placeholder>
@@ -152,7 +152,7 @@
                               <Font size="14.0" />
                            </font>
                       </Button>
-                      <Button mnemonicParsing="false" text="Edit variant" ButtonBar.buttonData="LEFT">
+                      <Button mnemonicParsing="false" onAction="#showEditVariantDlgAction" text="Edit variant" ButtonBar.buttonData="LEFT">
                            <font>
                               <Font size="14.0" />
                            </font>
