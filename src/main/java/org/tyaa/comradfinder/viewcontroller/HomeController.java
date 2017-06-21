@@ -54,6 +54,7 @@ import org.tyaa.comradfinder.modules.XmlImporter;
 import org.tyaa.comradfinder.modules.facades.ModelBuilder;
 import org.tyaa.comradfinder.screensframework.ProgressForm;
 import org.tyaa.comradfinder.utils.Cloner;
+import org.tyaa.comradfinder.utils.MapUtils;
 import org.tyaa.comradfinder.viewcontroller.viewmodel.VariantModel;
 import org.xml.sax.SAXException;
 
@@ -579,7 +580,7 @@ public class HomeController implements Initializable, ControlledScreen {
                         Map<String, Integer> forEditMap = null;
                         String forEditFieldName = null;
                         
-                        for (Field field : publicFields) {
+                        FOR_LABEL : for (Field field : publicFields) {
                             
                             Class fieldType = field.getType(); 
                             System.out.println("Имя: " + field.getName()); 
@@ -613,8 +614,65 @@ public class HomeController implements Initializable, ControlledScreen {
                                                 System.out.println(editedVariantString);
                                                 forEditMap = currentMap;
                                                 forEditFieldName = field.getName();
-                                                break;
+                                                
+                                                break FOR_LABEL;
                                             }
+                                        }
+                                    } else if (field.getName().equals("mPoliticalMap")
+                                        || field.getName().equals("mPeopleMainMap")
+                                        || field.getName().equals("mLifeMainMap")
+                                        || field.getName().equals("mSmokingMap")
+                                        || field.getName().equals("mAlcoholMap")) {
+                                        
+                                        Map<Integer, Integer> currentMap = null;
+                                        try {
+                                            currentMap = (Map)field.get(mWorkTypicalWords);
+                                        } catch (IllegalArgumentException ex) {
+                                            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                                        } catch (IllegalAccessException ex) {
+                                            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                        
+                                        if (currentMap != null && !currentMap.isEmpty()) {
+                                            
+                                            Integer oldVariantInteger = null;
+                                            
+                                            SWITCH_LABEL : switch(field.getName())
+                                            {
+                                                case "mPoliticalMap":{
+                                                
+                                                    oldVariantInteger =
+                                                        MapUtils
+                                                            .getKeysByValue(TypicalWords.mPoliticalMapping, oldVariantText)
+                                                            .iterator()
+                                                            .next();
+                                                    
+                                                    if (oldVariantInteger != null
+                                                        && currentMap.containsKey(oldVariantInteger)) {
+
+                                                        Integer editedVariantInteger = null;
+
+                                                        editedVariantInteger =
+                                                            MapUtils
+                                                                .getKeysByValue(TypicalWords.mPoliticalMapping, editedVariantString)
+                                                                .iterator()
+                                                                .next();
+
+                                                        currentMap.put(editedVariantString, currentMap.remove(oldVariantText));
+                                                        field.set(mWorkTypicalWords, currentMap);
+                                                        fillVariantObservableList(mWorkTypicalWords, mWorkVariantObservableList);
+
+                                                        System.out.println(editedVariantString);
+                                                        forEditMap = currentMap;
+                                                        forEditFieldName = field.getName();
+                                                        break FOR_LABEL;
+                                                    }
+                                                    
+                                                    break SWITCH_LABEL;
+                                                }
+                                            }
+
+                                            
                                         }
                                     }
                                 }

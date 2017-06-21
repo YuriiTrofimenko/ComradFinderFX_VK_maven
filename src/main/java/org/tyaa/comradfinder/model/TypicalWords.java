@@ -37,11 +37,11 @@ public class TypicalWords implements Serializable
     /*Карты соответствия кодового и текстового представлений значения
     для полей вариантов типа Map<Integer, Integer> */
     
-    public Map<Integer, String> mPoliticalMapping;
-    public Map<Integer, String> mPeopleMainMapping;
-    public Map<Integer, String> mLifeMainMapping;
-    public Map<Integer, String> mSmokingMapping;
-    public Map<Integer, String> mAlcoholMapping;
+    public static Map<Integer, String> mPoliticalMapping;
+    public static Map<Integer, String> mPeopleMainMapping;
+    public static Map<Integer, String> mLifeMainMapping;
+    public static Map<Integer, String> mSmokingMapping;
+    public static Map<Integer, String> mAlcoholMapping;
     
     public TypicalWords(){
     
@@ -81,5 +81,29 @@ public class TypicalWords implements Serializable
         mPeopleMainMapping.put(4, "власть и богатство");
         mPeopleMainMapping.put(5, "смелость и упорство");
         mPeopleMainMapping.put(6, "юмор и жизнелюбие");
+        
+        mLifeMainMapping = new HashMap<>();
+        mLifeMainMapping.put(1, "семья и дети");
+        mLifeMainMapping.put(2, "карьера и деньги");
+        mLifeMainMapping.put(3, "развлечения и отдых");
+        mLifeMainMapping.put(4, "наука и исследования");
+        mLifeMainMapping.put(5, "совершенствование мира");
+        mLifeMainMapping.put(6, "саморазвитие");
+        mLifeMainMapping.put(7, "красота и искусство");
+        mLifeMainMapping.put(8, "слава и влияние");
+        
+        mSmokingMapping = new HashMap<>();
+        mSmokingMapping.put(1, "резко негативное");
+        mSmokingMapping.put(2, "негативное");
+        mSmokingMapping.put(3, "компромиссное");
+        mSmokingMapping.put(4, "нейтральное");
+        mSmokingMapping.put(5, "положительное");
+        
+        mAlcoholMapping = new HashMap<>();
+        mAlcoholMapping.put(1, "резко негативное");
+        mAlcoholMapping.put(2, "негативное");
+        mAlcoholMapping.put(3, "компромиссное");
+        mAlcoholMapping.put(4, "нейтральное");
+        mAlcoholMapping.put(5, "положительное");
     }
 }
