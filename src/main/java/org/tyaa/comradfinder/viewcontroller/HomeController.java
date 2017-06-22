@@ -32,6 +32,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -554,170 +555,308 @@ public class HomeController implements Initializable, ControlledScreen {
             
             String oldVariantText = mSelectedVariantModel.getVariant();
             
-            TextInputDialog dialog =
-                new TextInputDialog(oldVariantText);
-            dialog.setTitle("Изменение текста варианта");
-            dialog.setHeaderText("Какой новый текст варианта?");
-            dialog.setContentText("Введите строку длинной не менее двух символов: ");
+            if(mSelectedVariantModel.getCategory().equals("political")
+                || mSelectedVariantModel.getCategory().equals("people main")
+                || mSelectedVariantModel.getCategory().equals("life main")
+                || mSelectedVariantModel.getCategory().equals("smoking")
+                || mSelectedVariantModel.getCategory().equals("alcohol")
+                    ){
+                
+                Class c = TypicalWords.class; 
+                Field[] publicFields = c.getFields();
 
-            Optional<String> result = dialog.showAndWait();
-            
-            result.ifPresent(
-                editedVariantString -> {
-                    
-                    Pattern pattern = 
-                        Pattern.compile(".{3,}");
-                    if (pattern.matcher(editedVariantString).matches()) {
+                Map<String, Integer> forEditMap = null;
+                String forEditFieldName = null;
 
-                        /*Optional<VariantModel> value = mWorkVariantObservableList
-                            .stream()
-                            .filter(variantModel -> variantModel.getVariant().equals(oldVariantText))
-                            .findFirst();*/
-                        
-                        Class c = TypicalWords.class; 
-                        Field[] publicFields = c.getFields();
-                        
-                        Map<String, Integer> forEditMap = null;
-                        String forEditFieldName = null;
-                        
-                        FOR_LABEL : for (Field field : publicFields) {
-                            
-                            Class fieldType = field.getType(); 
-                            System.out.println("Имя: " + field.getName()); 
-                            System.out.println("Тип: " + fieldType.getName());
-                            
-                            try {
-                                if (field.get(mWorkTypicalWords) instanceof Map<?,?>) {
+                FOR_LABEL : for (Field field : publicFields) {
+
+                    Class fieldType = field.getType(); 
+                    System.out.println("Имя: " + field.getName()); 
+                    System.out.println("Тип: " + fieldType.getName());
+
+                    try {
+                        if (field.get(mWorkTypicalWords) instanceof Map<?,?>) {
+
+                            if (field.getName().equals("mInterestMap")) {
+
+                                Map<Integer, Integer> currentMap =
+                                    (Map)field.get(mWorkTypicalWords);
+
+                                if (currentMap != null && !currentMap.isEmpty()) {
                                     
-                                    if (field.getName().equals("mInterestMap")
-                                        || field.getName().equals("mActivityMap")
-                                        || field.getName().equals("mAboutMap")
-                                        || field.getName().equals("mReligionMap")
-                                        || field.getName().equals("mInspiredByMap")
-                                        || field.getName().equals("mBooksMap")
-                                        || field.getName().equals("mMusicMap")
-                                        || field.getName().equals("mMoviesMap")) {
-                                        
-                                        Map<String, Integer> currentMap =
-                                            (Map)field.get(mWorkTypicalWords);
-                                        
-                                        if (currentMap != null && !currentMap.isEmpty()) {
+                                    List<String> choices =
+                                        new ArrayList<>(TypicalWords.mPoliticalMapping.values());
 
-                                            if (currentMap.containsKey(oldVariantText)) {
+                                    Integer oldVariantInteger = null;
+                                    
+                                    oldVariantInteger = MapUtils
+                                        .getKeysByValue(TypicalWords.mPoliticalMapping, oldVariantText)
+                                        .iterator()
+                                        .next();
+                                    
+                                    if (oldVariantInteger != null
+                                        && currentMap.containsKey(oldVariantInteger)) {
 
-                                                //field.set(mWorkTypicalWords, editedVariantString);
-                                                
+                                        ChoiceDialog<String> dialog =
+                                            new ChoiceDialog<>(oldVariantText, choices);
+                                        dialog.setTitle("Изменение выбора варианта");
+                                        dialog.setHeaderText("Какой новый выбор варианта?");
+                                        dialog.setContentText("Выберите один из пунктов: ");
+                                        
+                                        Optional<String> result = dialog.showAndWait();
+
+                                        result.ifPresent(
+                                            editedVariantString -> {
+                                            
+                                                Integer editedVariantInteger = null;
+
+                                                editedVariantInteger =
+                                                    MapUtils
+                                                        .getKeysByValue(TypicalWords.mPoliticalMapping, editedVariantString)
+                                                        .iterator()
+                                                        .next();
+
                                                 currentMap.put(editedVariantString, currentMap.remove(oldVariantText));
                                                 field.set(mWorkTypicalWords, currentMap);
                                                 fillVariantObservableList(mWorkTypicalWords, mWorkVariantObservableList);
-                                                
-                                                System.out.println(editedVariantString);
-                                                forEditMap = currentMap;
-                                                forEditFieldName = field.getName();
-                                                
-                                                break FOR_LABEL;
-                                            }
-                                        }
-                                    } else if (field.getName().equals("mPoliticalMap")
-                                        || field.getName().equals("mPeopleMainMap")
-                                        || field.getName().equals("mLifeMainMap")
-                                        || field.getName().equals("mSmokingMap")
-                                        || field.getName().equals("mAlcoholMap")) {
-                                        
-                                        Map<Integer, Integer> currentMap = null;
-                                        try {
-                                            currentMap = (Map)field.get(mWorkTypicalWords);
-                                        } catch (IllegalArgumentException ex) {
-                                            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-                                        } catch (IllegalAccessException ex) {
-                                            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-                                        }
-                                        
-                                        if (currentMap != null && !currentMap.isEmpty()) {
-                                            
-                                            Integer oldVariantInteger = null;
-                                            
-                                            SWITCH_LABEL : switch(field.getName())
-                                            {
-                                                case "mPoliticalMap":{
-                                                
-                                                    oldVariantInteger =
-                                                        MapUtils
-                                                            .getKeysByValue(TypicalWords.mPoliticalMapping, oldVariantText)
-                                                            .iterator()
-                                                            .next();
-                                                    
-                                                    if (oldVariantInteger != null
-                                                        && currentMap.containsKey(oldVariantInteger)) {
+                                            });
 
-                                                        Integer editedVariantInteger = null;
-
-                                                        editedVariantInteger =
-                                                            MapUtils
-                                                                .getKeysByValue(TypicalWords.mPoliticalMapping, editedVariantString)
-                                                                .iterator()
-                                                                .next();
-
-                                                        currentMap.put(editedVariantString, currentMap.remove(oldVariantText));
-                                                        field.set(mWorkTypicalWords, currentMap);
-                                                        fillVariantObservableList(mWorkTypicalWords, mWorkVariantObservableList);
-
-                                                        System.out.println(editedVariantString);
-                                                        forEditMap = currentMap;
-                                                        forEditFieldName = field.getName();
-                                                        break FOR_LABEL;
-                                                    }
-                                                    
-                                                    break SWITCH_LABEL;
-                                                }
-                                            }
-
-                                            
-                                        }
+                                        break FOR_LABEL;
                                     }
                                 }
-                                /*
-                                String oldVariantTextFromResource = (String) field.get(obj);*/
-                            } catch (IllegalArgumentException ex) {
-                                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-                            } catch (IllegalAccessException ex) {
-                                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        } 
-                        /*if (forEditMap != null && forEditFieldName != null) {
-                            
-                            Field field = null;
-                            
-                            try {
-                                field = c.getField(forEditFieldName);
-                            } catch (NoSuchFieldException ex) {
-                                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-                            } catch (SecurityException ex) {
-                                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            
-                            if (field != null) {
-                                
+                            } /*else if (field.getName().equals("mPoliticalMap")
+                                || field.getName().equals("mPeopleMainMap")
+                                || field.getName().equals("mLifeMainMap")
+                                || field.getName().equals("mSmokingMap")
+                                || field.getName().equals("mAlcoholMap")) {
+
+                                Map<Integer, Integer> currentMap = null;
                                 try {
-                                    field.set(mWorkTypicalWords, editedVariantString);
+                                    currentMap = (Map)field.get(mWorkTypicalWords);
                                 } catch (IllegalArgumentException ex) {
                                     Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
                                 } catch (IllegalAccessException ex) {
                                     Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
                                 }
-                            }
-                        }*/
 
-                    } else {
+                                if (currentMap != null && !currentMap.isEmpty()) {
 
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Ошибка");
-                        alert.setHeaderText("Изменение допустимого остатка воды не выполнено");
-                        alert.setContentText("Ошибка формата числа (максимум 9999) или число больше полного объема бочки");
-                        alert.showAndWait();
+                                    Integer oldVariantInteger = null;
+
+                                    SWITCH_LABEL : switch(field.getName())
+                                    {
+                                        case "mPoliticalMap":{
+
+                                            oldVariantInteger =
+                                                MapUtils
+                                                    .getKeysByValue(TypicalWords.mPoliticalMapping, oldVariantText)
+                                                    .iterator()
+                                                    .next();
+
+                                            if (oldVariantInteger != null
+                                                && currentMap.containsKey(oldVariantInteger)) {
+
+                                                Integer editedVariantInteger = null;
+
+                                                editedVariantInteger =
+                                                    MapUtils
+                                                        .getKeysByValue(TypicalWords.mPoliticalMapping, editedVariantString)
+                                                        .iterator()
+                                                        .next();
+
+                                                currentMap.put(editedVariantString, currentMap.remove(oldVariantText));
+                                                field.set(mWorkTypicalWords, currentMap);
+                                                fillVariantObservableList(mWorkTypicalWords, mWorkVariantObservableList);
+
+                                                System.out.println(editedVariantString);
+                                                forEditMap = currentMap;
+                                                forEditFieldName = field.getName();
+                                                break FOR_LABEL;
+                                            }
+
+                                            break SWITCH_LABEL;
+                                        }
+                                    }
+
+
+                                }
+                            }*/
+                        }
+                        /*
+                        String oldVariantTextFromResource = (String) field.get(obj);*/
+                    } catch (IllegalArgumentException ex) {
+                        Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalAccessException ex) {
+                        Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                }
-            );
+                } 
+            } else {
+            
+                TextInputDialog dialog =
+                    new TextInputDialog(oldVariantText);
+                dialog.setTitle("Изменение текста варианта");
+                dialog.setHeaderText("Какой новый текст варианта?");
+                dialog.setContentText("Введите строку длинной не менее двух символов: ");
+
+                Optional<String> result = dialog.showAndWait();
+
+                result.ifPresent(
+                    editedVariantString -> {
+
+                        Pattern pattern = 
+                            Pattern.compile(".{3,}");
+                        if (pattern.matcher(editedVariantString).matches()) {
+
+                            /*Optional<VariantModel> value = mWorkVariantObservableList
+                                .stream()
+                                .filter(variantModel -> variantModel.getVariant().equals(oldVariantText))
+                                .findFirst();*/
+
+                            Class c = TypicalWords.class; 
+                            Field[] publicFields = c.getFields();
+
+                            Map<String, Integer> forEditMap = null;
+                            String forEditFieldName = null;
+
+                            FOR_LABEL : for (Field field : publicFields) {
+
+                                Class fieldType = field.getType(); 
+                                System.out.println("Имя: " + field.getName()); 
+                                System.out.println("Тип: " + fieldType.getName());
+
+                                try {
+                                    if (field.get(mWorkTypicalWords) instanceof Map<?,?>) {
+
+                                        if (field.getName().equals("mInterestMap")
+                                            || field.getName().equals("mActivityMap")
+                                            || field.getName().equals("mAboutMap")
+                                            || field.getName().equals("mReligionMap")
+                                            || field.getName().equals("mInspiredByMap")
+                                            || field.getName().equals("mBooksMap")
+                                            || field.getName().equals("mMusicMap")
+                                            || field.getName().equals("mMoviesMap")) {
+
+                                            Map<String, Integer> currentMap =
+                                                (Map)field.get(mWorkTypicalWords);
+
+                                            if (currentMap != null && !currentMap.isEmpty()) {
+
+                                                if (currentMap.containsKey(oldVariantText)) {
+
+                                                    //field.set(mWorkTypicalWords, editedVariantString);
+
+                                                    currentMap.put(editedVariantString, currentMap.remove(oldVariantText));
+                                                    field.set(mWorkTypicalWords, currentMap);
+                                                    fillVariantObservableList(mWorkTypicalWords, mWorkVariantObservableList);
+
+                                                    System.out.println(editedVariantString);
+                                                    forEditMap = currentMap;
+                                                    forEditFieldName = field.getName();
+
+                                                    break FOR_LABEL;
+                                                }
+                                            }
+                                        } /*else if (field.getName().equals("mPoliticalMap")
+                                            || field.getName().equals("mPeopleMainMap")
+                                            || field.getName().equals("mLifeMainMap")
+                                            || field.getName().equals("mSmokingMap")
+                                            || field.getName().equals("mAlcoholMap")) {
+
+                                            Map<Integer, Integer> currentMap = null;
+                                            try {
+                                                currentMap = (Map)field.get(mWorkTypicalWords);
+                                            } catch (IllegalArgumentException ex) {
+                                                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                                            } catch (IllegalAccessException ex) {
+                                                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                                            }
+
+                                            if (currentMap != null && !currentMap.isEmpty()) {
+
+                                                Integer oldVariantInteger = null;
+
+                                                SWITCH_LABEL : switch(field.getName())
+                                                {
+                                                    case "mPoliticalMap":{
+
+                                                        oldVariantInteger =
+                                                            MapUtils
+                                                                .getKeysByValue(TypicalWords.mPoliticalMapping, oldVariantText)
+                                                                .iterator()
+                                                                .next();
+
+                                                        if (oldVariantInteger != null
+                                                            && currentMap.containsKey(oldVariantInteger)) {
+
+                                                            Integer editedVariantInteger = null;
+
+                                                            editedVariantInteger =
+                                                                MapUtils
+                                                                    .getKeysByValue(TypicalWords.mPoliticalMapping, editedVariantString)
+                                                                    .iterator()
+                                                                    .next();
+
+                                                            currentMap.put(editedVariantString, currentMap.remove(oldVariantText));
+                                                            field.set(mWorkTypicalWords, currentMap);
+                                                            fillVariantObservableList(mWorkTypicalWords, mWorkVariantObservableList);
+
+                                                            System.out.println(editedVariantString);
+                                                            forEditMap = currentMap;
+                                                            forEditFieldName = field.getName();
+                                                            break FOR_LABEL;
+                                                        }
+
+                                                        break SWITCH_LABEL;
+                                                    }
+                                                }
+
+
+                                            }
+                                        }*/
+                                    }
+                                    /*
+                                    String oldVariantTextFromResource = (String) field.get(obj);*/
+                                } catch (IllegalArgumentException ex) {
+                                    Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                                } catch (IllegalAccessException ex) {
+                                    Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                            } 
+                            /*if (forEditMap != null && forEditFieldName != null) {
+
+                                Field field = null;
+
+                                try {
+                                    field = c.getField(forEditFieldName);
+                                } catch (NoSuchFieldException ex) {
+                                    Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                                } catch (SecurityException ex) {
+                                    Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+
+                                if (field != null) {
+
+                                    try {
+                                        field.set(mWorkTypicalWords, editedVariantString);
+                                    } catch (IllegalArgumentException ex) {
+                                        Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                                    } catch (IllegalAccessException ex) {
+                                        Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                }
+                            }*/
+
+                        } else {
+
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Ошибка");
+                            alert.setHeaderText("Изменение допустимого остатка воды не выполнено");
+                            alert.setContentText("Ошибка формата числа (максимум 9999) или число больше полного объема бочки");
+                            alert.showAndWait();
+                        }
+                    }
+                );
+            }
         } else {
         
             Alert warningAlert =
