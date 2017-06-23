@@ -563,13 +563,42 @@ public class HomeController implements Initializable, ControlledScreen {
                     ){
                 
                 Class c = TypicalWords.class; 
-                Field[] publicFields = c.getFields();
+                //Field[] publicFields = c.getFields();
+                Field fieldTry = null;
+                try {
+                    
+                    switch (mSelectedVariantModel.getCategory()) {
+                        case "political":
+                            fieldTry = c.getField("mPoliticalMap");
+                            break;
+                        case "people main":
+                            fieldTry = c.getField("mPeopleMainMap");
+                            break;
+                        case "life main":
+                            fieldTry = c.getField("mLifeMainMap");
+                            break;
+                        case "smoking":
+                            fieldTry = c.getField("mSmokingMap");
+                            break;
+                        case "alcohol":
+                            fieldTry = c.getField("mAlcoholMap");
+                            break;
+                        default:
+                            break;
+                    }
+                } catch (NoSuchFieldException ex) {
+                    Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SecurityException ex) {
+                    Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
                 Map<String, Integer> forEditMap = null;
                 String forEditFieldName = null;
 
-                FOR_LABEL : for (Field field : publicFields) {
+                if(fieldTry != null){
+                //FOR_LABEL : for (Field field : publicFields) {
 
+                    final Field field = fieldTry;
                     Class fieldType = field.getType(); 
                     System.out.println("Имя: " + field.getName()); 
                     System.out.println("Тип: " + fieldType.getName());
@@ -577,24 +606,63 @@ public class HomeController implements Initializable, ControlledScreen {
                     try {
                         if (field.get(mWorkTypicalWords) instanceof Map<?,?>) {
 
-                            if (field.getName().equals("mInterestMap")) {
+                            //if (field.getName().equals("mPoliticalMap")) {
 
-                                Map<Integer, Integer> currentMap =
+                                final Map<Integer, Integer> currentMap =
                                     (Map)field.get(mWorkTypicalWords);
 
                                 if (currentMap != null && !currentMap.isEmpty()) {
                                     
-                                    List<String> choices =
-                                        new ArrayList<>(TypicalWords.mPoliticalMapping.values());
-
-                                    Integer oldVariantInteger = null;
+                                    List<String> choices = null;
+                                    Integer oldVariantIntegerTry = null;
                                     
-                                    oldVariantInteger = MapUtils
-                                        .getKeysByValue(TypicalWords.mPoliticalMapping, oldVariantText)
-                                        .iterator()
-                                        .next();
+                                    switch (mSelectedVariantModel.getCategory()) {
+                                        case "political":
+                                            choices =
+                                                new ArrayList<>(TypicalWords.mPoliticalMapping.values());
+                                            oldVariantIntegerTry = (Integer) MapUtils
+                                                .getKeysByValue(TypicalWords.mPoliticalMapping, oldVariantText)
+                                                .toArray()[0];
+                                            break;
+                                        case "people main":
+                                            choices =
+                                                new ArrayList<>(TypicalWords.mPeopleMainMapping.values());
+                                            oldVariantIntegerTry = (Integer) MapUtils
+                                                .getKeysByValue(TypicalWords.mPeopleMainMapping, oldVariantText)
+                                                .toArray()[0];
+                                            break;
+                                        case "life main":
+                                            choices =
+                                                new ArrayList<>(TypicalWords.mLifeMainMapping.values());
+                                            oldVariantIntegerTry = (Integer) MapUtils
+                                                .getKeysByValue(TypicalWords.mLifeMainMapping, oldVariantText)
+                                                .toArray()[0];
+                                            break;
+                                        case "smoking":
+                                            choices =
+                                                new ArrayList<>(TypicalWords.mSmokingMapping.values());
+                                            oldVariantIntegerTry = (Integer) MapUtils
+                                                .getKeysByValue(TypicalWords.mSmokingMapping, oldVariantText)
+                                                .toArray()[0];
+                                            break;
+                                        case "alcohol":
+                                            choices =
+                                                new ArrayList<>(TypicalWords.mAlcoholMapping.values());
+                                            oldVariantIntegerTry = (Integer) MapUtils
+                                                .getKeysByValue(TypicalWords.mAlcoholMapping, oldVariantText)
+                                                .toArray()[0];
+                                            break;
+                                        default:
+                                            break;
+                                    }
                                     
-                                    if (oldVariantInteger != null
+                                    final Integer oldVariantInteger =
+                                        oldVariantIntegerTry;
+                                        //.iterator()
+                                        //.next();
+                                    
+                                    if (choices != null
+                                        && oldVariantInteger != null
                                         && currentMap.containsKey(oldVariantInteger)) {
 
                                         ChoiceDialog<String> dialog =
@@ -607,80 +675,80 @@ public class HomeController implements Initializable, ControlledScreen {
 
                                         result.ifPresent(
                                             editedVariantString -> {
-                                            
-                                                Integer editedVariantInteger = null;
+                                                
+                                                Integer editedVariantIntegerTry = null;
+                                                
+                                                switch (mSelectedVariantModel.getCategory()) {
+                                                    case "political":
+                                                        editedVariantIntegerTry =
+                                                            MapUtils
+                                                                .getKeysByValue(TypicalWords.mPoliticalMapping, editedVariantString)
+                                                                .iterator()
+                                                                .next();
+                                                        break;
+                                                    case "people main":
+                                                        editedVariantIntegerTry =
+                                                            MapUtils
+                                                                .getKeysByValue(TypicalWords.mPeopleMainMapping, editedVariantString)
+                                                                .iterator()
+                                                                .next();
+                                                        break;
+                                                    case "life main":
+                                                        editedVariantIntegerTry =
+                                                            MapUtils
+                                                                .getKeysByValue(TypicalWords.mLifeMainMapping, editedVariantString)
+                                                                .iterator()
+                                                                .next();
+                                                        break;
+                                                    case "smoking":
+                                                        editedVariantIntegerTry =
+                                                            MapUtils
+                                                                .getKeysByValue(TypicalWords.mSmokingMapping, editedVariantString)
+                                                                .iterator()
+                                                                .next();
+                                                        break;
+                                                    case "alcohol":
+                                                        editedVariantIntegerTry =
+                                                            MapUtils
+                                                                .getKeysByValue(TypicalWords.mAlcoholMapping, editedVariantString)
+                                                                .iterator()
+                                                                .next();
+                                                        break;
+                                                    default:
+                                                        break;
+                                                }
+                                                
+                                                final Integer editedVariantInteger = editedVariantIntegerTry;
 
-                                                editedVariantInteger =
-                                                    MapUtils
-                                                        .getKeysByValue(TypicalWords.mPoliticalMapping, editedVariantString)
-                                                        .iterator()
-                                                        .next();
-
-                                                currentMap.put(editedVariantString, currentMap.remove(oldVariantText));
-                                                field.set(mWorkTypicalWords, currentMap);
-                                                fillVariantObservableList(mWorkTypicalWords, mWorkVariantObservableList);
+                                                if (editedVariantInteger != null) {
+                                                    
+                                                    if (!currentMap.containsKey(editedVariantInteger)) {
+                                                        
+                                                        currentMap.put(editedVariantInteger, currentMap.remove(oldVariantInteger));
+                                                        try {
+                                                            field.set(mWorkTypicalWords, currentMap);
+                                                        } catch (IllegalArgumentException ex) {
+                                                            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                                                        } catch (IllegalAccessException ex) {
+                                                            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                                                        }
+                                                        fillVariantObservableList(mWorkTypicalWords, mWorkVariantObservableList);
+                                                    } else {
+                                                    
+                                                        Alert warningAlert =
+                                                            new Alert(Alert.AlertType.WARNING);
+                                                        warningAlert.setTitle("Предупреждение");
+                                                        warningAlert.setHeaderText("Выбор варианта не изменен");
+                                                        warningAlert.setContentText("В модели уже есть вариант с таким выбором");
+                                                        warningAlert.showAndWait();
+                                                    }
+                                                }
                                             });
 
-                                        break FOR_LABEL;
+                                        //break FOR_LABEL;
                                     }
                                 }
-                            } /*else if (field.getName().equals("mPoliticalMap")
-                                || field.getName().equals("mPeopleMainMap")
-                                || field.getName().equals("mLifeMainMap")
-                                || field.getName().equals("mSmokingMap")
-                                || field.getName().equals("mAlcoholMap")) {
-
-                                Map<Integer, Integer> currentMap = null;
-                                try {
-                                    currentMap = (Map)field.get(mWorkTypicalWords);
-                                } catch (IllegalArgumentException ex) {
-                                    Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-                                } catch (IllegalAccessException ex) {
-                                    Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-                                }
-
-                                if (currentMap != null && !currentMap.isEmpty()) {
-
-                                    Integer oldVariantInteger = null;
-
-                                    SWITCH_LABEL : switch(field.getName())
-                                    {
-                                        case "mPoliticalMap":{
-
-                                            oldVariantInteger =
-                                                MapUtils
-                                                    .getKeysByValue(TypicalWords.mPoliticalMapping, oldVariantText)
-                                                    .iterator()
-                                                    .next();
-
-                                            if (oldVariantInteger != null
-                                                && currentMap.containsKey(oldVariantInteger)) {
-
-                                                Integer editedVariantInteger = null;
-
-                                                editedVariantInteger =
-                                                    MapUtils
-                                                        .getKeysByValue(TypicalWords.mPoliticalMapping, editedVariantString)
-                                                        .iterator()
-                                                        .next();
-
-                                                currentMap.put(editedVariantString, currentMap.remove(oldVariantText));
-                                                field.set(mWorkTypicalWords, currentMap);
-                                                fillVariantObservableList(mWorkTypicalWords, mWorkVariantObservableList);
-
-                                                System.out.println(editedVariantString);
-                                                forEditMap = currentMap;
-                                                forEditFieldName = field.getName();
-                                                break FOR_LABEL;
-                                            }
-
-                                            break SWITCH_LABEL;
-                                        }
-                                    }
-
-
-                                }
-                            }*/
+                            //}
                         }
                         /*
                         String oldVariantTextFromResource = (String) field.get(obj);*/
@@ -715,8 +783,8 @@ public class HomeController implements Initializable, ControlledScreen {
                             Class c = TypicalWords.class; 
                             Field[] publicFields = c.getFields();
 
-                            Map<String, Integer> forEditMap = null;
-                            String forEditFieldName = null;
+                            //Map<String, Integer> forEditMap = null;
+                            //String forEditFieldName = null;
 
                             FOR_LABEL : for (Field field : publicFields) {
 
@@ -743,15 +811,26 @@ public class HomeController implements Initializable, ControlledScreen {
 
                                                 if (currentMap.containsKey(oldVariantText)) {
 
-                                                    //field.set(mWorkTypicalWords, editedVariantString);
+                                                    if (!currentMap.containsKey(editedVariantString)) {
+                                                        
+                                                        currentMap.put(editedVariantString, currentMap.remove(oldVariantText));
+                                                            try {
+                                                                field.set(mWorkTypicalWords, currentMap);
+                                                            } catch (IllegalArgumentException ex) {
+                                                                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                                                            } catch (IllegalAccessException ex) {
+                                                                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                                                            }
+                                                            fillVariantObservableList(mWorkTypicalWords, mWorkVariantObservableList);
+                                                        } else {
 
-                                                    currentMap.put(editedVariantString, currentMap.remove(oldVariantText));
-                                                    field.set(mWorkTypicalWords, currentMap);
-                                                    fillVariantObservableList(mWorkTypicalWords, mWorkVariantObservableList);
-
-                                                    System.out.println(editedVariantString);
-                                                    forEditMap = currentMap;
-                                                    forEditFieldName = field.getName();
+                                                            Alert warningAlert =
+                                                                new Alert(Alert.AlertType.WARNING);
+                                                            warningAlert.setTitle("Предупреждение");
+                                                            warningAlert.setHeaderText("Текст варианта не изменен");
+                                                            warningAlert.setContentText("В модели уже есть вариант с таким текстом");
+                                                            warningAlert.showAndWait();
+                                                        }
 
                                                     break FOR_LABEL;
                                                 }
