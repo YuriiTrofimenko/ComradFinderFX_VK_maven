@@ -32,6 +32,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -381,123 +382,78 @@ public class HomeController implements Initializable, ControlledScreen {
     //по заданной группе
     @FXML
     private void showCreateModelDialog(){
-        
-        //progressIndicator.visibleProperty().set(true);
-    
-        //
-        /*mSelectedBarrelModel =
-                (BarrelModel) barrelsTableView.getSelectionModel().getSelectedItem();
-        
-        //
-        if (mSelectedBarrelModel != null) {
             
-            mSelectedBarrel =
-                mBarrelsDAOImpl.getBarrel(mSelectedBarrelModel.getId());*/
-            
-            TextInputDialog dialog =
-                new TextInputDialog("");
-            dialog.setTitle("Создание модели");
-            dialog.setHeaderText("Для какой группы ВК создать модель совокупного пользователя?");
-            dialog.setContentText("Введите id или псевдоним группы (например, 137118920 или tehnokom_su): ");
+        TextInputDialog dialog =
+            new TextInputDialog("");
+        dialog.setTitle("Создание модели");
+        dialog.setHeaderText("Для какой группы ВК создать модель совокупного пользователя?");
+        dialog.setContentText("Введите id или псевдоним группы (например, 137118920 или tehnokom_su): ");
 
-            Optional<String> result = dialog.showAndWait();
+        Optional<String> result = dialog.showAndWait();
 
-            result.ifPresent(
-                groupIdString -> {
+        result.ifPresent(
+            groupIdString -> {
 
-                    boolean hasNumFormatErrors = false;
-                    //boolean tooMuchErrors = false;
-                    
-                    try{
-                    
-                        Task buildModelTask =
-                            ModelBuilder.buildModel(groupIdString);
-                        
-                        ProgressForm pForm = new ProgressForm();
-                        
-                        // binds progress of progress bars to progress of task:
-                        pForm.activateProgressBar(buildModelTask);
-                        
-                        
-                        
-                        // this method would get the result of the task
-                        // and update the UI based on its value
-                        buildModelTask.setOnSucceeded(event -> {
-                            pForm.getDialogStage().close();
-                            //Активируем кнопки основного экрана
-                            toggleButtonsEnable();
-                            //Загружаем модель типичных слов в объект Java
-                            //из только что сохраненного файла
-                            //Читаем набор типичных слов из файла XML в Java объект
+                boolean hasNumFormatErrors = false;
+
+                try{
+
+                    Task buildModelTask =
+                        ModelBuilder.buildModel(groupIdString);
+
+                    ProgressForm pForm = new ProgressForm();
+
+                    // binds progress of progress bars to progress of task:
+                    pForm.activateProgressBar(buildModelTask);
+
+                    // this method would get the result of the task
+                    // and update the UI based on its value
+                    buildModelTask.setOnSucceeded(event -> {
+                        pForm.getDialogStage().close();
+                        //Активируем кнопки основного экрана
+                        toggleButtonsEnable();
+                        //Загружаем модель типичных слов в объект Java
+                        //из только что сохраненного файла
+                        //Читаем набор типичных слов из файла XML в Java объект
+                        try {
                             try {
-                                try {
-                                    mSrcTypicalWords = XmlImporter.getTypicalWords("TypicalWords.xml");
-                                } catch (SAXException ex) {
-                                    Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-                                } catch (ParserConfigurationException ex) {
-                                    Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-                                }
-                            } catch (IOException | XMLStreamException ex) {
+                                mSrcTypicalWords = XmlImporter.getTypicalWords("TypicalWords.xml");
+                            } catch (SAXException ex) {
+                                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ParserConfigurationException ex) {
                                 Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                            if (mSrcTypicalWords != null) {
-                                
-                                fillVariantObservableList(mSrcTypicalWords, mSrcVariantObservableList);
-                            }
-                            
-                        });
-                        
-                        toggleButtonsEnable();
-                        
-                        pForm.getDialogStage().show();
+                        } catch (IOException | XMLStreamException ex) {
+                            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        if (mSrcTypicalWords != null) {
 
-                        Thread thread = new Thread(buildModelTask);
-                        thread.setDaemon(true);
-                        thread.start();
-                        
-                        /*Pattern pattern = 
-                            Pattern.compile("[0-9]{1,4}");
-                        if (pattern.matcher(changeAllowedRestString).matches()
-                            && Integer.valueOf(changeAllowedRestString)
-                                <= mBarrelCapacitiesDAOImpl
-                                    .getBarrelCapacity(
-                                            mSelectedBarrel.getCapacityId()).getCapacity()
-                                ) {*/
+                            fillVariantObservableList(mSrcTypicalWords, mSrcVariantObservableList);
+                        }
 
-                                //mSelectedBarrel.setAllowedRest(Integer.valueOf(changeAllowedRestString));
-                                //mBarrelsDAOImpl.updateBarrel(mSelectedBarrel);
-                                //Notify self
-                                //updateBarrelsForPage();
-                                //нотифицировать контроллер добавления доставок
-                                //WS1.addSaleControllerInstance.updateBarrels();
-                        /*} else {
+                    });
 
-                            hasNumFormatErrors = true;
-                        }*/
-                    } catch (NumberFormatException ex){
+                    toggleButtonsEnable();
 
-                        hasNumFormatErrors = true;
-                    }
-                    if (hasNumFormatErrors) {
-                        
-                        Alert alert = new Alert(Alert.AlertType.ERROR);
-                        alert.setTitle("Ошибка");
-                        alert.setHeaderText("Изменение допустимого остатка воды не выполнено");
-                        alert.setContentText("Ошибка формата числа (максимум 9999) или число больше полного объема бочки");
-                        alert.showAndWait();
-                    }
+                    pForm.getDialogStage().show();
+
+                    Thread thread = new Thread(buildModelTask);
+                    thread.setDaemon(true);
+                    thread.start();
+                } catch (NumberFormatException ex){
+
+                    hasNumFormatErrors = true;
                 }
-            );
-        /*} else {
-        
-            Alert warningAlert =
-                new Alert(Alert.AlertType.WARNING);
-            warningAlert.setTitle("Предупреждение");
-            warningAlert.setHeaderText("Не выбрана ни одна бочка");
-            warningAlert.setContentText("Выделите одну строку в таблице");
-            warningAlert.showAndWait();
-        }*/
-        //progressIndicator.visibleProperty().set(false);
+                if (hasNumFormatErrors) {
+
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Ошибка");
+                    alert.setHeaderText("Сбой создания модели");
+                    alert.setContentText("Сетевой ресурс недоступен или введен некорректный идентификатор группы");
+                    alert.showAndWait();
+                }
+            }
+        );
     }
     
     @FXML
@@ -606,152 +562,143 @@ public class HomeController implements Initializable, ControlledScreen {
                     try {
                         if (field.get(mWorkTypicalWords) instanceof Map<?,?>) {
 
-                            //if (field.getName().equals("mPoliticalMap")) {
+                            final Map<Integer, Integer> currentMap =
+                                (Map)field.get(mWorkTypicalWords);
 
-                                final Map<Integer, Integer> currentMap =
-                                    (Map)field.get(mWorkTypicalWords);
+                            if (currentMap != null && !currentMap.isEmpty()) {
 
-                                if (currentMap != null && !currentMap.isEmpty()) {
-                                    
-                                    List<String> choices = null;
-                                    Integer oldVariantIntegerTry = null;
-                                    
-                                    switch (mSelectedVariantModel.getCategory()) {
-                                        case "political":
-                                            choices =
-                                                new ArrayList<>(TypicalWords.mPoliticalMapping.values());
-                                            oldVariantIntegerTry = (Integer) MapUtils
-                                                .getKeysByValue(TypicalWords.mPoliticalMapping, oldVariantText)
-                                                .toArray()[0];
-                                            break;
-                                        case "people main":
-                                            choices =
-                                                new ArrayList<>(TypicalWords.mPeopleMainMapping.values());
-                                            oldVariantIntegerTry = (Integer) MapUtils
-                                                .getKeysByValue(TypicalWords.mPeopleMainMapping, oldVariantText)
-                                                .toArray()[0];
-                                            break;
-                                        case "life main":
-                                            choices =
-                                                new ArrayList<>(TypicalWords.mLifeMainMapping.values());
-                                            oldVariantIntegerTry = (Integer) MapUtils
-                                                .getKeysByValue(TypicalWords.mLifeMainMapping, oldVariantText)
-                                                .toArray()[0];
-                                            break;
-                                        case "smoking":
-                                            choices =
-                                                new ArrayList<>(TypicalWords.mSmokingMapping.values());
-                                            oldVariantIntegerTry = (Integer) MapUtils
-                                                .getKeysByValue(TypicalWords.mSmokingMapping, oldVariantText)
-                                                .toArray()[0];
-                                            break;
-                                        case "alcohol":
-                                            choices =
-                                                new ArrayList<>(TypicalWords.mAlcoholMapping.values());
-                                            oldVariantIntegerTry = (Integer) MapUtils
-                                                .getKeysByValue(TypicalWords.mAlcoholMapping, oldVariantText)
-                                                .toArray()[0];
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                    
-                                    final Integer oldVariantInteger =
-                                        oldVariantIntegerTry;
-                                        //.iterator()
-                                        //.next();
-                                    
-                                    if (choices != null
-                                        && oldVariantInteger != null
-                                        && currentMap.containsKey(oldVariantInteger)) {
+                                List<String> choices = null;
+                                Integer oldVariantIntegerTry = null;
 
-                                        ChoiceDialog<String> dialog =
-                                            new ChoiceDialog<>(oldVariantText, choices);
-                                        dialog.setTitle("Изменение выбора варианта");
-                                        dialog.setHeaderText("Какой новый выбор варианта?");
-                                        dialog.setContentText("Выберите один из пунктов: ");
-                                        
-                                        Optional<String> result = dialog.showAndWait();
-
-                                        result.ifPresent(
-                                            editedVariantString -> {
-                                                
-                                                Integer editedVariantIntegerTry = null;
-                                                
-                                                switch (mSelectedVariantModel.getCategory()) {
-                                                    case "political":
-                                                        editedVariantIntegerTry =
-                                                            MapUtils
-                                                                .getKeysByValue(TypicalWords.mPoliticalMapping, editedVariantString)
-                                                                .iterator()
-                                                                .next();
-                                                        break;
-                                                    case "people main":
-                                                        editedVariantIntegerTry =
-                                                            MapUtils
-                                                                .getKeysByValue(TypicalWords.mPeopleMainMapping, editedVariantString)
-                                                                .iterator()
-                                                                .next();
-                                                        break;
-                                                    case "life main":
-                                                        editedVariantIntegerTry =
-                                                            MapUtils
-                                                                .getKeysByValue(TypicalWords.mLifeMainMapping, editedVariantString)
-                                                                .iterator()
-                                                                .next();
-                                                        break;
-                                                    case "smoking":
-                                                        editedVariantIntegerTry =
-                                                            MapUtils
-                                                                .getKeysByValue(TypicalWords.mSmokingMapping, editedVariantString)
-                                                                .iterator()
-                                                                .next();
-                                                        break;
-                                                    case "alcohol":
-                                                        editedVariantIntegerTry =
-                                                            MapUtils
-                                                                .getKeysByValue(TypicalWords.mAlcoholMapping, editedVariantString)
-                                                                .iterator()
-                                                                .next();
-                                                        break;
-                                                    default:
-                                                        break;
-                                                }
-                                                
-                                                final Integer editedVariantInteger = editedVariantIntegerTry;
-
-                                                if (editedVariantInteger != null) {
-                                                    
-                                                    if (!currentMap.containsKey(editedVariantInteger)) {
-                                                        
-                                                        currentMap.put(editedVariantInteger, currentMap.remove(oldVariantInteger));
-                                                        try {
-                                                            field.set(mWorkTypicalWords, currentMap);
-                                                        } catch (IllegalArgumentException ex) {
-                                                            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-                                                        } catch (IllegalAccessException ex) {
-                                                            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-                                                        }
-                                                        fillVariantObservableList(mWorkTypicalWords, mWorkVariantObservableList);
-                                                    } else {
-                                                    
-                                                        Alert warningAlert =
-                                                            new Alert(Alert.AlertType.WARNING);
-                                                        warningAlert.setTitle("Предупреждение");
-                                                        warningAlert.setHeaderText("Выбор варианта не изменен");
-                                                        warningAlert.setContentText("В модели уже есть вариант с таким выбором");
-                                                        warningAlert.showAndWait();
-                                                    }
-                                                }
-                                            });
-
-                                        //break FOR_LABEL;
-                                    }
+                                switch (mSelectedVariantModel.getCategory()) {
+                                    case "political":
+                                        choices =
+                                            new ArrayList<>(TypicalWords.mPoliticalMapping.values());
+                                        oldVariantIntegerTry = (Integer) MapUtils
+                                            .getKeysByValue(TypicalWords.mPoliticalMapping, oldVariantText)
+                                            .toArray()[0];
+                                        break;
+                                    case "people main":
+                                        choices =
+                                            new ArrayList<>(TypicalWords.mPeopleMainMapping.values());
+                                        oldVariantIntegerTry = (Integer) MapUtils
+                                            .getKeysByValue(TypicalWords.mPeopleMainMapping, oldVariantText)
+                                            .toArray()[0];
+                                        break;
+                                    case "life main":
+                                        choices =
+                                            new ArrayList<>(TypicalWords.mLifeMainMapping.values());
+                                        oldVariantIntegerTry = (Integer) MapUtils
+                                            .getKeysByValue(TypicalWords.mLifeMainMapping, oldVariantText)
+                                            .toArray()[0];
+                                        break;
+                                    case "smoking":
+                                        choices =
+                                            new ArrayList<>(TypicalWords.mSmokingMapping.values());
+                                        oldVariantIntegerTry = (Integer) MapUtils
+                                            .getKeysByValue(TypicalWords.mSmokingMapping, oldVariantText)
+                                            .toArray()[0];
+                                        break;
+                                    case "alcohol":
+                                        choices =
+                                            new ArrayList<>(TypicalWords.mAlcoholMapping.values());
+                                        oldVariantIntegerTry = (Integer) MapUtils
+                                            .getKeysByValue(TypicalWords.mAlcoholMapping, oldVariantText)
+                                            .toArray()[0];
+                                        break;
+                                    default:
+                                        break;
                                 }
-                            //}
+
+                                final Integer oldVariantInteger =
+                                    oldVariantIntegerTry;
+
+                                if (choices != null
+                                    && oldVariantInteger != null
+                                    && currentMap.containsKey(oldVariantInteger)) {
+
+                                    ChoiceDialog<String> dialog =
+                                        new ChoiceDialog<>(oldVariantText, choices);
+                                    dialog.setTitle("Изменение выбора варианта");
+                                    dialog.setHeaderText("Какой новый выбор варианта?");
+                                    dialog.setContentText("Выберите один из пунктов: ");
+
+                                    Optional<String> result = dialog.showAndWait();
+
+                                    result.ifPresent(
+                                        editedVariantString -> {
+
+                                            Integer editedVariantIntegerTry = null;
+
+                                            switch (mSelectedVariantModel.getCategory()) {
+                                                case "political":
+                                                    editedVariantIntegerTry =
+                                                        MapUtils
+                                                            .getKeysByValue(TypicalWords.mPoliticalMapping, editedVariantString)
+                                                            .iterator()
+                                                            .next();
+                                                    break;
+                                                case "people main":
+                                                    editedVariantIntegerTry =
+                                                        MapUtils
+                                                            .getKeysByValue(TypicalWords.mPeopleMainMapping, editedVariantString)
+                                                            .iterator()
+                                                            .next();
+                                                    break;
+                                                case "life main":
+                                                    editedVariantIntegerTry =
+                                                        MapUtils
+                                                            .getKeysByValue(TypicalWords.mLifeMainMapping, editedVariantString)
+                                                            .iterator()
+                                                            .next();
+                                                    break;
+                                                case "smoking":
+                                                    editedVariantIntegerTry =
+                                                        MapUtils
+                                                            .getKeysByValue(TypicalWords.mSmokingMapping, editedVariantString)
+                                                            .iterator()
+                                                            .next();
+                                                    break;
+                                                case "alcohol":
+                                                    editedVariantIntegerTry =
+                                                        MapUtils
+                                                            .getKeysByValue(TypicalWords.mAlcoholMapping, editedVariantString)
+                                                            .iterator()
+                                                            .next();
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+
+                                            final Integer editedVariantInteger = editedVariantIntegerTry;
+
+                                            if (editedVariantInteger != null) {
+
+                                                if (!currentMap.containsKey(editedVariantInteger)) {
+
+                                                    currentMap.put(editedVariantInteger, currentMap.remove(oldVariantInteger));
+                                                    try {
+                                                        field.set(mWorkTypicalWords, currentMap);
+                                                    } catch (IllegalArgumentException ex) {
+                                                        Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                                                    } catch (IllegalAccessException ex) {
+                                                        Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                                                    }
+                                                    fillVariantObservableList(mWorkTypicalWords, mWorkVariantObservableList);
+                                                } else {
+
+                                                    Alert warningAlert =
+                                                        new Alert(Alert.AlertType.WARNING);
+                                                    warningAlert.setTitle("Предупреждение");
+                                                    warningAlert.setHeaderText("Выбор варианта не изменен");
+                                                    warningAlert.setContentText("В модели уже есть вариант с таким выбором");
+                                                    warningAlert.showAndWait();
+                                                }
+                                            }
+                                    });
+                                }
+                            }
                         }
-                        /*
-                        String oldVariantTextFromResource = (String) field.get(obj);*/
                     } catch (IllegalArgumentException ex) {
                         Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
                     } catch (IllegalAccessException ex) {
@@ -775,16 +722,8 @@ public class HomeController implements Initializable, ControlledScreen {
                             Pattern.compile(".{3,}");
                         if (pattern.matcher(editedVariantString).matches()) {
 
-                            /*Optional<VariantModel> value = mWorkVariantObservableList
-                                .stream()
-                                .filter(variantModel -> variantModel.getVariant().equals(oldVariantText))
-                                .findFirst();*/
-
                             Class c = TypicalWords.class; 
                             Field[] publicFields = c.getFields();
-
-                            //Map<String, Integer> forEditMap = null;
-                            //String forEditFieldName = null;
 
                             FOR_LABEL : for (Field field : publicFields) {
 
@@ -835,106 +774,283 @@ public class HomeController implements Initializable, ControlledScreen {
                                                     break FOR_LABEL;
                                                 }
                                             }
-                                        } /*else if (field.getName().equals("mPoliticalMap")
-                                            || field.getName().equals("mPeopleMainMap")
-                                            || field.getName().equals("mLifeMainMap")
-                                            || field.getName().equals("mSmokingMap")
-                                            || field.getName().equals("mAlcoholMap")) {
-
-                                            Map<Integer, Integer> currentMap = null;
-                                            try {
-                                                currentMap = (Map)field.get(mWorkTypicalWords);
-                                            } catch (IllegalArgumentException ex) {
-                                                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-                                            } catch (IllegalAccessException ex) {
-                                                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-                                            }
-
-                                            if (currentMap != null && !currentMap.isEmpty()) {
-
-                                                Integer oldVariantInteger = null;
-
-                                                SWITCH_LABEL : switch(field.getName())
-                                                {
-                                                    case "mPoliticalMap":{
-
-                                                        oldVariantInteger =
-                                                            MapUtils
-                                                                .getKeysByValue(TypicalWords.mPoliticalMapping, oldVariantText)
-                                                                .iterator()
-                                                                .next();
-
-                                                        if (oldVariantInteger != null
-                                                            && currentMap.containsKey(oldVariantInteger)) {
-
-                                                            Integer editedVariantInteger = null;
-
-                                                            editedVariantInteger =
-                                                                MapUtils
-                                                                    .getKeysByValue(TypicalWords.mPoliticalMapping, editedVariantString)
-                                                                    .iterator()
-                                                                    .next();
-
-                                                            currentMap.put(editedVariantString, currentMap.remove(oldVariantText));
-                                                            field.set(mWorkTypicalWords, currentMap);
-                                                            fillVariantObservableList(mWorkTypicalWords, mWorkVariantObservableList);
-
-                                                            System.out.println(editedVariantString);
-                                                            forEditMap = currentMap;
-                                                            forEditFieldName = field.getName();
-                                                            break FOR_LABEL;
-                                                        }
-
-                                                        break SWITCH_LABEL;
-                                                    }
-                                                }
-
-
-                                            }
-                                        }*/
+                                        }
                                     }
-                                    /*
-                                    String oldVariantTextFromResource = (String) field.get(obj);*/
                                 } catch (IllegalArgumentException ex) {
                                     Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
                                 } catch (IllegalAccessException ex) {
                                     Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
                                 }
                             } 
-                            /*if (forEditMap != null && forEditFieldName != null) {
-
-                                Field field = null;
-
-                                try {
-                                    field = c.getField(forEditFieldName);
-                                } catch (NoSuchFieldException ex) {
-                                    Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-                                } catch (SecurityException ex) {
-                                    Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-                                }
-
-                                if (field != null) {
-
-                                    try {
-                                        field.set(mWorkTypicalWords, editedVariantString);
-                                    } catch (IllegalArgumentException ex) {
-                                        Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-                                    } catch (IllegalAccessException ex) {
-                                        Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-                                    }
-                                }
-                            }*/
-
                         } else {
 
                             Alert alert = new Alert(Alert.AlertType.ERROR);
                             alert.setTitle("Ошибка");
-                            alert.setHeaderText("Изменение допустимого остатка воды не выполнено");
-                            alert.setContentText("Ошибка формата числа (максимум 9999) или число больше полного объема бочки");
+                            alert.setHeaderText("Изменение варианта не выполнено");
+                            alert.setContentText("Введите строку длинной не менее двух символов");
                             alert.showAndWait();
                         }
                     }
                 );
+            }
+        } else {
+        
+            Alert warningAlert =
+                new Alert(Alert.AlertType.WARNING);
+            warningAlert.setTitle("Предупреждение");
+            warningAlert.setHeaderText("Не выбрана ни одна строка в рабочей таблице вариантов");
+            warningAlert.setContentText("Выделите одну строку в таблице вариантов");
+            warningAlert.showAndWait();
+        }
+    }
+    
+    @FXML
+    private void showDeleteRowDlgAction(ActionEvent event){
+    
+        mSelectedVariantModel =
+            (VariantModel) workModelTableView.getSelectionModel().getSelectedItem();
+        
+        if (mSelectedVariantModel != null) {
+            
+            String oldVariantText = mSelectedVariantModel.getVariant();
+            
+            if(mSelectedVariantModel.getCategory().equals("political")
+                || mSelectedVariantModel.getCategory().equals("people main")
+                || mSelectedVariantModel.getCategory().equals("life main")
+                || mSelectedVariantModel.getCategory().equals("smoking")
+                || mSelectedVariantModel.getCategory().equals("alcohol")
+                    ){
+                
+                Class c = TypicalWords.class; 
+                Field fieldTry = null;
+                try {
+                    
+                    switch (mSelectedVariantModel.getCategory()) {
+                        case "political":
+                            fieldTry = c.getField("mPoliticalMap");
+                            break;
+                        case "people main":
+                            fieldTry = c.getField("mPeopleMainMap");
+                            break;
+                        case "life main":
+                            fieldTry = c.getField("mLifeMainMap");
+                            break;
+                        case "smoking":
+                            fieldTry = c.getField("mSmokingMap");
+                            break;
+                        case "alcohol":
+                            fieldTry = c.getField("mAlcoholMap");
+                            break;
+                        default:
+                            break;
+                    }
+                } catch (NoSuchFieldException ex) {
+                    Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SecurityException ex) {
+                    Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                if(fieldTry != null){
+
+                    final Field field = fieldTry;
+                    Class fieldType = field.getType(); 
+                    System.out.println("Имя: " + field.getName()); 
+                    System.out.println("Тип: " + fieldType.getName());
+
+                    try {
+                        if (field.get(mWorkTypicalWords) instanceof Map<?,?>) {
+
+                            final Map<Integer, Integer> currentMap =
+                                (Map)field.get(mWorkTypicalWords);
+
+                            if (currentMap != null && !currentMap.isEmpty()) {
+
+                                Integer oldVariantIntegerTry = null;
+
+                                switch (mSelectedVariantModel.getCategory()) {
+                                    case "political":
+
+                                        oldVariantIntegerTry = (Integer) MapUtils
+                                            .getKeysByValue(TypicalWords.mPoliticalMapping, oldVariantText)
+                                            .toArray()[0];
+                                        break;
+                                    case "people main":
+
+                                        oldVariantIntegerTry = (Integer) MapUtils
+                                            .getKeysByValue(TypicalWords.mPeopleMainMapping, oldVariantText)
+                                            .toArray()[0];
+                                        break;
+                                    case "life main":
+
+                                        oldVariantIntegerTry = (Integer) MapUtils
+                                            .getKeysByValue(TypicalWords.mLifeMainMapping, oldVariantText)
+                                            .toArray()[0];
+                                        break;
+                                    case "smoking":
+
+                                        oldVariantIntegerTry = (Integer) MapUtils
+                                            .getKeysByValue(TypicalWords.mSmokingMapping, oldVariantText)
+                                            .toArray()[0];
+                                        break;
+                                    case "alcohol":
+
+                                        oldVariantIntegerTry = (Integer) MapUtils
+                                            .getKeysByValue(TypicalWords.mAlcoholMapping, oldVariantText)
+                                            .toArray()[0];
+                                        break;
+                                    default:
+                                        break;
+                                }
+
+                                final Integer oldVariantInteger =
+                                    oldVariantIntegerTry;
+
+                                if (oldVariantInteger != null
+                                    && currentMap.containsKey(oldVariantInteger)) {
+
+                                    Object delResult = null;
+
+                                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                                    alert.setTitle("Удаление строки");
+                                    alert.setHeaderText("Требуется подтверждение");
+                                    alert.setContentText("Вы действительно хотите удалить выбранную строку рабочей модели?");
+
+                                    Optional<ButtonType> result = alert.showAndWait();
+
+                                    if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
+
+                                        delResult = currentMap.remove(oldVariantInteger);
+                                        try {
+                                            field.set(mWorkTypicalWords, currentMap);
+                                        } catch (IllegalArgumentException ex) {
+
+                                            delResult = null;
+                                            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                                        } catch (IllegalAccessException ex) {
+
+                                            delResult = null;
+                                            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+
+                                        if (delResult != null) {
+
+                                            fillVariantObservableList(mWorkTypicalWords, mWorkVariantObservableList);
+
+                                            alert = new Alert(Alert.AlertType.INFORMATION);
+                                            alert.setTitle("Информация");
+                                            alert.setHeaderText("Выбранная строка рабочей модели успешно удалена");
+                                            //Показать сообщение и ждать клика по кнопке Ok
+                                            alert.showAndWait();
+                                        } else {
+
+                                            alert = new Alert(Alert.AlertType.ERROR);
+                                            alert.setTitle("Ошибка");
+                                            alert.setHeaderText("Произошел сбой в работе приложения. Выбранная строка не найдена и/или не удалена.");
+                                            alert.showAndWait();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } catch (IllegalArgumentException ex) {
+                        Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalAccessException ex) {
+                        Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } 
+            } else {
+            
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Удаление строки");
+                alert.setHeaderText("Требуется подтверждение");
+                alert.setContentText("Вы действительно хотите удалить выбранную строку рабочей модели?");
+
+                Optional<ButtonType> result = alert.showAndWait();
+
+                if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
+
+                    Class c = TypicalWords.class; 
+                    Field[] publicFields = c.getFields();
+
+                    FOR_LABEL : for (Field field : publicFields) {
+
+                        Class fieldType = field.getType(); 
+                        System.out.println("Имя: " + field.getName()); 
+                        System.out.println("Тип: " + fieldType.getName());
+
+                        try {
+                            if (field.get(mWorkTypicalWords) instanceof Map<?,?>) {
+
+                                if (field.getName().equals("mInterestMap")
+                                    || field.getName().equals("mActivityMap")
+                                    || field.getName().equals("mAboutMap")
+                                    || field.getName().equals("mReligionMap")
+                                    || field.getName().equals("mInspiredByMap")
+                                    || field.getName().equals("mBooksMap")
+                                    || field.getName().equals("mMusicMap")
+                                    || field.getName().equals("mMoviesMap")) {
+
+                                    Map<String, Integer> currentMap =
+                                        (Map)field.get(mWorkTypicalWords);
+
+                                    Object delResult = null;
+
+                                    if (currentMap != null && !currentMap.isEmpty()) {
+
+                                        if (currentMap.containsKey(oldVariantText)) {
+
+                                            //if (!currentMap.containsKey(editedVariantString)) {
+
+                                            delResult = currentMap.remove(oldVariantText);
+                                            try {
+                                                field.set(mWorkTypicalWords, currentMap);
+                                            } catch (IllegalArgumentException ex) {
+
+                                                delResult = null;
+                                                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                                            } catch (IllegalAccessException ex) {
+
+                                                delResult = null;
+                                                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                                            }
+
+                                            if (delResult != null) {
+
+                                                fillVariantObservableList(mWorkTypicalWords, mWorkVariantObservableList);
+
+                                                alert = new Alert(Alert.AlertType.INFORMATION);
+                                                alert.setTitle("Информация");
+                                                alert.setHeaderText("Выбранная строка рабочей модели успешно удалена");
+                                                //Показать сообщение и ждать клика по кнопке Ok
+                                                alert.showAndWait();
+                                            } else {
+
+                                                alert = new Alert(Alert.AlertType.ERROR);
+                                                alert.setTitle("Ошибка");
+                                                alert.setHeaderText("Произошел сбой в работе приложения. Выбранная строка не найдена и/или не удалена.");
+                                                alert.showAndWait();
+                                            }
+                                            break FOR_LABEL;
+                                        }
+                                    }
+                                }
+                            }
+                            /*
+                            String oldVariantTextFromResource = (String) field.get(obj);*/
+                        } catch (IllegalArgumentException ex) {
+                            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (IllegalAccessException ex) {
+                            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } 
+                } else {
+
+                    Alert infoAlert = new Alert(Alert.AlertType.INFORMATION);
+                    infoAlert.setTitle("Информация");
+                    infoAlert.setHeaderText("Процесс удаления отменен");
+                    infoAlert.setContentText("Удаление выбранной строки из рабочей модели не выполнено");
+                    infoAlert.showAndWait();
+                }
             }
         } else {
         

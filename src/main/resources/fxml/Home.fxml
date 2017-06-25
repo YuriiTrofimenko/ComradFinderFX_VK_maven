@@ -157,7 +157,7 @@
                               <Font size="14.0" />
                            </font>
                       </Button>
-                      <Button mnemonicParsing="false" text="Delete row" ButtonBar.buttonData="LEFT">
+                      <Button mnemonicParsing="false" onAction="#showDeleteRowDlgAction" text="Delete row" ButtonBar.buttonData="LEFT">
                            <font>
                               <Font size="14.0" />
                            </font>
