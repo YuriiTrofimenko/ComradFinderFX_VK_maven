@@ -44,6 +44,7 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLStreamException;
 import org.controlsfx.control.textfield.CustomTextField;
@@ -52,6 +53,7 @@ import org.controlsfx.validation.Severity;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
 import org.tyaa.comradfinder.model.TypicalWords;
+import org.tyaa.comradfinder.modules.XmlExporter;
 import org.tyaa.comradfinder.modules.XmlImporter;
 import org.tyaa.comradfinder.modules.facades.ModelBuilder;
 import org.tyaa.comradfinder.screensframework.ProgressForm;
@@ -130,19 +132,7 @@ public class HomeController implements Initializable, ControlledScreen {
     CustomTextField сleaningOCTimeCTextField;
     @FXML
     CustomTextField allowedRestPercent;*/
-    
-    /*@FXML
-    Button waterTypesAddButton;
-    @FXML
-    Button waterTypesDeleteButton;
-    @FXML
-    Button capacityAddButton;
-    @FXML
-    Button capacityDeleteButton;*/
-    /*@FXML
-    CheckBox replaceCheckBox;
-    @FXML
-    DatePicker lastCleanDatePicker;*/
+
     
     //Флаг "кнопки активны"
     private boolean mButtonsEnable;
@@ -456,10 +446,126 @@ public class HomeController implements Initializable, ControlledScreen {
         );
     }
     
+    //Действие отображения диалогового окна сохранения модели
+    //в указанной папке файловой системы
+    @FXML
+    private void showSaveModelDialog(){
+        
+        //TODO Добавить диалог, предлагающий сохранение данных при выходе
+        //из приложения
+        
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+            new ExtensionFilter("XML Files", "*.xml")
+                ,new ExtensionFilter("All Files", "*.*"));
+        fileChooser.setTitle("Сохранение файла модели");
+        fileChooser.setInitialFileName("TypicalWords.xml");
+        File savedFile = fileChooser.showSaveDialog(null);
+
+        if (savedFile != null) {
+            
+            int savingResult = 0;
+
+            try {
+
+                //TODO Добавить в класс модели TypicalWords
+                //поле счетчика вариантов. Если оно == 0 - модель пуста
+                
+                if (mWorkTypicalWords != null
+                    && (!mWorkTypicalWords.mAboutMap.isEmpty()
+                        || !mWorkTypicalWords.mActivityMap.isEmpty()
+                        || !mWorkTypicalWords.mAlcoholMap.isEmpty()
+                        || !mWorkTypicalWords.mBooksMap.isEmpty())
+                        || !mWorkTypicalWords.mInspiredByMap.isEmpty()
+                        || !mWorkTypicalWords.mInterestMap.isEmpty()
+                        || !mWorkTypicalWords.mLifeMainMap.isEmpty()
+                        || !mWorkTypicalWords.mMoviesMap.isEmpty()
+                        || !mWorkTypicalWords.mMusicMap.isEmpty()
+                        || !mWorkTypicalWords.mPeopleMainMap.isEmpty()
+                        || !mWorkTypicalWords.mPoliticalMap.isEmpty()
+                        || !mWorkTypicalWords.mReligionMap.isEmpty()
+                        || !mWorkTypicalWords.mSmokingMap.isEmpty()) {
+                    
+                    XmlExporter.TypicalWordsToXml(
+                        mWorkTypicalWords
+                            , savedFile.getAbsolutePath());
+                } else if (mSrcTypicalWords != null
+                            && (!mSrcTypicalWords.mAboutMap.isEmpty()
+                                || !mSrcTypicalWords.mActivityMap.isEmpty()
+                                || !mSrcTypicalWords.mAlcoholMap.isEmpty()
+                                || !mSrcTypicalWords.mBooksMap.isEmpty())
+                                || !mSrcTypicalWords.mInspiredByMap.isEmpty()
+                                || !mSrcTypicalWords.mInterestMap.isEmpty()
+                                || !mSrcTypicalWords.mLifeMainMap.isEmpty()
+                                || !mSrcTypicalWords.mMoviesMap.isEmpty()
+                                || !mSrcTypicalWords.mMusicMap.isEmpty()
+                                || !mSrcTypicalWords.mPeopleMainMap.isEmpty()
+                                || !mSrcTypicalWords.mPoliticalMap.isEmpty()
+                                || !mSrcTypicalWords.mReligionMap.isEmpty()
+                                || !mSrcTypicalWords.mSmokingMap.isEmpty()) {
+                    
+                    XmlExporter.TypicalWordsToXml(
+                        mSrcTypicalWords
+                            , savedFile.getAbsolutePath());
+                } else {
+                
+                    Alert warningAlert =
+                        new Alert(Alert.AlertType.INFORMATION);
+                    warningAlert.setTitle("Предупреждение");
+                    warningAlert.setHeaderText("Модель не сохранена в файл");
+                    warningAlert.setContentText("Нечего сохранять");
+                    warningAlert.showAndWait();
+                    return;
+                }
+            }
+            catch(IOException e) {
+
+                savingResult = -1;
+            }
+            catch(XMLStreamException e) {
+
+                savingResult = -1;
+            }
+            
+            if (savingResult == 0) {
+                
+                Alert infoAlert =
+                    new Alert(Alert.AlertType.INFORMATION);
+                infoAlert.setTitle("Информация");
+                infoAlert.setHeaderText("Модель сохранена в файл");
+                infoAlert.setContentText(
+                    "Сохранение файла модели "
+                    + savedFile.toString()
+                    + " завершено успешно"
+                );
+                infoAlert.showAndWait();
+            } else {
+            
+                Alert errorAlert =
+                    new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Ощибка");
+                errorAlert.setHeaderText("Модель сохранена в файл");
+                errorAlert.setContentText("При попытке сохранить файл произошла ошибка");
+                errorAlert.showAndWait();
+            }
+        } else {
+            
+            Alert infoAlert =
+                new Alert(Alert.AlertType.INFORMATION);
+            infoAlert.setTitle("Информация");
+            infoAlert.setHeaderText("Модель не сохранена в файл");
+            infoAlert.setContentText("Сохранение файла модели отменено");
+            infoAlert.showAndWait();
+        }
+    }
+    
     @FXML
     private void loadModelAction(ActionEvent event){
     
         FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+            new ExtensionFilter("XML Files", "*.xml")
+                ,new ExtensionFilter("All Files", "*.*"));
         File selectedFile = fileChooser.showOpenDialog(null);
 
         if (selectedFile != null) {
@@ -483,7 +589,13 @@ public class HomeController implements Initializable, ControlledScreen {
             }
         }
         else {
-            System.out.println("File selection cancelled.");
+            
+            Alert infoAlert =
+                new Alert(Alert.AlertType.INFORMATION);
+            infoAlert.setTitle("Информация");
+            infoAlert.setHeaderText("Модель не загружена");
+            infoAlert.setContentText("Загрузка исходной модели из файла отменена");
+            infoAlert.showAndWait();
         }
     }
     
