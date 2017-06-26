@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import org.controlsfx.control.textfield.CustomTextField?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="pane" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.tyaa.comradfinder.viewcontroller.FindUsersController">
+    <children>
+      <VBox AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="0.0">
+         <children>
+           <HBox maxHeight="57.0" minHeight="57.0" prefHeight="57.0" styleClass="top-menu">
+             <children>
+                <Label fx:id="captionLabel" text="Поиск кандидатов">
+                   <HBox.margin>
+                      <Insets right="10.0" />
+                   </HBox.margin>
+                   <font>
+                      <Font name="System Bold" size="18.0" />
+                   </font>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                </Label>
+             </children>
+             <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+             </padding>
+               <VBox.margin>
+                  <Insets bottom="10.0" top="10.0" />
+               </VBox.margin>
+          </HBox>
+            <HBox>
+               <children>
+                  <Label prefWidth="100.0" text="страна">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <CustomTextField fx:id="carCTextField" prefWidth="200.0" promptText="страна">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </CustomTextField>
+                  <Label prefWidth="200.0" text="начните набирать название">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                     <HBox.margin>
+                        <Insets left="15.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
+            <HBox>
+               <children>
+                  <Label prefWidth="100.0" text="город">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <CustomTextField fx:id="driverCTextField" prefWidth="200.0" promptText="населенный пункт">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </CustomTextField>
+                  <Label prefWidth="200.0" text="начните набирать название">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                     <HBox.margin>
+                        <Insets left="15.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </HBox>
+            <HBox>
+               <children>
+                  <Label prefWidth="100.0" text="возраст">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <ComboBox fx:id="barrelComboBox" prefWidth="200.0" promptText="возраст кандидатов" />
+                  <Label prefWidth="200.0" text="выберите из списка">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                     <HBox.margin>
+                        <Insets left="15.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </HBox>
+            <HBox>
+               <children>
+                  <Label prefWidth="100.0" text="пол">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <CheckBox fx:id="cleanCheckBox" mnemonicParsing="false" text="женский">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </CheckBox>
+                  <CheckBox fx:id="repairCheckBox" mnemonicParsing="false" text="мужской">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </CheckBox>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </HBox>
+            <HBox fx:id="mainButtonsHBox" alignment="CENTER_LEFT" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <children>
+                    <Button fx:id="addSaleButton" defaultButton="true" mnemonicParsing="false" onAction="#actionAddSale" text="Искать">
+                        <font>
+                           <Font size="14.0" />
+                        </font>
+                    </Button>
+                    <Button fx:id="resetFormButton" mnemonicParsing="false" onAction="#resetForm" text="Очистить">
+                        <font>
+                           <Font size="14.0" />
+                        </font>
+                    </Button>
+                    <Button fx:id="backButton" cancelButton="true" mnemonicParsing="false" onAction="#goToSalesScreen" text="Назад">
+                        <font>
+                           <Font size="14.0" />
+                        </font>
+                    </Button>
+                </children>
+                <padding>
+                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                </padding>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="10.0" left="15.0" right="10.0" />
+         </padding>
+      </VBox>
+  </children>
+</AnchorPane>
