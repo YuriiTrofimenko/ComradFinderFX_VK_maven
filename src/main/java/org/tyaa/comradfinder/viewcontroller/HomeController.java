@@ -1181,8 +1181,8 @@ public class HomeController implements Initializable, ControlledScreen {
         
        myController.setScreen(MainApp.findUsersID);
        MainApp.primaryStage.setMaximized(false);
-       //MainApp.primaryStage.setWidth(600);
-       //MainApp.primaryStage.setHeight(360);
+       MainApp.primaryStage.setWidth(566);
+       MainApp.primaryStage.setHeight(350);
        MainApp.primaryStage.setY(30);
     }
     

@@ -19,6 +19,8 @@ import org.json.JSONObject;
 import org.tyaa.comradfinder.MainApp;
 import org.tyaa.comradfinder.model.TypicalWords;
 import org.tyaa.comradfinder.model.VKCandidate;
+import org.tyaa.comradfinder.model.VKCity;
+import org.tyaa.comradfinder.model.VKCountry;
 import org.tyaa.comradfinder.model.VKUser;
 import org.tyaa.comradfinder.modules.ExcelSaver;
 import org.tyaa.comradfinder.modules.JsonFetcher;
@@ -245,5 +247,37 @@ public class ComradFinder {
             }
         }
         //out.println(jsonString);
+    }
+    
+    public static List<VKCountry> getCountries()
+    {
+        String jsonString = "";
+        JsonFetcher jsonFetcher = new JsonFetcher();
+        JsonParser jsonParser = new JsonParser();
+        List<VKCountry> mVKCountries = new ArrayList<>();
+        
+        jsonString = jsonFetcher.fetchByUrl(
+            "https://api.vk.com/method/database.getCountries?need_all=1&count=1000"
+        );
+        
+        JSONArray countriesItems = jsonParser.parseVKSearch(jsonString);
+
+        //Перебираем все JSONObject с информацией о найденных countries
+        for (int i = 1; i < countriesItems.length(); i++) {
+        
+            VKCountry newVKCountry = new VKCountry();
+            newVKCountry.id =
+                (Integer)((JSONObject)countriesItems.get(i)).get("cid");
+            newVKCountry.name =
+                (String)((JSONObject)countriesItems.get(i)).get("title");
+            mVKCountries.add(newVKCountry);
+        }
+        
+        return mVKCountries;
+    }
+    
+    public static List<VKCity> getCitiesByCountryId(int _countryId)
+    {
+        return null;
     }
 }

@@ -50,7 +50,7 @@
                               </ButtonBar>
                               <ButtonBar buttonMinWidth="105.0" prefHeight="40.0">
                                 <buttons>
-                                          <Button mnemonicParsing="false" text="Find users">
+                                          <Button mnemonicParsing="false" onAction="#goToFindUsersScreen" text="Find users">
                                                <font>
                                                   <Font size="14.0" />
                                                </font>

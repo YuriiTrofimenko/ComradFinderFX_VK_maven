@@ -121,4 +121,18 @@ public class JsonParser
         
         return usersItems;
     }
+    
+    public JSONArray parseVKCountries(String _jsonString){
+    
+        JSONArray countriesItems = null;
+
+        try {
+            JSONObject responseJSONObject = new JSONObject(_jsonString);
+            countriesItems = responseJSONObject.getJSONArray("response");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        
+        return countriesItems;
+    }
 }

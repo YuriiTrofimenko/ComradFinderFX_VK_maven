@@ -134,7 +134,7 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </CheckBox>
-                  <CheckBox fx:id="mailCheckBox" mnemonicParsing="false" text="мужской">
+                  <CheckBox fx:id="maleCheckBox" mnemonicParsing="false" text="мужской">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -151,12 +151,12 @@
                            <Font size="14.0" />
                         </font>
                     </Button>
-                    <Button fx:id="resetFormButton" mnemonicParsing="false" onAction="#resetForm" text="Очистить">
+                    <Button fx:id="resetFormButton" mnemonicParsing="false" onAction="#resetFormAction" text="Очистить">
                         <font>
                            <Font size="14.0" />
                         </font>
                     </Button>
-                    <Button fx:id="backButton" cancelButton="true" mnemonicParsing="false" onAction="#goToHomeScreen" text="Назад">
+                    <Button fx:id="backButton" cancelButton="true" mnemonicParsing="false" onAction="#goHomeScreenAction" text="Назад">
                         <font>
                            <Font size="14.0" />
                         </font>
