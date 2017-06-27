@@ -79,77 +79,28 @@ public class FindUsersController implements Initializable, ControlledScreen {
 
     /*Внедренные хендлеры элементов UI*/
     
-    @FXML
-    Label captionLabel;
+    /*@FXML
+    Label captionLabel;*/
     
     //элементы ввода информации
     @FXML
-    CustomTextField shopCTextField;
+    CustomTextField countryCTextField;
     @FXML
-    ComboBox barrelComboBox;
+    CustomTextField cityCTextField;
     @FXML
-    CustomTextField driverCTextField;
+    ComboBox ageComboBox;
     @FXML
-    CustomTextField carCTextField;
+    CheckBox femaleCheckBox;
     @FXML
-    CustomTextField countOldCTextField;
-    @FXML
-    CustomTextField countNewCTextField;
-    @FXML
-    CustomTextField countNewAfterCTextField;
-    @FXML
-    HBox countNewAfterHBox;
-    @FXML
-    CustomTextField volumeCTextField;
-    @FXML
-    CheckBox cleanCheckBox;
-    @FXML
-    CheckBox repairCheckBox;
-    @FXML
-    CustomTextField profitCTextField;
-    @FXML
-    CustomTextField debtCTextField;
-    @FXML
-    CustomTextField debtAmortCTextField;
-    @FXML
-    DatePicker createdDatePicker;
-    @FXML
-    CustomTextField noticeCTextField;
-    @FXML
-    CheckBox showDebtsBlockCheckBox;
+    CheckBox mailCheckBox;
     
+    //
     @FXML
-    Button addSaleButton;
+    Button findUsersButton;
     @FXML
     Button resetFormButton;
     @FXML
     Button backButton;
-    
-    /*For debts block*/
-    
-    @FXML
-    ComboBox debtsComboBox;
-    
-    @FXML
-    HBox newDebtHBox;
-    @FXML
-    CheckBox notRequireAmortCheckBox;
-    
-    @FXML
-    HBox amortDebtsHBox;
-    @FXML
-    HBox finishEditDebtsHBox;
-    @FXML
-    HBox mainButtonsHBox;
-    
-    @FXML
-    Label positionLabel;
-    @FXML
-    Label toPayLabel;
-    
-    @FXML
-    HBox debtsTogglerHBox;
-    /**/
     
     //Объекты доступа к данным
     private SalesDAOImpl mSalesDAOImpl;
@@ -174,24 +125,18 @@ public class FindUsersController implements Initializable, ControlledScreen {
     private List<DebtChange> mShopActiveCredits;
     
     //Наборы для автодополнения в полях ввода
-    private Set<String> mShopNamesSet;
-    private Set<String> mDriverNamesSet;
-    private Set<String> mCarNamesSet;
+    private Set<String> mCountryNamesSet;
+    private Set<String> mCityNamesSet;
     
     //хендлеры к наборам автодополнения
-    private AutoCompletionBinding<String> mShopAutoCompletionBinding;
-    private AutoCompletionBinding<String> mDriverAutoCompletionBinding;
-    private AutoCompletionBinding<String> mCarAutoCompletionBinding;
+    private AutoCompletionBinding<String> mCountryAutoCompletionBinding;
+    private AutoCompletionBinding<String> mCityAutoCompletionBinding;
     
     //Выбранные объекты
-    private Shop mSelectedShop;
-    private Barrel mSelectedBarrel;
-    private Driver mSelectedDriver;
-    private Car mSelectedCar;
-    //Модель существующего долга, выбранная из списка
-    private ExistingDebtModel mSelectedExistingDebtModel;
-    //Существующий долг, выбранный из списка
-    private DebtChange mSelectedExistingDebt;
+    private Shop mSelectedCountry;
+    private Barrel mSelectedCity;
+    
+    
     //ID только что добавленной доставки
     private int mTmpLastSaleId;
     
@@ -238,40 +183,6 @@ public class FindUsersController implements Initializable, ControlledScreen {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-        WS1.addSaleControllerInstance = this;
-        
-        mSalesDAOImpl = new SalesDAOImpl();
-        mShopsDAOImpl = new ShopsDAOImpl();
-        mBarrelsDAOImpl = new BarrelsDAOImpl();
-        mBarrelCapacitiesDAOImpl = new BarrelCapacitiesDAOImpl();
-        mDriversDAOImpl = new DriversDAOImpl();
-        mCarsDAOImpl = new CarsDAOImpl();
-        mDebtChangesDAOImpl = new DebtChangesDAOImpl();
-        mDebtsDAOImpl = new DebtsDAOImpl();
-        
-        mCounterMaxPosition = 6;
-        mCounterMaxNumber = 999999;
-        
-        //credit value
-        mCredit = 0.0d;
-        
-        //Изначально считаем, что последней доставки нет
-        mTmpLastSaleId = 0;
-        //Изначально устанавливаем флаг "блок работы с долгами скрыт"
-        mShowDebtsBlock = false;
-        
-        //
-        mNoProfitFieldChange = false;
-        
-        //mShopCreditApplied = false;
-        
-        //TODO to the facade!
-        mActive = 1;
-        mShops = mShopsDAOImpl.getFilteredShops(mActive, -1, -1);
-        /*for (Shop mShop : mShops) {
-            
-            System.out.println(mShop);
-        }*/
         mShopNamesSet = new HashSet<>();
         
         //mBarrels = mBarrelsDAOImpl.getAllBarrels();

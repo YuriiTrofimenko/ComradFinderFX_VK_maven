@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.textfield.CustomTextField?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="pane" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.tyaa.comradfinder.viewcontroller.FindUsersController">
+<AnchorPane styleClass="pane" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.tyaa.comradfinder.viewcontroller.FindUsersController">
     <children>
       <VBox AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -43,7 +43,7 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <CustomTextField fx:id="carCTextField" prefWidth="200.0" promptText="страна">
+                  <CustomTextField fx:id="countryCTextField" prefWidth="200.0" promptText="страна">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -74,7 +74,7 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <CustomTextField fx:id="driverCTextField" prefWidth="200.0" promptText="населенный пункт">
+                  <CustomTextField fx:id="cityCTextField" prefWidth="200.0" promptText="населенный пункт">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -102,7 +102,7 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <ComboBox fx:id="barrelComboBox" prefWidth="200.0" promptText="возраст кандидатов" />
+                  <ComboBox fx:id="ageComboBox" prefWidth="200.0" promptText="возраст кандидатов" />
                   <Label prefWidth="200.0" text="выберите из списка">
                      <font>
                         <Font size="14.0" />
@@ -126,7 +126,7 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <CheckBox fx:id="cleanCheckBox" mnemonicParsing="false" text="женский">
+                  <CheckBox fx:id="femaleCheckBox" mnemonicParsing="false" text="женский">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -134,7 +134,7 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </CheckBox>
-                  <CheckBox fx:id="repairCheckBox" mnemonicParsing="false" text="мужской">
+                  <CheckBox fx:id="mailCheckBox" mnemonicParsing="false" text="мужской">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -146,7 +146,7 @@
             </HBox>
             <HBox fx:id="mainButtonsHBox" alignment="CENTER_LEFT" spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                 <children>
-                    <Button fx:id="addSaleButton" defaultButton="true" mnemonicParsing="false" onAction="#actionAddSale" text="Искать">
+                    <Button fx:id="findUsersButton" defaultButton="true" mnemonicParsing="false" onAction="#findUsersAction" text="Искать">
                         <font>
                            <Font size="14.0" />
                         </font>
@@ -156,7 +156,7 @@
                            <Font size="14.0" />
                         </font>
                     </Button>
-                    <Button fx:id="backButton" cancelButton="true" mnemonicParsing="false" onAction="#goToSalesScreen" text="Назад">
+                    <Button fx:id="backButton" cancelButton="true" mnemonicParsing="false" onAction="#goToHomeScreen" text="Назад">
                         <font>
                            <Font size="14.0" />
                         </font>

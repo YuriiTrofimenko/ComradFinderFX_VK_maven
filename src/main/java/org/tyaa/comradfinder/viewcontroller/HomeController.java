@@ -52,6 +52,7 @@ import org.controlsfx.tools.ValueExtractor;
 import org.controlsfx.validation.Severity;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
+import org.tyaa.comradfinder.MainApp;
 import org.tyaa.comradfinder.model.TypicalWords;
 import org.tyaa.comradfinder.modules.XmlExporter;
 import org.tyaa.comradfinder.modules.XmlImporter;
@@ -1175,6 +1176,16 @@ public class HomeController implements Initializable, ControlledScreen {
         }
     }
     
+    @FXML
+    private void goToFindUsersScreen(ActionEvent event){
+        
+       myController.setScreen(MainApp.findUsersID);
+       MainApp.primaryStage.setMaximized(false);
+       //MainApp.primaryStage.setWidth(600);
+       //MainApp.primaryStage.setHeight(360);
+       MainApp.primaryStage.setY(30);
+    }
+    
     /*@FXML
     private void addWaterType(ActionEvent event){
        
@@ -1335,11 +1346,7 @@ public class HomeController implements Initializable, ControlledScreen {
         }
     }
     
-    @FXML
-    private void goToSalesScreen(ActionEvent event){
-       myController.setScreen(WS1.salesID);
-       WS1.primaryStage.setMaximized(true);
-    }
+    
     
     //Приведение формы в исходное состояние
     private void resetForm(){

@@ -15,9 +15,13 @@ public class MainApp extends Application {
     
     public static Dimension d;
     
-    //water types
+    //
     public static String homeID = "home";
     public static String homeView = "/fxml/Home.fxml";
+    
+    //
+    public static String findUsersID = "find_users";
+    public static String findUsersView = "/fxml/FindUsers.fxml";
 
     public static void main(String[] args)
     {
@@ -36,9 +40,9 @@ public class MainApp extends Application {
         
         //Создаем объект скринс-фреймворка (контейнер представлений)
         ScreensController screensContainer = new ScreensController();
-        //Добавляем в него представления главного окна и окна добавления продажи
+        //Добавляем в него представления главного окна и окна поиска пользователей
         screensContainer.loadScreen(MainApp.homeID, MainApp.homeView);
-        
+        screensContainer.loadScreen(MainApp.findUsersID, MainApp.findUsersView);
         
         //Устанавливаем представление экрана входа в качестве текущего
         screensContainer.setScreen(MainApp.homeID);
