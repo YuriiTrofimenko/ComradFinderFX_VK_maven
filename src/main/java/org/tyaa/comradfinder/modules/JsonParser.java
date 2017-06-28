@@ -108,31 +108,35 @@ public class JsonParser
     
     public JSONArray parseVKSearch(String _jsonString){
     
-        JSONArray usersItems = null;
-
-        try {
-            JSONObject responseJSONObject = new JSONObject(_jsonString);
-            //Get JSONArray of elements like
-            //{"uid":292243967,"last_name":"Брежнева","first_name":"Вера"}
-            usersItems = responseJSONObject.getJSONArray("response");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        
-        return usersItems;
+        return jsonStringToJSONArray(_jsonString);
     }
     
     public JSONArray parseVKCountries(String _jsonString){
     
-        JSONArray countriesItems = null;
+        return jsonStringToJSONArray(_jsonString);
+    }
+    
+    public JSONArray parseVKRegions(String _jsonString){
+    
+        return jsonStringToJSONArray(_jsonString);
+    }
+    
+    public JSONArray parseVKCities(String _jsonString){
+    
+        return jsonStringToJSONArray(_jsonString);
+    }
+    
+    private JSONArray jsonStringToJSONArray(String _jsonString){
+    
+        JSONArray items = null;
 
         try {
             JSONObject responseJSONObject = new JSONObject(_jsonString);
-            countriesItems = responseJSONObject.getJSONArray("response");
+            items = responseJSONObject.getJSONArray("response");
         } catch (JSONException e) {
             e.printStackTrace();
         }
         
-        return countriesItems;
+        return items;
     }
 }

@@ -69,12 +69,43 @@
             </HBox>
             <HBox>
                <children>
+                  <Label prefWidth="100.0" text="регион">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+                  <CustomTextField fx:id="regionCTextField" disable="true" prefWidth="200.0" promptText="регион">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </CustomTextField>
+                  <Label prefWidth="200.0" text="начните набирать название">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                     <HBox.margin>
+                        <Insets left="15.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
+            <HBox>
+               <children>
                   <Label prefWidth="100.0" text="город">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <CustomTextField fx:id="cityCTextField" prefWidth="200.0" promptText="населенный пункт">
+                  <CustomTextField fx:id="cityCTextField" disable="true" prefWidth="200.0" promptText="населенный пункт">
                      <font>
                         <Font size="14.0" />
                      </font>

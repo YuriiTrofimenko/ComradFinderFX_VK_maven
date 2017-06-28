@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import org.tyaa.comradfinder.modules.exception.FailJsonFetchException;
 import org.unbescape.html.HtmlEscape;
 
 /**
@@ -20,7 +21,7 @@ import org.unbescape.html.HtmlEscape;
  */
 public class JsonFetcher
 {
-    public String fetchByUrl(String _urlString){
+    public String fetchByUrl(String _urlString) throws FailJsonFetchException{
     
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
@@ -32,6 +33,8 @@ public class JsonFetcher
 
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
+            urlConnection.setRequestProperty("Accept-Charset", "UTF-8");
+            urlConnection.setRequestProperty("charset", "UTF-8");
             urlConnection.connect();
 
             InputStream inputStream = urlConnection.getInputStream();
@@ -46,7 +49,13 @@ public class JsonFetcher
 
             jsonString = HtmlEscape.unescapeHtml(buffer.toString());
         } catch (Exception e) {
+            
             e.printStackTrace();
+            throw new FailJsonFetchException();
+        }
+        if (jsonString == null || jsonString.equals("")) {
+            
+            throw new FailJsonFetchException();
         }
         return jsonString;
     }

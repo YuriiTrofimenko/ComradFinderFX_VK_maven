@@ -1177,12 +1177,12 @@ public class HomeController implements Initializable, ControlledScreen {
     }
     
     @FXML
-    private void goToFindUsersScreen(ActionEvent event){
+    private void goToFindUsersScreen(){
         
        myController.setScreen(MainApp.findUsersID);
        MainApp.primaryStage.setMaximized(false);
        MainApp.primaryStage.setWidth(566);
-       MainApp.primaryStage.setHeight(350);
+       MainApp.primaryStage.setHeight(400);
        MainApp.primaryStage.setY(30);
     }
     

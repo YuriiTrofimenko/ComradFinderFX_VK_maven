@@ -4,6 +4,11 @@
 
 .table-column {-fx-alignment:center;-fx-font-size:10pt}
 
+.custom-text-field:disabled, .custom-text-field:disabled > * {
+  /*-fx-opacity: 1.0 ;*/
+  -fx-background-color:lightgrey;
+}
+
 /* Table columns headers with text wrap */
 
 /*.pagination .toggle-button {

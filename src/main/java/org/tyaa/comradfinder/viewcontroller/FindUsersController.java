@@ -5,6 +5,7 @@
  */
 package org.tyaa.comradfinder.viewcontroller;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import org.tyaa.comradfinder.screensframework.ControlledScreen;
@@ -42,6 +43,7 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.util.StringConverter;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
@@ -55,6 +57,8 @@ import org.controlsfx.validation.Validator;
 import org.tyaa.comradfinder.MainApp;
 import org.tyaa.comradfinder.model.VKCity;
 import org.tyaa.comradfinder.model.VKCountry;
+import org.tyaa.comradfinder.model.VKRegion;
+import org.tyaa.comradfinder.modules.exception.FailJsonFetchException;
 import org.tyaa.comradfinder.modules.facades.ComradFinder;
 
 /**
@@ -72,6 +76,8 @@ public class FindUsersController implements Initializable, ControlledScreen {
     //элементы ввода информации
     @FXML
     CustomTextField countryCTextField;
+    @FXML
+    CustomTextField regionCTextField;
     @FXML
     CustomTextField cityCTextField;
     @FXML
@@ -94,22 +100,27 @@ public class FindUsersController implements Initializable, ControlledScreen {
     
     //Списки объектов
     private List<VKCountry> mVKCountries;
-    //private List<VKCity> mVKCities;
-    //Cities выбранного country
-    private List<VKCity> mCountryCities;
+    private List<VKRegion> mVKCountryRegions;
+    //Cities выбранного country and region
+    private List<VKCity> mVKCountryRegionCities;
     
     //Наборы для автодополнения в полях ввода
     private Set<String> mCountryNamesSet;
+    private Set<String> mRegionNamesSet;
     private Set<String> mCityNamesSet;
     
     //хендлеры к наборам автодополнения
     private AutoCompletionBinding<String> mCountryAutoCompletionBinding;
+    private AutoCompletionBinding<String> mRegionAutoCompletionBinding;
     private AutoCompletionBinding<String> mCityAutoCompletionBinding;
     
     //Выбранные объекты
     private VKCountry mSelectedCountry;
+    private VKRegion mSelectedRegion;
     private VKCity mSelectedCity;
     
+    private boolean mChangeCitiesByRegion;
+    private boolean mCityWasSelected;
     
     //ID только что добавленной доставки
     //private int mTmpLastSaleId;
@@ -125,13 +136,219 @@ public class FindUsersController implements Initializable, ControlledScreen {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
+        mChangeCitiesByRegion = false;
+        mCityWasSelected = false;
+        
         mCountryNamesSet = new HashSet<>();
+        mRegionNamesSet = new HashSet<>();
         mCityNamesSet = new HashSet<>();
         
-        mVKCountries = ComradFinder.getCountries();
+        try {
+            mVKCountries = ComradFinder.getCountries();
+        } catch (FailJsonFetchException ex) {
+
+            showJsonFetchErrorMsg();
+        }
         
         /*Приведение формы в исходное состояние*/
         resetForm();
+        
+        //обработка события "ввод названия country"
+        countryCTextField.textProperty().addListener(new ChangeListener(){
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                
+                if (mVKCountryRegions != null) {
+                    
+                    mVKCountryRegions.clear();
+                }
+                
+                /*Выбираем regions, относящиеся к the country*/
+                
+                //Находим объект country с таким именем, которое выбрано из списка
+                if (mVKCountries != null
+                        && !countryCTextField.textProperty().getValue().equals("")
+                        && mCountryNamesSet.contains(countryCTextField.textProperty().getValue())) {
+                    
+                    for (VKCountry vKCountry : mVKCountries) {
+                        
+                        if (vKCountry.name.equals(countryCTextField.textProperty().getValue())) {
+                            
+                            mSelectedCountry = vKCountry;
+                            break;
+                        }
+                    }
+                    
+                    try {
+                        /*Работа с regions*/
+                        
+                        mVKCountryRegions =
+                                ComradFinder.getRegionsByCountryId(mSelectedCountry.id);
+                    } catch (FailJsonFetchException ex) {
+
+                        showJsonFetchErrorMsg();
+                    }
+                 
+                    //System.out.println(mVKCountryRegions);
+                    if (mVKCountryRegions != null
+                            && mVKCountryRegions.size() > 0) {
+                    
+                        //regionCTextField.setDisable(false);
+                        rebindRegionNames();
+                    } else {
+                    
+                        regionCTextField.setText("");
+                        regionCTextField.setDisable(true);
+                    }
+                } else {
+                
+                    regionCTextField.setText("");
+                    regionCTextField.setDisable(true);
+                }
+            }
+        });
+        
+        //обработка события "ввод названия region"
+        regionCTextField.textProperty().addListener(new ChangeListener(){
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                
+                if (mVKCountryRegionCities != null) {
+                    
+                    mVKCountryRegionCities.clear();
+                }
+                
+                /*Выбираем cities, относящиеся к the country and the region*/
+                
+                //Находим объект region с таким именем, которое выбрано из списка
+                if (mVKCountryRegions != null
+                        && !regionCTextField.textProperty().getValue().equals("")
+                        && mRegionNamesSet.contains(regionCTextField.textProperty().getValue())) {
+                    
+                    for (VKRegion vKRegion : mVKCountryRegions) {
+                        
+                        if (vKRegion.name.equals(regionCTextField.textProperty().getValue())) {
+                            
+                            mSelectedRegion = vKRegion;
+                            break;
+                        }
+                    }
+                    
+                    try {
+                        /*Работа с cities*/
+                        
+                        mVKCountryRegionCities =
+                            ComradFinder.getCitiesByCountryRegionIds(
+                                mSelectedCountry.id
+                                , mSelectedRegion.id
+                                , null
+                            );
+                    } catch (FailJsonFetchException ex) {
+
+                        showJsonFetchErrorMsg();
+                    } catch (UnsupportedEncodingException ex) {
+
+                        showEncodingErrorMsg();
+                    }
+                 
+                    if (mVKCountryRegionCities != null
+                            && mVKCountryRegionCities.size() > 0) {
+                    
+                        rebindCityNames();
+                        mChangeCitiesByRegion = true;
+                    } else {
+                    
+                        cityCTextField.setText("");
+                        cityCTextField.setDisable(true);
+                    }
+                } else {
+                
+                    cityCTextField.setText("");
+                    cityCTextField.setDisable(true);
+                }
+            }
+        });
+        
+        //обработка события "ввод названия city"
+        cityCTextField.textProperty().addListener(new ChangeListener(){
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                
+                
+                if (!cityCTextField.getText().equals("")) {
+                    
+                    
+                    try {
+                        System.out.println("mSelectedCountry.id is " + mSelectedCountry.id + mSelectedCountry.name);
+                        System.out.println("mSelectedRegion.id is " + mSelectedRegion.id + mSelectedRegion.name);
+                        mVKCountryRegionCities =
+                            ComradFinder.getCitiesByCountryRegionIds(
+                                mSelectedCountry.id
+                                , mSelectedRegion.id
+                                , cityCTextField.getText()
+                            );
+                        System.out.println("mVKCountryRegionCities is " + mVKCountryRegionCities);
+                    } catch (FailJsonFetchException ex) {
+
+                        showJsonFetchErrorMsg();
+                    } catch (UnsupportedEncodingException ex) {
+
+                        showEncodingErrorMsg();
+                    }
+                    
+                    if (mVKCountryRegionCities != null
+                            && mVKCountryRegionCities.size() > 0) {
+                    
+                        rebindCityNames();
+                        cityCTextField.setDisable(false);
+                        
+                        /*Выбираем city*/
+                        for (VKCity vKCity : mVKCountryRegionCities) {
+
+                                System.out.println("vKCity.name " + vKCity.name);
+                        }
+
+                        if (!cityCTextField.textProperty().getValue().equals("")
+                                && mCityNamesSet.contains(cityCTextField.textProperty().getValue())) {
+
+                            for (VKCity vKCity : mVKCountryRegionCities) {
+
+                                if (vKCity.name.equals(cityCTextField.textProperty().getValue())) {
+
+                                    mSelectedCity = vKCity;
+                                    
+                                    mCityWasSelected = true;
+                                    
+                                    cityCTextField.fireEvent(
+                                        new KeyEvent(
+                                            KeyEvent.KEY_PRESSED
+                                                , ""
+                                                , ""
+                                                , KeyCode.ESCAPE
+                                                , true
+                                                , true
+                                                , true
+                                                , true
+                                        )
+                                    );
+                                    break;
+                                } else {
+                                
+                                    mSelectedCity = null;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (mSelectedCity != null) {
+                    System.out.println("mSelectedCity is " + mSelectedCity.name);
+                } else {
+                
+                    System.out.println("mSelectedCity is null");
+                }
+                
+            }
+        });
         
         /*mBarrels = mBarrelsDAOImpl.getFilteredBarels(
                 -1
@@ -321,90 +538,7 @@ public class FindUsersController implements Initializable, ControlledScreen {
         /*Настраиваем здесь обработчики событий тех контрлов,
         для которых это невозможно при помощи внедрения */
         
-        //обработка события "ввод названия магазина"
-//        shopCTextField.textProperty().addListener(new ChangeListener(){
-//            @Override
-//            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-//                
-//                mShopBarrels.clear();
-//                mShopActiveDebts.clear();
-//                mShopActiveCredits.clear();
-//                mBarrelsObservableList.clear();
-//                mDebtChangesObservableList.clear();
-//                
-//                /*Выбираем бочки и долги, относящиеся к выбранному магазину*/
-//                
-//                //Находим объект магазина с таким именем, которое выбрано из списка
-//                if (!shopCTextField.textProperty().getValue().equals("")
-//                        && mShopNamesSet.contains(shopCTextField.textProperty().getValue())) {
-//                    
-//                    for (Shop shop : mShops) {
-//                        
-//                        if (shop.getName().equals(shopCTextField.textProperty().getValue())) {
-//                            
-//                            mSelectedShop = shop;
-//                            break;
-//                        }
-//                    }
-//                    
-//                    /*Работа с бочками*/
-//                    
-//                    //Набираем в список объекты бочек выбранного магазина
-//                    for (Barrel barrel : mBarrels) {
-//                        
-//                        if (Objects.equals(barrel.getShopId(), mSelectedShop.getId())) {
-//                            mShopBarrels.add(barrel);
-//                        }
-//                    }
-//                    
-//                    //... и заполняем этими объектами наблюдабельный список
-//                    for (Barrel barrel : mShopBarrels) {
-//
-//                        mBarrelsObservableList.add(barrel);
-//                    }
-//                    
-//                    //Если в наблюдабельном списке есть хотя бы один объект -
-//                    //устанавливаем его как источник данных для комбо-бокса
-//                    if (mBarrelsObservableList.size() > 0) {
-//                        
-//                        barrelComboBox.setItems(mBarrelsObservableList);
-//                    }
-//                    
-//                    /*Работа с непогашеными долгами*/
-//                    
-//                    //Пытаемся получить список долгов по ИД магазина
-//                    mShopActiveDebts =
-//                        mDebtChangesDAOImpl.getFilteredDebtChanges(
-//                            mSelectedShop.getId()
-//                            , true
-//                        );
-//                    
-//                    for (DebtChange debtChange : mShopActiveDebts) {
-//                        
-//                        //Предлагаем гасить только активные долги,
-//                        //требующие погашения,
-//                        //исключаем авансы
-//                        if (!debtChange.isNotReqAmort()
-//                                && !debtChange.getIsCredit()) {
-//                            
-//                            mDebtChangesObservableList.add(debtChange);
-//                        }
-//                    }
-//                    
-//                    if (mDebtChangesObservableList.size() > 0) {
-//                        
-//                        debtsComboBox.setItems(mDebtChangesObservableList);
-//                    }
-//                    
-//                    /*Get credits*/
-//                    mShopActiveCredits =
-//                        mDebtChangesDAOImpl.getActiveCreditDebtChanges(
-//                            mSelectedShop.getId()
-//                            , true
-//                        );
-//                }
-//            }
-//        });
+        
 //        
 //        //обработка события "выбор бочки"
 //        barrelComboBox.valueProperty().addListener(new ChangeListener()
@@ -1476,11 +1610,19 @@ public class FindUsersController implements Initializable, ControlledScreen {
         
         //очистка элементов ввода
         countryCTextField.clear();
+        regionCTextField.clear();
         cityCTextField.clear();
 
         femaleCheckBox.setSelected(false);
         maleCheckBox.setSelected(false);
-        
+        if (mVKCountries != null) {
+            
+            rebindCountryNames();
+        }
+    }
+    
+    private void rebindCountryNames(){
+    
         //Подключение автодополнения к полям с наборами вариантов выбора
         mCountryNamesSet.clear();
         for (VKCountry vKCountry : mVKCountries) {
@@ -1495,88 +1637,107 @@ public class FindUsersController implements Initializable, ControlledScreen {
         //подписываемся на новый набор автодополнения
         mCountryAutoCompletionBinding =
             TextFields.bindAutoCompletion(countryCTextField, mCountryNamesSet);
-        
     }
-//    
-//    private void resetCarDriver(){
-//        
-//        driverCTextField.clear();
-//        carCTextField.clear();
-//    }
-//    
-//    //Обновление списка магазинов (вызывается извне,
-//    //если магазин был добавлен или деактивирован)
-//    public void updateShops(){
-//        
-//        //mShops = mShopsDAOImpl.getAllShops();
-//        mShops = mShopsDAOImpl.getFilteredShops(mActive, -1, -1);
-//        /*for (Shop mShop : mShops) {
-//            
-//            System.out.println(mShop);
-//        }*/
-//        resetForm();
-//    }
-//    public void updateBarrels(){
-//        
-//        //mBarrels = mBarrelsDAOImpl.getAllBarrels();
-//        mBarrels = mBarrelsDAOImpl.getFilteredBarels(
-//                -1
-//                //, mFilterBarrelId
-//                //, -1
-//                , null
-//                , mActive
-//                , -1
-//                , -1
-//            );
-//        resetForm();
-//    }
-//    public void updateDrivers(){
-//        
-//        //mDrivers = mDriversDAOImpl.getAllDrivers();
-//        mDrivers = mDriversDAOImpl.getFilteredDrivers(mActive, -1 , -1);
-//        resetForm();
-//        resetCarDriver();
-//    }
-//    public void updateCars(){
-//        
-//        //mCars = mCarsDAOImpl.getAllCars();
-//        mCars = mCarsDAOImpl.getFilteredCars(mActive, -1, -1);
-//        resetForm();
-//    }
-//    //TODO вызов к фасаду: получить обновленный список бочек
-//    
-//    public void updateDebts(){
-//        
-//        //Пытаемся получить список долгов по ИД магазина
-//        if (mSelectedShop != null) {
-//            
-//            mDebtChangesObservableList.clear();
-//         
-//            mShopActiveDebts =
-//            mDebtChangesDAOImpl.getFilteredDebtChanges(
-//                mSelectedShop.getId()
-//                , true
-//            );
-//            
-//            for (DebtChange debtChange : mShopActiveDebts) {
-//
-//                if (!debtChange.isNotReqAmort()
-//                        && !debtChange.getIsCredit()) {
-//                    
-//                    mDebtChangesObservableList.add(debtChange);
-//                }
-//            }
-//
-//            if (mDebtChangesObservableList.size() > 0) {
-//
-//                //Подключаем наблюдабельную коллекцию активных долгов
-//                //в качестве источника для пунктов списка комбобокса долгов,
-//                //предлагаемых к погашению
-//                debtsComboBox.setItems(mDebtChangesObservableList);
-//            }
-//        }
-//    }
-//    
+    
+    private void rebindRegionNames(){
+    
+        //Подключение автодополнения к полям с наборами вариантов выбора
+        mRegionNamesSet.clear();
+        for (VKRegion vKRegion : mVKCountryRegions) {
+            
+            mRegionNamesSet.add(vKRegion.name);
+        }
+        //отписываемся от предыдущего набора автодополнения
+        if (mRegionAutoCompletionBinding != null) {
+            
+            mRegionAutoCompletionBinding.dispose();
+        }
+        //подписываемся на новый набор автодополнения
+        mRegionAutoCompletionBinding =
+            TextFields.bindAutoCompletion(regionCTextField, mRegionNamesSet);
+        
+        if (mRegionNamesSet.size() > 0
+            && regionCTextField.disableProperty().getValue() == true) {
+            //System.out.println(regionCTextField.disableProperty().getValue());
+            regionCTextField.setDisable(false);
+        } else {
+        
+            //System.out.println(regionCTextField.disableProperty().getValue());
+            regionCTextField.setDisable(true);
+        }
+    }
+
+    private void rebindCityNames(){
+    System.out.println("rebindCityNames");
+        //Подключение автодополнения к полям с наборами вариантов выбора
+        mCityNamesSet.clear();
+        /*for (VKCity vKCity : mVKCountryRegionCities) {
+
+                System.out.println("vKCity.name " + vKCity.name);
+        }*/
+        for (VKCity vKCity : mVKCountryRegionCities) {
+            System.out.println("vKCity.name " + vKCity.name);
+            mCityNamesSet.add(vKCity.name);
+        }
+        //отписываемся от предыдущего набора автодополнения
+        if (mCityAutoCompletionBinding != null) {
+            
+            mCityAutoCompletionBinding.dispose();
+        }
+        
+        if (!mChangeCitiesByRegion) {
+            
+            cityCTextField.fireEvent(
+                new KeyEvent(
+                    KeyEvent.KEY_PRESSED
+                        , ""
+                        , ""
+                        , KeyCode.ESCAPE
+                        , true
+                        , true
+                        , true
+                        , true
+                )
+            );
+        } else {
+        
+            mChangeCitiesByRegion = false;
+        }
+        
+        //подписываемся на новый набор автодополнения
+        mCityAutoCompletionBinding =
+            TextFields.bindAutoCompletion(cityCTextField, mCityNamesSet);
+        
+        if (mCityWasSelected) {
+            
+            cityCTextField.fireEvent(
+                new KeyEvent(
+                    KeyEvent.KEY_PRESSED
+                        , ""
+                        , ""
+                        , KeyCode.ESCAPE
+                        , true
+                        , true
+                        , true
+                        , true
+                )
+            );
+        } else {
+        
+            mCityWasSelected = false;
+        }
+        
+        if (mCityNamesSet.size() > 0
+            && cityCTextField.disableProperty().getValue() == true) {
+            //System.out.println(regionCTextField.disableProperty().getValue());
+            cityCTextField.setDisable(false);
+        } else {
+        
+            //System.out.println(regionCTextField.disableProperty().getValue());
+            cityCTextField.setDisable(true);
+        }
+    }
+    
 //    private void processSaleSaving(){
 //        
 //        /*Устанавливаем объекты выбранного водителя и выбранного авто*/
@@ -1967,4 +2128,20 @@ public class FindUsersController implements Initializable, ControlledScreen {
 //            countNewAfterCTextField.setEditable(false);
 //        }
 //    }
+    
+    private void showJsonFetchErrorMsg(){
+    
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Ошибка");
+        alert.setHeaderText("Ошибка получения данных по сети");
+        alert.showAndWait();
+    }
+    
+    private void showEncodingErrorMsg(){
+    
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Ошибка");
+        alert.setHeaderText("Неподходящий символ");
+        alert.showAndWait();
+    }
 }

@@ -6,7 +6,9 @@
 package org.tyaa.comradfinder.modules.facades;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import static java.lang.System.out;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,11 +23,13 @@ import org.tyaa.comradfinder.model.TypicalWords;
 import org.tyaa.comradfinder.model.VKCandidate;
 import org.tyaa.comradfinder.model.VKCity;
 import org.tyaa.comradfinder.model.VKCountry;
+import org.tyaa.comradfinder.model.VKRegion;
 import org.tyaa.comradfinder.model.VKUser;
 import org.tyaa.comradfinder.modules.ExcelSaver;
 import org.tyaa.comradfinder.modules.JsonFetcher;
 import org.tyaa.comradfinder.modules.JsonParser;
 import org.tyaa.comradfinder.modules.XmlImporter;
+import org.tyaa.comradfinder.modules.exception.FailJsonFetchException;
 import org.xml.sax.SAXException;
 
 /**
@@ -36,7 +40,7 @@ import org.xml.sax.SAXException;
  */
 public class ComradFinder {
     
-    public static void findByModel(String _countryId, String _cityId, String _age, String _sex)
+    public static void findByModel(String _countryId, String _cityId, String _age, String _sex) throws FailJsonFetchException
     {
         //out.println("*** Find users by model ***");
         
@@ -97,7 +101,7 @@ public class ComradFinder {
 
                     //Получаем id текущего пользователя
                     Integer userId =
-                        (Integer)((JSONObject)usersItems.get(i)).get("uid");
+                        Integer.parseInt(((JSONObject)usersItems.get(i)).get("uid").toString());
                         //(JSONObject)((JSONArray)usersItems.get(i)).get(0);
                     //out.println(userId);
 
@@ -249,7 +253,7 @@ public class ComradFinder {
         //out.println(jsonString);
     }
     
-    public static List<VKCountry> getCountries()
+    public static List<VKCountry> getCountries() throws FailJsonFetchException
     {
         String jsonString = "";
         JsonFetcher jsonFetcher = new JsonFetcher();
@@ -267,7 +271,7 @@ public class ComradFinder {
         
             VKCountry newVKCountry = new VKCountry();
             newVKCountry.id =
-                (Integer)((JSONObject)countriesItems.get(i)).get("cid");
+                Integer.parseInt(((JSONObject)countriesItems.get(i)).get("cid").toString());
             newVKCountry.name =
                 (String)((JSONObject)countriesItems.get(i)).get("title");
             mVKCountries.add(newVKCountry);
@@ -276,8 +280,77 @@ public class ComradFinder {
         return mVKCountries;
     }
     
-    public static List<VKCity> getCitiesByCountryId(int _countryId)
+    public static List<VKRegion> getRegionsByCountryId(int _countryId) throws FailJsonFetchException
     {
-        return null;
+        String jsonString = "";
+        JsonFetcher jsonFetcher = new JsonFetcher();
+        JsonParser jsonParser = new JsonParser();
+        List<VKRegion> mVKRegions = new ArrayList<>();
+        
+        jsonString = jsonFetcher.fetchByUrl(
+            "https://api.vk.com/method/database.getRegions?country_id=" + _countryId + "&count=1000"
+        );
+        
+        JSONArray regionsItems = jsonParser.parseVKSearch(jsonString);
+
+        //Перебираем все JSONObject с информацией о найденных regions
+        for (int i = 1; i < regionsItems.length(); i++) {
+        
+            VKRegion newVKRegion = new VKRegion();
+            newVKRegion.id =
+                Integer.parseInt(((JSONObject)regionsItems.get(i)).get("region_id").toString());
+            newVKRegion.name =
+                (String)((JSONObject)regionsItems.get(i)).get("title");
+            mVKRegions.add(newVKRegion);
+        }
+        
+        return mVKRegions;
+    }
+    
+    public static List<VKCity> getCitiesByCountryRegionIds(int _countryId, int _regionId, String _q) throws FailJsonFetchException, UnsupportedEncodingException
+    {
+        String jsonString = "";
+        JsonFetcher jsonFetcher = new JsonFetcher();
+        JsonParser jsonParser = new JsonParser();
+        List<VKCity> mVKCities = new ArrayList<>();
+        if (_q != null) {
+            
+            String q = URLEncoder.encode(_q, "UTF-8");
+            System.out.println("_q " + _q);
+            //https://api.vk.com/method/database.getCities?country_id=1&region_id=1053480&q=%D0%BC%D0%BE&need_all=1&count=1000
+            jsonString = jsonFetcher.fetchByUrl(
+                "https://api.vk.com/method/database.getCities?country_id="
+                    + _countryId
+                    + "&region_id="
+                    + _regionId
+                    + "&q="
+                    + q
+                    + "&need_all=1&count=1000"
+            );
+        } else {
+        
+            jsonString = jsonFetcher.fetchByUrl(
+                "https://api.vk.com/method/database.getCities?country_id="
+                    + _countryId
+                    + "&region_id="
+                    + _regionId
+                    + "&need_all=1&count=1000"
+            );
+        }
+        
+        JSONArray citiesItems = jsonParser.parseVKSearch(jsonString);
+
+        //Перебираем все JSONObject с информацией о найденных regions
+        for (int i = 0; i < citiesItems.length(); i++) {
+        
+            VKCity newVKCity = new VKCity();
+            newVKCity.id =
+                Integer.parseInt(((JSONObject)citiesItems.get(i)).get("cid").toString());
+            newVKCity.name =
+                (String)((JSONObject)citiesItems.get(i)).get("title");
+            mVKCities.add(newVKCity);
+        }
+        
+        return mVKCities;
     }
 }
