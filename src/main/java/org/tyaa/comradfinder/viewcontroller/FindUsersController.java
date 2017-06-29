@@ -60,6 +60,7 @@ import org.tyaa.comradfinder.model.VKCountry;
 import org.tyaa.comradfinder.model.VKRegion;
 import org.tyaa.comradfinder.modules.exception.FailJsonFetchException;
 import org.tyaa.comradfinder.modules.facades.ComradFinder;
+import org.tyaa.comradfinder.utils.SexEnum;
 
 /**
  * FXML Controller class
@@ -104,6 +105,9 @@ public class FindUsersController implements Initializable, ControlledScreen {
     //Cities выбранного country and region
     private List<VKCity> mVKCountryRegionCities;
     
+    //
+    private List<Integer> mAgeList;
+    
     //Наборы для автодополнения в полях ввода
     private Set<String> mCountryNamesSet;
     private Set<String> mRegionNamesSet;
@@ -118,6 +122,10 @@ public class FindUsersController implements Initializable, ControlledScreen {
     private VKCountry mSelectedCountry;
     private VKRegion mSelectedRegion;
     private VKCity mSelectedCity;
+    
+    private Integer mSelectedAge;
+    
+    private SexEnum mSelectedSex;
     
     private boolean mChangeCitiesByRegion;
     private boolean mCityWasSelected;
@@ -143,6 +151,20 @@ public class FindUsersController implements Initializable, ControlledScreen {
         mRegionNamesSet = new HashSet<>();
         mCityNamesSet = new HashSet<>();
         
+        mAgeList = new ArrayList<>();
+        
+        for (int i = 14; i < 100; i++) {
+            
+            mAgeList.add(i);
+        }
+        
+        ObservableList<Integer> ageObservableList =
+            FXCollections.observableArrayList();
+        
+        ageObservableList.addAll(mAgeList);
+        
+        ageComboBox.setItems(ageObservableList);
+                
         try {
             mVKCountries = ComradFinder.getCountries();
         } catch (FailJsonFetchException ex) {
@@ -349,6 +371,54 @@ public class FindUsersController implements Initializable, ControlledScreen {
                 
             }
         });
+                
+        //обработка события "выбор age"
+        ageComboBox.valueProperty().addListener(new ChangeListener()
+        {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue)
+            {
+                mSelectedAge = (Integer) ageComboBox
+                    .getSelectionModel()
+                    .getSelectedItem();
+            }
+        });
+        //По нажатию клавиши Ввод или Пробел комбобокс
+        //должен показать свой список
+        ageComboBox.setOnKeyPressed((event) -> {
+            
+            if (event.getCode() == KeyCode.ENTER || event.getCode() == KeyCode.SPACE) {
+                
+                ageComboBox.show();
+            }
+        });
+        
+        //обработка события "переключение чекбокса"
+        femaleCheckBox.setOnAction((event) -> {
+            
+            if (femaleCheckBox.isSelected()) {
+                
+                mSelectedSex = SexEnum.female;
+                maleCheckBox.setDisable(true);
+            } else {
+                
+                mSelectedSex = null;
+                maleCheckBox.setDisable(false);
+            }
+        });
+        
+        maleCheckBox.setOnAction((event) -> {
+            
+            if (maleCheckBox.isSelected()) {
+                
+                mSelectedSex = SexEnum.male;
+                femaleCheckBox.setDisable(true);
+            } else {
+                
+                mSelectedSex = null;
+                femaleCheckBox.setDisable(false);
+            }
+        });
         
         /*mBarrels = mBarrelsDAOImpl.getFilteredBarels(
                 -1
@@ -538,67 +608,6 @@ public class FindUsersController implements Initializable, ControlledScreen {
         /*Настраиваем здесь обработчики событий тех контрлов,
         для которых это невозможно при помощи внедрения */
         
-        
-//        
-//        //обработка события "выбор бочки"
-//        barrelComboBox.valueProperty().addListener(new ChangeListener()
-//        {
-//            @Override
-//            public void changed(ObservableValue observable, Object oldValue, Object newValue)
-//            {
-//                mSelectedBarrel = (Barrel) barrelComboBox
-//                    .getSelectionModel()
-//                    .getSelectedItem();
-//                if (mSelectedBarrel != null) {
-//
-//                    if (isEditMode()) {
-//                        
-//                        countOldCTextField.setText("");
-//                    } else {
-//                    
-//                        countOldCTextField.setText(
-//                            String.valueOf(mSelectedBarrel.getCounter())
-//                        );
-//                    }
-//                    mCounterMaxPosition = mSelectedBarrel.getPositions();
-//                    validationSupport.registerValidator(
-//                        countNewCTextField
-//                        , Validator.createRegexValidator("Введите целое число, максимальное число знаков - " + mCounterMaxPosition, "[0-9]{1," + mCounterMaxPosition + "}", Severity.ERROR)
-//                    );
-//                    positionLabel.setText("не более " + mCounterMaxPosition + " знаков");
-//                    switch(mCounterMaxPosition){
-//
-//                        case 5:
-//                        {
-//                            mCounterMaxNumber = 99999;
-//                            break;
-//                        }
-//                        case 6:
-//                        {
-//                            mCounterMaxNumber = 999999;
-//                            break;
-//                        }
-//                        case 7:
-//                        {
-//                            mCounterMaxNumber = 9999999;
-//                            break;
-//                        }
-//                    }
-//                } else {
-//                    
-//                    countOldCTextField.setText("");
-//                }
-//            }
-//        });
-//        //По нажатию клавиши Ввод или Пробел комбобокс
-//        //должен показать свой список
-//        barrelComboBox.setOnKeyPressed((event) -> {
-//            
-//            if (event.getCode() == KeyCode.ENTER || event.getCode() == KeyCode.SPACE) {
-//                
-//                barrelComboBox.show();
-//            }
-//        });
 //        
 //        debtsComboBox.setOnKeyPressed((event) -> {
 //            
@@ -608,24 +617,6 @@ public class FindUsersController implements Initializable, ControlledScreen {
 //            }
 //        });
 //                
-//        //обработка события "переключение чекбокса"
-//        cleanCheckBox.setOnAction((event) -> {
-//            cleanCheckBoxEventHandler();
-//        });
-//        repairCheckBox.setOnAction((event) -> {
-//            repairCheckBoxEventHandler();
-//        });
-//        showDebtsBlockCheckBox.setOnAction((event) -> {
-//            
-//            if (showDebtsBlockCheckBox.isSelected()) {
-//                
-//                mShowDebtsBlock = true;
-//            } else {
-//                
-//                mShowDebtsBlock = false;
-//            }
-//        });
-//        
 //        //обработка события "ввод текста в поле счетчик New"
 //        countNewCTextField.textProperty().addListener(new ChangeListener(){
 //            @Override
