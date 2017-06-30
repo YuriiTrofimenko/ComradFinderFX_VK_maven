@@ -420,94 +420,27 @@ public class FindUsersController implements Initializable, ControlledScreen {
             }
         });
         
-        /*mBarrels = mBarrelsDAOImpl.getFilteredBarels(
-                -1
-                //, mFilterBarrelId
-                //, -1
-                , null
-                , mActive
-                , -1
-                , -1
-            );
-        mShopBarrels = new ArrayList();
-        mShopActiveDebts = new ArrayList();
-        mShopActiveCredits = new ArrayList();
-        
-        //mDrivers = mDriversDAOImpl.getAllDrivers();
-        mDrivers = mDriversDAOImpl.getFilteredDrivers(mActive, -1, -1);
-        mDriverNamesSet = new HashSet<>();
-        
-        //mCars = mCarsDAOImpl.getAllCars();
-        mCars = mCarsDAOImpl.getFilteredCars(mActive, -1, -1);
-        mCarNamesSet = new HashSet<>();
-        
-        mBarrelsObservableList = FXCollections.observableArrayList();
-        mDebtChangesObservableList = FXCollections.observableArrayList();
-        
-        //Поле ввода "старые показания водомера" всегда будет пропускаться
-        //при обходе контролов табуляцией
-        countOldCTextField.setFocusTraversable(false);
-        
-        //По умолчанию контроллер будет настраиваться
-        //на режим добавления новой доставки
-        setEditMode(false);*/
-        /*
-
         //Активация механизма валидации для элементов ввода типа CustomTextField
         ValueExtractor.addObservableValueExtractor(
                 c -> c instanceof CustomTextField
                 , c -> ((CustomTextField) c).textProperty());
+        
         validationSupport = new ValidationSupport();
+        
         //Явная настройка включения визуального оформления валидации
         validationSupport.setErrorDecorationEnabled(true);
+        
         //Настройки валидации для каждого элемента ввода, подлежащего проверке
         validationSupport.registerValidator(
-                shopCTextField
-                , Validator.createEmptyValidator("Название магазина обязательно"));
-        /*validationSupport.registerValidator(
-                barrelComboBox
-                , Validator.createEmptyValidator("Barrel is required"));*/
-        /*validationSupport.registerValidator(
-                driverCTextField
-                , Validator.createEmptyValidator("Имя водителя обязательно"));
+                countryCTextField
+                , Validator.createEmptyValidator("Название страны обязательно"));
         validationSupport.registerValidator(
-                carCTextField
-                , Validator.createEmptyValidator("Номер автомобиля обязателен"));*/
-//        validationSupport.registerValidator(
-//                countOldCTextField
-//                , Validator.createEmptyValidator("Старые показания счетчика обязательны"));
-//        validationSupport.registerValidator(
-//                countOldCTextField
-//                , Validator.createRegexValidator("Введите целое число от 0 до 99999", "[0-9]{1,5}", Severity.ERROR));
-//        validationSupport.registerValidator(
-//                countNewCTextField
-//                , Validator.createEmptyValidator("Новые показания счетчика обязательны"));
+                regionCTextField
+                , Validator.createEmptyValidator("Название региона обязательно"));
+        validationSupport.registerValidator(
+                cityCTextField
+                , Validator.createEmptyValidator("Название населенного пункта обязательно"));
         
-        /*Не применяем автоматическую валидацию к полю счетчика, т.к.
-        правило проверки может меняться в зависимости от выбранной бочки (разрядности ее водомера)*/
-        /*validationSupport.registerValidator(
-            countNewCTextField
-            , Validator.createRegexValidator("Введите целое число, максимальное число знаков - " + mCounterMaxPosition, "[0-9]{1," + mCounterMaxPosition + "}", Severity.ERROR));
-        
-        validationSupport.registerValidator(
-            volumeCTextField
-            , Validator.createRegexValidator("Введите целое число от 0 до 9999", "[0-9]{1,4}", Severity.ERROR));
-//        validationSupport.registerValidator(
-//                profitCTextField
-//                , Validator.createEmptyValidator("Сумма оплаты обязательна"));
-        validationSupport.registerValidator(
-                profitCTextField
-                , Validator.createRegexValidator("Введите положительное целое или дробное число (максимум - 99999.99)", "[0-9]{1,5}([.,][0-9]{0,2}){0,1}", Severity.ERROR));
-//        validationSupport.registerValidator(
-//                debtCTextField
-//                , Validator.createRegexValidator("Введите положительное целое или дробное число (максимум - 99999.99)", "[-]{0,1}[0-9]{1,5}[.]{0,1}[0-9]{0,2}", Severity.ERROR));
-        validationSupport.registerValidator(
-                debtCTextField
-                , Validator.createRegexValidator("Введите положительное целое или дробное число (максимум - 99999.99)", "[0-9]{1,5}([.,][0-9]{0,2}){0,1}", Severity.ERROR));
-        validationSupport.registerValidator(
-                debtAmortCTextField
-                , Validator.createRegexValidator("Введите целое или дробное число (максимум - 99999.99)", "[-]{0,1}[0-9]{1,5}([.,][0-9]{0,2}){0,1}", Severity.ERROR));
-        */
         /*Настраиваем способ отображения информации из объектов,
         подключенных в составе коллекции-источника к контролам списочного типа*/
         
@@ -844,105 +777,12 @@ public class FindUsersController implements Initializable, ControlledScreen {
 //                }
 //            }
 //        });
-//        
-//        //обработка события "ввод текста в поле оплата"
-//        profitCTextField.textProperty().addListener(new ChangeListener() {
-//            
-//            @Override
-//            public void changed(ObservableValue observable, Object oldValue, Object newValue)
-//            {
-//                //
-//                if (mNoProfitFieldChange != true) {
-//                    //если в поле есть не пустая строка
-//                    if (!profitCTextField.textProperty().getValue().equals("")) {
-//                        
-//                        //считываем ее значение как дробное число
-//                        Double profit = 0.0d;
-//                        Double deltaProfit = 0.0d;
-//                        try{
-//                            //если символы строки содержат integer or дробное число -
-//                            //сохраняем его в переменную
-//                            profit = Double.parseDouble(profitCTextField.getText().replaceAll(",", "."));
-//                        }catch(NumberFormatException ex){
-//                            //если символы строки не содержат дробное число - ничего не делаем
-//                        }
-//                        //если есть положительное значение должной оплаты,
-//                        //и оно больше, чем реально полученная оплата,
-//                        //и отключен режим редактирования доставки
-//                        //
-//                        if (mMustPay.doubleValue() > 0.0d
-//                            && mMustPay.doubleValue() > profit
-//                            && !mEditMode) {
-//                            //&& !mShopCreditApplied) {
-//
-//                            //Находим разность между должной и реальной оплатами
-//                            deltaProfit = mMustPay.doubleValue() - profit;
-//                            //...если она положительная
-//                            if (deltaProfit > 0.0d) {
-//                                // - копируем ее в поле суммы нового долга
-//                                //и устанавливаем чекбокс работы с долгами
-//                                
-//                                debtCTextField.textProperty().setValue(
-//                                    //String.valueOf(deltaProfit)
-//                                    /*String.valueOf(
-//                                        new BigDecimal(deltaProfit)
-//                                            .setScale(2, RoundingMode.UP)
-//                                                .doubleValue()
-//                                    )*/
-//                                    String.valueOf(new DecimalFormat("#0.00").format(deltaProfit))
-//                                        //new BigDecimal(d).setScale(2, RoundingMode.UP).doubleValue()
-//                                );
-//                                showDebtsBlockCheckBox.setSelected(true);
-//                                mShowDebtsBlock = true;
-//                            }
-//                        } else {
-//                            
-//                            /*if (mShopCreditApplied) {
-//                                
-//                                mShopCreditApplied = false;
-//                            }*/
-//
-//                            debtCTextField.setText("0");
-//                            showDebtsBlockCheckBox.setSelected(false);
-//                            mShowDebtsBlock = false;
-//                            
-//                            //if profit is greight than mustPay
-//                            if (mMustPay.doubleValue() < profit) {
-//                                
-//                                //itialize class field mCredit
-//                                deltaProfit = profit - mMustPay.doubleValue();
-//                                if (deltaProfit > 0.0d) {
-//                                
-//                                    mCredit = deltaProfit;
-//                                }
-//                            }
-//                        }
-//                    } else {
-//
-//                        debtCTextField.setText("0");
-//                        showDebtsBlockCheckBox.setSelected(false);
-//                        mShowDebtsBlock = false;
-//                    }
-//                } else {
-//                    
-//                    //
-//                    mNoProfitFieldChange = false;
-//                    
-//                    debtCTextField.setText("0");
-//                    showDebtsBlockCheckBox.setSelected(false);
-//                    mShowDebtsBlock = false;
-//                }
-//            }
-//        });
     }    
 
     @Override
     public void setScreenParent(ScreensController screenParent) {
         myController = screenParent;
     }
-    
-    @FXML
-    private void findUsersAction(){}
     
     @FXML
     private void goHomeScreenAction(){
@@ -957,6 +797,80 @@ public class FindUsersController implements Initializable, ControlledScreen {
     private void resetFormAction(){
        
     }
+    
+    @FXML
+    private void findUsersAction() {
+                        
+        List<ValidationMessage> validationMessageList =
+                (List<ValidationMessage>) validationSupport
+                        .getValidationResult()
+                        .getMessages();
+        if (validationMessageList.isEmpty()) {
+            
+            //Если страны с введенным названием нет в списке автозавершения,
+            //показываем окно ошибки
+            String errorsString = "";
+            boolean hasErrors = false;
+            
+            if (!mCountryNamesSet.contains(countryCTextField.getText())) {
+                errorsString += "Нет страны с таким названием. ";
+                hasErrors = true;
+            }
+            if (!mRegionNamesSet.contains(regionCTextField.getText())) {
+                errorsString += "Нет региона с таким названием. ";
+                hasErrors = true;
+            }
+            if (!mCityNamesSet.contains(cityCTextField.getText())) {
+                errorsString += "Нет населенного пункта с таким названием. ";
+                hasErrors = true;
+            }
+            if (mSelectedAge == null) {
+                errorsString += "Не выбран возраст. ";
+                hasErrors = true;
+            }
+            
+            if (hasErrors) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Ошибка");
+                alert.setHeaderText("Поиск пользователей невозможно запустить - недостаточно данных для высокоселективного запроса к VK API");
+                alert.setContentText(errorsString);
+                alert.showAndWait();
+            } else {
+                
+                //Не было ошибок - начинаем поиск
+                System.out.println("countryCTextField " + countryCTextField.getText());
+                System.out.println("regionCTextField " + regionCTextField.getText());
+                System.out.println("cityCTextField " + cityCTextField.getText());
+                
+                System.out.println("ageComboBox " + ageComboBox.getSelectionModel().getSelectedItem());
+                
+                System.out.println("mSelectedSex " + mSelectedSex);
+            }
+            
+        } else {
+            
+            //Если хотя бы одно из валидируемых полей не заполнено,
+            //показываем окно ошибок валидации
+            
+            String errorsString = "";
+            
+            for (ValidationMessage validationMessage : validationMessageList) {
+                
+                errorsString += "поле \""
+                        + ((CustomTextField)validationMessage.getTarget()).getPromptText()
+                        + "\": "
+                        + validationMessage.getText()
+                        + ". ";
+            }
+            
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка");
+            alert.setHeaderText("Поиск пользователей невозможно запустить");
+            alert.setContentText(errorsString);
+            alert.showAndWait();
+        }
+    }
+    
 //    
 //    @FXML
 //    private void setDateNow(ActionEvent event){
@@ -1331,271 +1245,7 @@ public class FindUsersController implements Initializable, ControlledScreen {
 ////            }
 ////        }
 ////    }
-//    @FXML
-//    private void actionAddSale(ActionEvent actionEvent) {
-//        
-//        volumeCTextField.setEditable(false);
-//                
-//        List<ValidationMessage> validationMessageList =
-//                (List<ValidationMessage>) validationSupport
-//                        .getValidationResult()
-//                        .getMessages();
-//        if (validationMessageList.isEmpty()) {
-//            
-//            //Если магазина с введенным названием нет в БД,
-//            //показываем окно ошибки
-//            String errorsString = "";
-//            boolean hasErrors = false;
-//            if (!mShopNamesSet.contains(shopCTextField.textProperty().getValue())) {
-//                errorsString += "Нет магазина с таким названием. ";
-//                hasErrors = true;
-//            }
-//            if (mSelectedBarrel == null) {
-//                errorsString += "Не выбрана бочка. ";
-//                hasErrors = true;
-//            }
-//            if (!mDriverNamesSet.contains(driverCTextField.textProperty().getValue())) {
-//                errorsString += "Нет водителя с таким именем. ";
-//                hasErrors = true;
-//            }
-//            if (!mCarNamesSet.contains(carCTextField.textProperty().getValue())) {
-//                errorsString += "Нет автомобиля с таким номером. ";
-//                hasErrors = true;
-//            }
-//            
-//            if (createdDatePicker.getValue() == null) {
-//                
-//                errorsString += "Не установлена дата. ";
-//                hasErrors = true;
-//            }
-//            
-//            if (hasErrors) {
-//                Alert alert = new Alert(Alert.AlertType.ERROR);
-//                alert.setTitle("Ошибка");
-//                alert.setHeaderText(
-//                    !mEditMode
-//                        ?"Доставка не добавлена"
-//                        :"Доставка не изменена"
-//                );
-//                alert.setContentText(errorsString);
-//                alert.showAndWait();
-//            } else {
-//                
-//                /*проверки на подозрительные данные о счетчике и объеме*/
-//                String warningString = "";
-//                boolean hasWarnings = false;
-//                //Если сейчас режим добавления доставки
-//                if(!mEditMode){
-//
-//                    //по расзности счетчика с прошлым значением: израсходовано больше,
-//                    //чем емкость бочки (проверять всегда, а если предыдущая продажа
-//                    //не найдена - пропускать)
-//
-//                    //находим ID предыдущ. дост. для данной бочки
-//                    Integer lastSaleId = mSelectedBarrel.getLastSaleId();
-//                    //емкость выбранной бочки
-//                    int selectedBarrelCapacityInt =
-//                        mBarrelCapacitiesDAOImpl.getBarrelCapacity(
-//                                mSelectedBarrel.getCapacityId()
-//                        ).getCapacity();
-//                    //максимальная емкость, доступная сейчас
-//                    int maxCurrentCapacity = selectedBarrelCapacityInt;
-//                    //если существует информация о предыдущей доставке для бочки
-//                    /*if (lastSaleId != null) {
-//                        Sale lastSale =
-//                            mSalesDAOImpl.getSale(lastSaleId);
-//                        if (lastSale != null) {
-//                            int diff = Integer.parseInt(
-//                                    countOldCTextField.getText()
-//                            ) - lastSale.getCounterNew();
-//
-//                            //корректируем максимальную емкость, доступную сейчас
-//                            maxCurrentCapacity =
-//                                    maxCurrentCapacity -
-//                                    (selectedBarrelCapacityInt - diff);
-//
-//                            diff = diff - (int)((double)diff * 0.02D);
-//                            if (diff > selectedBarrelCapacityInt) {
-//                                warningString +=
-//                                        "Израсходовано больше, чем емкость бочки. ";
-//                                hasWarnings = true;
-//                            }
-//                        }
-//                    }*/
-//
-//
-//                    if (lastSaleId != null) {
-//                        /*Sale lastSale =
-//                            mSalesDAOImpl.getSale(lastSaleId);*/
-//                        //if (lastSale != null) {
-//                            int diff = Integer.parseInt(
-//                                    countNewCTextField.getText()
-//                            ) - mSelectedBarrel.getCounter();
-//
-//                            int diffTest = diff - (int)((double)diff * 0.02D);
-//                            if (diffTest > selectedBarrelCapacityInt) {
-//                                warningString +=
-//                                        "Израсходовано больше, чем емкость бочки. ";
-//                                hasWarnings = true;
-//                            }
-//
-//                            //корректируем максимальную емкость, доступную сейчас
-//                            maxCurrentCapacity =
-//                                maxCurrentCapacity -
-//                                (selectedBarrelCapacityInt - diff);
-//
-//                        //}
-//                    }
-//
-//
-//                    //заправлено больше, чем емкость бочки [+ остаток]
-//
-//                    //если чистка или замена произведены,
-//                    //то доступная полная емкость бочки
-//                    if (cleanCheckBox.isSelected() || repairCheckBox.isSelected()) {
-//                        maxCurrentCapacity = selectedBarrelCapacityInt;
-//                    }
-//
-//                    if (Integer.parseInt(volumeCTextField.getText()) > maxCurrentCapacity) {
-//
-//                        warningString +=
-//                                "Заправлено больше, чем доступная емкость бочки. ";
-//                        hasWarnings = true;
-//                    }
-//
-//                    //
-//                    if (!debtAmortCTextField.getText().equals("0")
-//                            && debtsComboBox.getSelectionModel().getSelectedItem() == null) {
-//
-//                        warningString +=
-//                                "В поле погашения долга ненулевое значение, но погашаемый долг не выбран (ПОГАШЕНИЕ НЕ БУДЕТ ЗАСЧИТАНО!). ";
-//                        hasWarnings = true;
-//                    }
-//                }
-//                //***
-//                
-//                //Были подготовлены предупреждения - показываем их,
-//                //и спрашиваем: добавлять доставку или нет?
-//                if (hasWarnings) {
-//                    
-//                    Alert warningConfirmationAlert =
-//                        new Alert(Alert.AlertType.CONFIRMATION);
-//                    warningConfirmationAlert.setTitle("Подозрительные значения");
-//                    warningConfirmationAlert.setHeaderText("Все равно добавить доставку?");
-//                    warningConfirmationAlert.setContentText(warningString);
-//
-//                    Optional<ButtonType> result =
-//                            warningConfirmationAlert.showAndWait();
-//                    if (result.get() == ButtonType.OK){
-//
-//                        //Нажата кнопка OK - сохраняем доставку в БД
-//                        processSaleSaving();
-//                    } else {
-//                        //Нажата кнопка CANCEL - показываем сообщение об отмене
-//                        Alert cancelWarningAlert =
-//                                new Alert(Alert.AlertType.WARNING);
-//                        cancelWarningAlert.setTitle("Предупреждение");
-//                        cancelWarningAlert.setHeaderText(
-//                            !mEditMode
-//                                ?"Доставка не добавлена"
-//                                :"Доставка не изменена"
-//                        );
-//                        cancelWarningAlert.setContentText("Добавление доставки отменено");
-//                        cancelWarningAlert.showAndWait();
-//                    }
-//                } else {
-//                    
-//                    //Не было ни ошибок, ни предупреждений -
-//                    //сохраняем доставку в БД
-//                    processSaleSaving();
-//                }
-//
-//                
-//                
-//            }
-////            securityNameCTextField.promptTextProperty()
-////                                .setValue("security name");
-////            quantityCTextField.promptTextProperty()
-////                                .setValue("quantity");
-////            priceCTextField.promptTextProperty()
-////                                .setValue("price");
-////            securityNameCTextField.setStyle("-fx-border-color:lightgray;");
-////            quantityCTextField.setStyle("-fx-border-color:lightgray;");
-////            priceCTextField.setStyle("-fx-border-color:lightgray;");
-//            
-//            //System.out.println(securityNameCTextField.getText());
-//            
-//            //Добавление записи в таблицу "Продажи"
-////            Sale newSale = new Sale();
-////            newSale.setPrice((int)(Double.parseDouble(priceCTextField.getText()) * 100));
-////            newSale.setQuantity(Integer.parseInt(quantityCTextField.getText()));
-////            newSale.setSecurityName(securityNameCTextField.getText());
-////            remoteServiceRemote.addSale(newSale, 1, 1);
-//            
-////            securityNameCTextField.textProperty().setValue("");
-////            quantityCTextField.textProperty().setValue("");
-////            priceCTextField.textProperty().setValue("");
-//            
-//        } else {
-//            
-//            //Если хотя бы одно из валидируемых полей не заполнено,
-//            //показываем окно ошибок валидации
-//            
-//            String errorsString = "";
-//            
-//            for (ValidationMessage validationMessage : validationMessageList) {
-//                
-//                //System.out.println(validationMessage.getText());
-//                errorsString += "поле \""
-//                        + ((CustomTextField)validationMessage.getTarget()).getPromptText()
-//                        + "\": "
-//                        + validationMessage.getText()
-//                        + ". ";
-//            }
-//            
-//            Alert alert = new Alert(Alert.AlertType.ERROR);
-//            alert.setTitle("Ошибка");
-//            alert.setHeaderText(
-//                !mEditMode
-//                    ?"Доставка не добавлена"
-//                    :"Доставка не изменена"
-//            );
-//            alert.setContentText(errorsString);
-//            alert.showAndWait();
-//                        
-////            String currentControlIdString;
-////            for (ValidationMessage validationMessage : validationMessageList) {
-////                currentControlIdString =
-////                        ((CustomTextField)validationMessage.getTarget()).getId();
-////                switch(currentControlIdString){
-////                    case "securityNameCTextField" : {
-////                        securityNameCTextField.promptTextProperty()
-////                                .setValue(validationMessage.getText());
-////                        //securityNameCTextField.getStyleClass().remove("custom-text-field");
-////                        //securityNameCTextField.getStyleClass().add("error-c-text-field");
-////                        securityNameCTextField.setStyle("-fx-border-color:red;");
-////                        break;
-////                    }
-////                    case "quantityCTextField" : {
-////                        quantityCTextField.promptTextProperty()
-////                                .setValue(validationMessage.getText());
-////                        quantityCTextField.setStyle("-fx-border-color:red;");
-////                        break;
-////                    }
-////                    case "priceCTextField" : {
-////                        priceCTextField.promptTextProperty()
-////                                .setValue(validationMessage.getText());
-////                        priceCTextField.setStyle("-fx-border-color:red;");
-////                        break;
-////                    }
-////                }
-//                
-//                //System.out.println(((CustomTextField)validationMessage.getTarget()).getId());
-//                
-//            //}
-//        }
-//    }
-//    
+
     //Приведение формы в исходное состояние
     private void resetForm(){
         
