@@ -5,6 +5,7 @@
  */
 package org.tyaa.comradfinder.viewcontroller;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -31,6 +32,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -46,6 +48,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.util.StringConverter;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLStreamException;
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
 import org.controlsfx.control.textfield.CustomTextField;
@@ -55,12 +59,18 @@ import org.controlsfx.validation.ValidationMessage;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
 import org.tyaa.comradfinder.MainApp;
+import org.tyaa.comradfinder.model.TypicalWords;
 import org.tyaa.comradfinder.model.VKCity;
 import org.tyaa.comradfinder.model.VKCountry;
 import org.tyaa.comradfinder.model.VKRegion;
+import org.tyaa.comradfinder.modules.XmlImporter;
 import org.tyaa.comradfinder.modules.exception.FailJsonFetchException;
 import org.tyaa.comradfinder.modules.facades.ComradFinder;
+import org.tyaa.comradfinder.modules.facades.ModelBuilder;
+import org.tyaa.comradfinder.screensframework.ProgressForm;
+import org.tyaa.comradfinder.utils.MapUtils;
 import org.tyaa.comradfinder.utils.SexEnum;
+import org.xml.sax.SAXException;
 
 /**
  * FXML Controller class
@@ -845,6 +855,67 @@ public class FindUsersController implements Initializable, ControlledScreen {
                 System.out.println("ageComboBox " + ageComboBox.getSelectionModel().getSelectedItem());
                 
                 System.out.println("mSelectedSex " + mSelectedSex);
+                
+                boolean hasFetchJsonErrors = false;
+
+                try{
+
+                    Task findUsersTask =
+                    ComradFinder.findByModel(
+                        String.valueOf(mSelectedCountry.id)
+                            , String.valueOf(mSelectedRegion.id)
+                            , String.valueOf(mSelectedCity.id)
+                            , String.valueOf(mSelectedAge)
+                            , mSelectedSex.toString()
+                    );
+
+                    ProgressForm pForm = new ProgressForm();
+
+                    // binds progress of progress bars to progress of task:
+                    pForm.activateProgressBar(findUsersTask);
+
+                    // this method would get the result of the task
+                    // and update the UI based on its value
+                    findUsersTask.setOnSucceeded(event -> {
+                        pForm.getDialogStage().close();
+                        /*//Загружаем модель типичных слов в объект Java
+                        //из только что сохраненного файла
+                        //Читаем набор типичных слов из файла XML в Java объект
+                        try {
+                            try {
+                                mSrcTypicalWords = XmlImporter.getTypicalWords("TypicalWords.xml");
+                            } catch (SAXException ex) {
+                                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ParserConfigurationException ex) {
+                                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        } catch (IOException | XMLStreamException ex) {
+                            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        if (mSrcTypicalWords != null) {
+
+                            fillVariantObservableList(mSrcTypicalWords, mSrcVariantObservableList);
+                        }*/
+
+                    });
+
+                    pForm.getDialogStage().show();
+
+                    Thread thread = new Thread(findUsersTask);
+                    thread.setDaemon(true);
+                    thread.start();
+                } catch (NumberFormatException | FailJsonFetchException ex){
+
+                    hasFetchJsonErrors = true;
+                }
+                if (hasFetchJsonErrors) {
+
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Ошибка");
+                    alert.setHeaderText("Сбой поиска кандидатов");
+                    alert.setContentText("Сетевой ресурс недоступен");
+                    alert.showAndWait();
+                }
             }
             
         } else {
