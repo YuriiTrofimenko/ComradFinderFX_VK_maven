@@ -16,7 +16,9 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Node;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
+import org.tyaa.comradfinder.model.VKCandidate;
 import org.xml.sax.SAXException;
 
 /**
@@ -29,13 +31,19 @@ import org.xml.sax.SAXException;
 public class XmlImporter
 {
     private static TypicalWords mTypicalWords;
+    private static List<VKCandidate> mVKCandidatesList;
     
     static {
     
         mTypicalWords = new TypicalWords();
+        mVKCandidatesList = new ArrayList<>();
     }
     
-    public static TypicalWords getTypicalWords(String _filePath) throws IOException, XMLStreamException, SAXException, ParserConfigurationException {
+    public static TypicalWords getTypicalWords(String _filePath)
+        throws IOException
+            , XMLStreamException
+            , SAXException
+            , ParserConfigurationException {
                 
         //try {
             
@@ -69,6 +77,80 @@ public class XmlImporter
         //}
         
         return mTypicalWords;
+    }
+    
+    public static List<VKCandidate> getVKCandidates(String _filePath)
+        throws IOException
+            , XMLStreamException
+            , SAXException
+            , ParserConfigurationException {
+                            
+            File fXmlFile = new File(_filePath);
+            DocumentBuilderFactory dbFactory =
+                DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(fXmlFile);
+            doc.getDocumentElement().normalize();
+            
+            Node rootNode = doc.getDocumentElement();
+            NodeList rootChildNodes = rootNode.getChildNodes();
+            ArrayList<Node> rootChildList = new ArrayList<>();
+            
+            for (int i = 0; i < rootChildNodes.getLength(); i++) {
+                if (rootChildNodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                    rootChildList.add(rootChildNodes.item(i));
+                }
+            }
+            
+            for (Node currentNode : rootChildList) {
+
+                //String vKCandidateItemName = "candidate";
+                NodeList vKCandidateItemChildNodes = currentNode.getChildNodes();
+                
+                for (int i = 0; i < vKCandidateItemChildNodes.getLength(); i++) {
+
+                    if (vKCandidateItemChildNodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
+
+                            NodeList vKCandidateChildNodes =
+                                vKCandidateItemChildNodes.item(i).getChildNodes();
+                            
+                            String currentId = "";
+                            String currentFName = "";
+                            String currentLName = "";
+                            String currentScore = "";
+
+                            for (int j = 0; j < vKCandidateChildNodes.getLength(); j++) {
+
+                                if (vKCandidateChildNodes.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                            
+                                    if (vKCandidateItemChildNodes.item(j).getNodeName().equals("fname")) {
+
+                                        currentFName = vKCandidateItemChildNodes.item(j).getTextContent();
+                                    } else if (vKCandidateItemChildNodes.item(j).getNodeName().equals("lname")) {
+
+                                        currentLName = vKCandidateItemChildNodes.item(j).getTextContent();
+                                    } else if (vKCandidateItemChildNodes.item(j).getNodeName().equals("score")) {
+
+                                        currentScore = vKCandidateItemChildNodes.item(j).getTextContent();
+                                    }
+                                } else if (vKCandidateItemChildNodes.item(j).getNodeType() == Node.ATTRIBUTE_NODE) {
+
+                                    currentId = vKCandidateItemChildNodes.item(j).getTextContent();
+                                }
+                            }
+                            
+                            VKCandidate newVKCandidate = new VKCandidate();
+                            newVKCandidate.setUID(Integer.parseInt(currentId));
+                            newVKCandidate.setFirstName(currentFName);
+                            newVKCandidate.setLastName(currentLName);
+                            newVKCandidate.setScore(Integer.parseInt(currentScore));
+                            
+                            mVKCandidatesList.add(newVKCandidate);
+                    }
+                }
+            }
+        
+        return mVKCandidatesList;
     }
     
     //Внутренний метод для заполнения того поля объекта TypicalWords,
