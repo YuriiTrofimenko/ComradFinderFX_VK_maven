@@ -856,18 +856,25 @@ public class FindUsersController implements Initializable, ControlledScreen {
                 
                 System.out.println("mSelectedSex " + mSelectedSex);
                 
+                Alert infoAalert = new Alert(Alert.AlertType.INFORMATION);
+                infoAalert.setTitle("Информация");
+                infoAalert.setHeaderText("Этот процесс может занять значительное время. Прогресс поиска будет отображаться восемь раз,");
+                infoAalert.setContentText("так как поиск производится последовательно по пользователям с 8 различными статусами");
+                infoAalert.showAndWait();
+                
                 boolean hasFetchJsonErrors = false;
 
                 try{
 
+                    //Подготавливаем фоновую задачу поиска кандидатов
                     Task findUsersTask =
-                    ComradFinder.findByModel(
-                        String.valueOf(mSelectedCountry.id)
-                            , String.valueOf(mSelectedRegion.id)
-                            , String.valueOf(mSelectedCity.id)
-                            , String.valueOf(mSelectedAge)
-                            , mSelectedSex.toString()
-                    );
+                        ComradFinder.findByModel(
+                            String.valueOf(mSelectedCountry.id)
+                                , String.valueOf(mSelectedRegion.id)
+                                , String.valueOf(mSelectedCity.id)
+                                , String.valueOf(mSelectedAge)
+                                , mSelectedSex.toString()
+                        );
 
                     ProgressForm pForm = new ProgressForm();
 
@@ -877,7 +884,17 @@ public class FindUsersController implements Initializable, ControlledScreen {
                     // this method would get the result of the task
                     // and update the UI based on its value
                     findUsersTask.setOnSucceeded(event -> {
+                        
+                        //Закрываем окно отображения прогресса
                         pForm.getDialogStage().close();
+                        
+                        //Информируем подписчиков об обновлении данных
+                        //о кандидатах
+                        MainApp.updateCandidatesGenerator.fire();
+                        
+                        //Переходим на главный экран приложения
+                        goHomeScreenAction();
+                        
                         /*//Загружаем модель типичных слов в объект Java
                         //из только что сохраненного файла
                         //Читаем набор типичных слов из файла XML в Java объект
@@ -899,8 +916,10 @@ public class FindUsersController implements Initializable, ControlledScreen {
 
                     });
 
+                    //Отображаем окно прогресса
                     pForm.getDialogStage().show();
 
+                    //Запускаем поиск пользователей как фоновую задачу
                     Thread thread = new Thread(findUsersTask);
                     thread.setDaemon(true);
                     thread.start();

@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.EventObject;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -56,6 +57,7 @@ import org.tyaa.comradfinder.MainApp;
 import org.tyaa.comradfinder.model.TypicalWords;
 import org.tyaa.comradfinder.modules.XmlExporter;
 import org.tyaa.comradfinder.modules.XmlImporter;
+import org.tyaa.comradfinder.modules.events.interfaces.UpdateCandidatesListener;
 import org.tyaa.comradfinder.modules.facades.ModelBuilder;
 import org.tyaa.comradfinder.screensframework.ProgressForm;
 import org.tyaa.comradfinder.utils.Cloner;
@@ -69,7 +71,10 @@ import org.xml.sax.SAXException;
  *
  * @author Yurii
  */
-public class HomeController implements Initializable, ControlledScreen {
+public class HomeController implements
+        Initializable
+        , ControlledScreen
+        , UpdateCandidatesListener{
 
     /*Внедренные хендлеры элементов UI*/
     
@@ -185,7 +190,7 @@ public class HomeController implements Initializable, ControlledScreen {
         
         
         //myLabel.setText("None");
-        //WS1.addBarrelControllerInstance = this;
+        MainApp.homeControllerInstance = this;
         //System.out.println("HomeController");
         //mSalesDAOImpl = new SalesDAOImpl();
         //mShopsDAOImpl = new ShopsDAOImpl();
@@ -1774,6 +1779,12 @@ public class HomeController implements Initializable, ControlledScreen {
         
             createModelButton.setDisable(false);
         }
+    }
+
+    @Override
+    public void handleUpdateCandidatesEvent(EventObject e)
+    {
+        System.out.println("Load new cand");
     }
     
 }

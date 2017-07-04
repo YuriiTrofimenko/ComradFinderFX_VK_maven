@@ -32,11 +32,13 @@ public class XmlImporter
 {
     private static TypicalWords mTypicalWords;
     private static List<VKCandidate> mVKCandidatesList;
+    private static String mGroupId;
     
     static {
     
         mTypicalWords = new TypicalWords();
         mVKCandidatesList = new ArrayList<>();
+        mGroupId = "";
     }
     
     public static TypicalWords getTypicalWords(String _filePath)
@@ -58,10 +60,18 @@ public class XmlImporter
             ArrayList<Node> rootChildList = new ArrayList<>();
             
             for (int i = 0; i < rootChildNodes.getLength(); i++) {
+                
                 if (rootChildNodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                    
                     rootChildList.add(rootChildNodes.item(i));
+                } else if (rootChildNodes.item(i).getNodeType() == Node.ATTRIBUTE_NODE
+                        && rootChildNodes.item(i).getNodeName().equals("group_id")) {
+                    
+                    mGroupId = rootChildNodes.item(i).getTextContent();
                 }
             }
+            
+            mTypicalWords.mGroupId = mGroupId;
             
             for (Node currentNode : rootChildList) {
 

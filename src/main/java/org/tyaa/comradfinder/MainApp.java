@@ -6,7 +6,10 @@ import static javafx.application.Application.launch;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.tyaa.comradfinder.modules.events.UpdateCandidatesGenerator;
 import org.tyaa.comradfinder.screensframework.ScreensController;
+import org.tyaa.comradfinder.viewcontroller.FindUsersController;
+import org.tyaa.comradfinder.viewcontroller.HomeController;
 
 
 public class MainApp extends Application {
@@ -22,6 +25,11 @@ public class MainApp extends Application {
     //
     public static String findUsersID = "find_users";
     public static String findUsersView = "/fxml/FindUsers.fxml";
+    
+    public static HomeController homeControllerInstance;
+    public static FindUsersController findUsersControllerInstance;
+    
+    public static UpdateCandidatesGenerator updateCandidatesGenerator;
 
     public static void main(String[] args)
     {
@@ -46,6 +54,11 @@ public class MainApp extends Application {
         
         //Устанавливаем представление экрана входа в качестве текущего
         screensContainer.setScreen(MainApp.homeID);
+        
+        //Подписываем контроллеры экранов на события обновления данных
+        updateCandidatesGenerator = new UpdateCandidatesGenerator();
+        updateCandidatesGenerator.addListener(homeControllerInstance);
+        
         //Создаем корневой контейнер, помещаем в него наш контейнер представлений,
         //на его базе - сцену, которую подключаем в главный стейдж и отображаем стейдж
         

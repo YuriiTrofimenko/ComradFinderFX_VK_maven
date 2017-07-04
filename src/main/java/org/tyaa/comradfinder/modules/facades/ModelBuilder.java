@@ -310,6 +310,8 @@ public class ModelBuilder {
                 /*Заносим в модель TypicalWords списки-карты*/
 
                 TypicalWords typicalWords = new TypicalWords();
+                
+                typicalWords.mGroupId = _groupId;
 
                 //В каждом спике-карте отбрасываем пары слово - частота
                 //с длиной слова более трех символов,

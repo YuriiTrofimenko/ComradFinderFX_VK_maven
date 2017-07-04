@@ -18,6 +18,8 @@ import java.util.Map;
 
 public class TypicalWords implements Serializable
 {
+    public String mGroupId;
+    
     public Map<String, Integer> mInterestMap;
     public Map<String, Integer> mActivityMap;
     public Map<String, Integer> mAboutMap;
