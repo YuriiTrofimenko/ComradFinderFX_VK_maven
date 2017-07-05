@@ -62,7 +62,7 @@ import org.tyaa.comradfinder.modules.facades.ModelBuilder;
 import org.tyaa.comradfinder.screensframework.ProgressForm;
 import org.tyaa.comradfinder.utils.Cloner;
 import org.tyaa.comradfinder.utils.MapUtils;
-import org.tyaa.comradfinder.viewcontroller.viewmodel.VariantModel;
+import org.tyaa.comradfinder.viewmodel.VariantModel;
 import org.xml.sax.SAXException;
 
 
@@ -79,7 +79,7 @@ public class HomeController implements
     /*Внедренные хендлеры элементов UI*/
     
     @FXML
-    Label myLabel;
+    Label groupIdLabel;
     
     @FXML
     Button createModelButton;
@@ -191,10 +191,11 @@ public class HomeController implements
         
         //myLabel.setText("None");
         MainApp.homeControllerInstance = this;
-        //System.out.println("HomeController");
-        //mSalesDAOImpl = new SalesDAOImpl();
-        //mShopsDAOImpl = new ShopsDAOImpl();
-        //mBarrelsDAOImpl = new BarrelsDAOImpl();
+        
+        //
+        groupIdLabel
+            .textProperty()
+            .bindBidirectional(MainApp.globalModel.groupIdProperty());
 //        mBarrelCapacitiesDAOImpl = new BarrelCapacitiesDAOImpl();
 //        mWaterTypesDAOImpl = new WaterTypesDAOImpl();
 //        
@@ -413,7 +414,9 @@ public class HomeController implements
                         //Читаем набор типичных слов из файла XML в Java объект
                         try {
                             try {
+                                
                                 mSrcTypicalWords = XmlImporter.getTypicalWords("TypicalWords.xml");
+                                MainApp.globalModel.groupIdProperty().set(groupIdString);
                             } catch (SAXException ex) {
                                 Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
                             } catch (ParserConfigurationException ex) {
@@ -583,6 +586,7 @@ public class HomeController implements
                 if (mSrcTypicalWords != null) {
 
                     fillVariantObservableList(mSrcTypicalWords, mSrcVariantObservableList);
+                    MainApp.globalModel.groupIdProperty().set(mSrcTypicalWords.mGroupId);
                 }
             } catch (IOException ex) {
                 Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
@@ -1184,11 +1188,18 @@ public class HomeController implements
     @FXML
     private void goToFindUsersScreen(){
         
-       myController.setScreen(MainApp.findUsersID);
-       MainApp.primaryStage.setMaximized(false);
-       MainApp.primaryStage.setWidth(566);
-       MainApp.primaryStage.setHeight(400);
-       MainApp.primaryStage.setY(30);
+        if (MainApp.globalModel.groupIdProperty() != null 
+            && !MainApp.globalModel.groupIdProperty().equals("")) {
+            
+            myController.setScreen(MainApp.findUsersID);
+            MainApp.primaryStage.setMaximized(false);
+            MainApp.primaryStage.setWidth(566);
+            MainApp.primaryStage.setHeight(400);
+            MainApp.primaryStage.setY(30);
+        } else {
+        
+            
+        }
     }
     
     /*@FXML

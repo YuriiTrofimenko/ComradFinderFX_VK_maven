@@ -10,6 +10,7 @@ import org.tyaa.comradfinder.modules.events.UpdateCandidatesGenerator;
 import org.tyaa.comradfinder.screensframework.ScreensController;
 import org.tyaa.comradfinder.viewcontroller.FindUsersController;
 import org.tyaa.comradfinder.viewcontroller.HomeController;
+import org.tyaa.comradfinder.viewmodel.GlobalModel;
 
 
 public class MainApp extends Application {
@@ -30,6 +31,8 @@ public class MainApp extends Application {
     public static FindUsersController findUsersControllerInstance;
     
     public static UpdateCandidatesGenerator updateCandidatesGenerator;
+    
+    public static GlobalModel globalModel;
 
     public static void main(String[] args)
     {
@@ -45,6 +48,8 @@ public class MainApp extends Application {
     public void start(Stage _primaryStage){
         
         primaryStage = _primaryStage;
+        
+        globalModel = new GlobalModel("");
         
         //Создаем объект скринс-фреймворка (контейнер представлений)
         ScreensController screensContainer = new ScreensController();

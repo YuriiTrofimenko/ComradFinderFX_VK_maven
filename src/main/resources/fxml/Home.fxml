@@ -9,6 +9,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="pane" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.tyaa.comradfinder.viewcontroller.HomeController">
@@ -25,6 +28,14 @@
                             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                          </padding>
                     </Label>
+                  <Label fx:id="groupIdLabel" maxWidth="200.0" minWidth="200.0" prefWidth="200.0" text="Group's id is ..." visible="false" wrapText="true" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="40.0">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </Label>
                   <AnchorPane AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <FlowPane AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -35,16 +46,40 @@
                                                <font>
                                                   <Font size="14.0" />
                                                </font>
+                                       <textFill>
+                                          <RadialGradient centerX="0.5" centerY="0.5" radius="0.9">
+                                             <stops>
+                                                <Stop color="RED" />
+                                                <Stop color="#005eff00" offset="1.0" />
+                                             </stops>
+                                          </RadialGradient>
+                                       </textFill>
                                           </Button>
                                           <Button mnemonicParsing="false" onAction="#showSaveModelDialog" text="Save model">
                                              <font>
                                                 <Font size="14.0" />
                                              </font>
+                                       <textFill>
+                                          <LinearGradient endX="0.5380952380952381" endY="1.0" startX="0.5285714285714286">
+                                             <stops>
+                                                <Stop color="#0369ff" />
+                                                <Stop color="#ff0505" offset="1.0" />
+                                             </stops>
+                                          </LinearGradient>
+                                       </textFill>
                                           </Button>
                                           <Button mnemonicParsing="false" onAction="#loadModelAction" text="Load model">
                                               <font>
                                                  <Font size="14.0" />
                                               </font>
+                                       <textFill>
+                                          <RadialGradient centerX="0.5" centerY="0.5" radius="0.9">
+                                             <stops>
+                                                <Stop color="#ff0505" />
+                                                <Stop color="#056dff00" offset="1.0" />
+                                             </stops>
+                                          </RadialGradient>
+                                       </textFill>
                                           </Button>
                                  </buttons>
                               </ButtonBar>
@@ -54,26 +89,66 @@
                                                <font>
                                                   <Font size="14.0" />
                                                </font>
+                                       <textFill>
+                                          <RadialGradient centerX="0.5" centerY="0.5" radius="0.9">
+                                             <stops>
+                                                <Stop color="#048d01" />
+                                                <Stop color="#056dff00" offset="1.0" />
+                                             </stops>
+                                          </RadialGradient>
+                                       </textFill>
                                           </Button>
                                           <Button mnemonicParsing="false" text="Save users">
                                                <font>
                                                   <Font size="14.0" />
                                                </font>
+                                       <textFill>
+                                          <RadialGradient centerX="0.5" centerY="0.5" radius="0.9">
+                                             <stops>
+                                                <Stop color="#048d01" />
+                                                <Stop color="#056dff00" offset="1.0" />
+                                             </stops>
+                                          </RadialGradient>
+                                       </textFill>
                                           </Button>
                                           <Button mnemonicParsing="false" text="Load users">
                                                <font>
                                                   <Font size="14.0" />
                                                </font>
+                                       <textFill>
+                                          <RadialGradient centerX="0.5" centerY="0.5" radius="0.9">
+                                             <stops>
+                                                <Stop color="#048d01" />
+                                                <Stop color="#056dff00" offset="1.0" />
+                                             </stops>
+                                          </RadialGradient>
+                                       </textFill>
                                           </Button>
                                           <Button mnemonicParsing="false" text="Export users">
                                                <font>
                                                   <Font size="14.0" />
                                                </font>
+                                       <textFill>
+                                          <RadialGradient centerX="0.5" centerY="0.5" radius="0.9">
+                                             <stops>
+                                                <Stop color="#048d01" />
+                                                <Stop color="#056dff00" offset="1.0" />
+                                             </stops>
+                                          </RadialGradient>
+                                       </textFill>
                                           </Button>
                                           <Button mnemonicParsing="false" text="To processed">
                                                <font>
                                                   <Font size="14.0" />
                                                </font>
+                                       <textFill>
+                                          <RadialGradient centerX="0.5" centerY="0.5" radius="0.9">
+                                             <stops>
+                                                <Stop color="#048d01" />
+                                                <Stop color="#056dff00" offset="1.0" />
+                                             </stops>
+                                          </RadialGradient>
+                                       </textFill>
                                           </Button>
                                 </buttons>
                               </ButtonBar>
@@ -87,7 +162,20 @@
          <left>
             <AnchorPane minWidth="300.0" BorderPane.alignment="CENTER">
                <children>
-                  <TableView fx:id="sourceModelTableView" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                  <Label alignment="CENTER" contentDisplay="CENTER" text="Source model table" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <textFill>
+                        <RadialGradient centerX="0.5" centerY="0.5" radius="0.9">
+                           <stops>
+                              <Stop color="#ff0202" />
+                              <Stop color="WHITE" offset="1.0" />
+                           </stops>
+                        </RadialGradient>
+                     </textFill>
+                  </Label>
+                  <TableView fx:id="sourceModelTableView" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0">
                       <placeholder>
                           <Label text="Source model table" /> 
                       </placeholder>
@@ -106,7 +194,20 @@
          <center>
             <AnchorPane minWidth="400.0" BorderPane.alignment="CENTER">
                <children>
-                  <TableView fx:id="workModelTableView" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                  <Label alignment="CENTER" contentDisplay="CENTER" text="Work model table" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <textFill>
+                        <RadialGradient centerX="0.5" centerY="0.5" radius="0.9">
+                           <stops>
+                              <Stop color="#0369ff" />
+                              <Stop color="#1303ff00" offset="1.0" />
+                           </stops>
+                        </RadialGradient>
+                     </textFill>
+                  </Label>
+                  <TableView fx:id="workModelTableView" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0">
                     <placeholder>
                         <Label text="Work model table" /> 
                     </placeholder>
@@ -125,7 +226,20 @@
          <right>
             <AnchorPane minWidth="400.0" BorderPane.alignment="CENTER">
                <children>
-                  <TableView fx:id="usersTableView" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+                  <Label alignment="CENTER" contentDisplay="CENTER" text="Candidates table" textAlignment="CENTER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <textFill>
+                        <RadialGradient centerX="0.5" centerY="0.5" radius="0.9">
+                           <stops>
+                              <Stop color="#009414" />
+                              <Stop color="#1303ff00" offset="1.0" />
+                           </stops>
+                        </RadialGradient>
+                     </textFill>
+                  </Label>
+                  <TableView fx:id="usersTableView" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="50.0">
                     <placeholder>
                         <Label text="Candidates table" /> 
                     </placeholder>
@@ -151,16 +265,40 @@
                            <font>
                               <Font size="14.0" />
                            </font>
+                           <textFill>
+                              <LinearGradient endX="1.0" endY="0.48571428571428577" startY="0.4857142857142857">
+                                 <stops>
+                                    <Stop color="#8f0000" />
+                                    <Stop color="#005bff" offset="1.0" />
+                                 </stops>
+                              </LinearGradient>
+                           </textFill>
                       </Button>
                       <Button mnemonicParsing="false" onAction="#showEditVariantDlgAction" text="Edit variant" ButtonBar.buttonData="LEFT">
                            <font>
                               <Font size="14.0" />
                            </font>
+                           <textFill>
+                              <RadialGradient centerX="0.5" centerY="0.5" radius="0.9">
+                                 <stops>
+                                    <Stop color="#0037ff" />
+                                    <Stop color="#005eff00" offset="1.0" />
+                                 </stops>
+                              </RadialGradient>
+                           </textFill>
                       </Button>
                       <Button mnemonicParsing="false" onAction="#showDeleteRowDlgAction" text="Delete row" ButtonBar.buttonData="LEFT">
                            <font>
                               <Font size="14.0" />
                            </font>
+                           <textFill>
+                              <RadialGradient centerX="0.5" centerY="0.5" radius="0.9">
+                                 <stops>
+                                    <Stop color="#0037ff" />
+                                    <Stop color="#005eff00" offset="1.0" />
+                                 </stops>
+                              </RadialGradient>
+                           </textFill>
                       </Button>
                     </buttons>
                   </ButtonBar>
