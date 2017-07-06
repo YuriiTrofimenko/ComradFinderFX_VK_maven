@@ -9,6 +9,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import org.tyaa.comradfinder.model.TypicalWords;
 
 /**
  * Модель для заполнения строк
@@ -20,7 +21,8 @@ public class GlobalModel
 {
     //private IntegerProperty uid;
     private StringProperty groupId;
-    //private StringProperty lname;
+    //Текущий путь к xml - файлу модели типичных слов
+    public TypicalWords curerntTypicalWords;
     //private IntegerProperty score;
     
     public GlobalModel(

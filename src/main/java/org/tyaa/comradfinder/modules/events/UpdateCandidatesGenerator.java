@@ -7,6 +7,7 @@ package org.tyaa.comradfinder.modules.events;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.tyaa.comradfinder.model.VKCandidate;
 import org.tyaa.comradfinder.modules.events.interfaces.UpdateCandidatesListener;
 
 /**
@@ -27,9 +28,10 @@ public class UpdateCandidatesGenerator
         listeners.remove(_toRemoveListener);
     }
     
-    public void fire(){
+    public void fire(List<VKCandidate> _vKCandidatesList){
         
         UpdateCandidatesEvent e = new UpdateCandidatesEvent(this);
+        e.vKCandidatesList = _vKCandidatesList;
         // Notify everybody that may be interested.
         for (UpdateCandidatesListener l : listeners)
             l.handleUpdateCandidatesEvent(e);

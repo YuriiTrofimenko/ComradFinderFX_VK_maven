@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<infoitems>
+<infoitems group_id="cult_rev">
   <interest>
     <variant id="1">
       <value>rock</value>
@@ -149,7 +149,7 @@
     </variant>
     <variant id="5">
       <value>книги</value>
-      <count>4</count>
+      <count>3</count>
     </variant>
     <variant id="6">
       <value>сталь"</value>
@@ -170,11 +170,11 @@
   </books>
   <music>
     <variant id="0">
-      <value>ария</value>
+      <value>ансамбль</value>
       <count>2</count>
     </variant>
     <variant id="1">
-      <value>ансамбль</value>
+      <value>вагнер</value>
       <count>2</count>
     </variant>
     <variant id="2">
@@ -182,37 +182,37 @@
       <count>2</count>
     </variant>
     <variant id="3">
+      <value>вивальди</value>
+      <count>3</count>
+    </variant>
+    <variant id="4">
       <value>дмитрий</value>
       <count>2</count>
     </variant>
-    <variant id="4">
+    <variant id="5">
       <value>boys</value>
       <count>2</count>
     </variant>
-    <variant id="5">
+    <variant id="6">
       <value>bassotti</value>
       <count>2</count>
     </variant>
-    <variant id="6">
+    <variant id="7">
       <value>александр</value>
       <count>2</count>
     </variant>
-    <variant id="7">
-      <value>beatles</value>
-      <count>2</count>
-    </variant>
     <variant id="8">
-      <value>nina</value>
-      <count>2</count>
+      <value>beatles</value>
+      <count>3</count>
     </variant>
     <variant id="9">
       <value>сергей</value>
-      <count>3</count>
+      <count>4</count>
     </variant>
   </music>
   <movies>
     <variant id="0">
-      <value>терминатор</value>
+      <value>карибского</value>
       <count>2</count>
     </variant>
     <variant id="1">
@@ -220,20 +220,20 @@
       <count>2</count>
     </variant>
     <variant id="2">
-      <value>советские</value>
-      <count>3</count>
-    </variant>
-    <variant id="3">
       <value>"они</value>
       <count>2</count>
     </variant>
-    <variant id="4">
+    <variant id="3">
       <value>родину"</value>
       <count>2</count>
     </variant>
-    <variant id="5">
+    <variant id="4">
       <value>среди</value>
       <count>4</count>
+    </variant>
+    <variant id="5">
+      <value>моря</value>
+      <count>2</count>
     </variant>
     <variant id="6">
       <value>летят</value>
@@ -248,14 +248,14 @@
       <count>3</count>
     </variant>
     <variant id="9">
-      <value>некоторые</value>
+      <value>матрица</value>
       <count>2</count>
     </variant>
   </movies>
   <political>
     <variant id="0">
       <value>1</value>
-      <count>17</count>
+      <count>18</count>
     </variant>
     <variant id="1">
       <value>2</value>
@@ -275,7 +275,7 @@
     </variant>
     <variant id="5">
       <value>9</value>
-      <count>2</count>
+      <count>1</count>
     </variant>
   </political>
   <religion>
@@ -296,19 +296,19 @@
       <count>1</count>
     </variant>
     <variant id="4">
-      <value>телема</value>
-      <count>1</count>
+      <value>гуманизм</value>
+      <count>6</count>
     </variant>
     <variant id="5">
-      <value>гуманизм</value>
-      <count>5</count>
-    </variant>
-    <variant id="6">
-      <value>нужно</value>
+      <value>день</value>
       <count>1</count>
     </variant>
+    <variant id="6">
+      <value>трансгуманизм</value>
+      <count>2</count>
+    </variant>
     <variant id="7">
-      <value>день</value>
+      <value>вера</value>
       <count>1</count>
     </variant>
     <variant id="8">
@@ -317,7 +317,7 @@
     </variant>
     <variant id="9">
       <value>светский</value>
-      <count>3</count>
+      <count>4</count>
     </variant>
   </religion>
   <inspiredby>
@@ -369,11 +369,11 @@
     </variant>
     <variant id="1">
       <value>2</value>
-      <count>17</count>
+      <count>16</count>
     </variant>
     <variant id="2">
       <value>5</value>
-      <count>3</count>
+      <count>4</count>
     </variant>
     <variant id="3">
       <value>6</value>
@@ -383,7 +383,7 @@
   <lifemain>
     <variant id="0">
       <value>1</value>
-      <count>3</count>
+      <count>2</count>
     </variant>
     <variant id="1">
       <value>2</value>
@@ -399,11 +399,11 @@
     </variant>
     <variant id="4">
       <value>5</value>
-      <count>13</count>
+      <count>14</count>
     </variant>
     <variant id="5">
       <value>6</value>
-      <count>5</count>
+      <count>4</count>
     </variant>
     <variant id="6">
       <value>7</value>

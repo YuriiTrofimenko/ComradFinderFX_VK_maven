@@ -55,13 +55,16 @@ import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
 import org.tyaa.comradfinder.MainApp;
 import org.tyaa.comradfinder.model.TypicalWords;
+import org.tyaa.comradfinder.model.VKCandidate;
 import org.tyaa.comradfinder.modules.XmlExporter;
 import org.tyaa.comradfinder.modules.XmlImporter;
+import org.tyaa.comradfinder.modules.events.UpdateCandidatesEvent;
 import org.tyaa.comradfinder.modules.events.interfaces.UpdateCandidatesListener;
 import org.tyaa.comradfinder.modules.facades.ModelBuilder;
 import org.tyaa.comradfinder.screensframework.ProgressForm;
 import org.tyaa.comradfinder.utils.Cloner;
 import org.tyaa.comradfinder.utils.MapUtils;
+import org.tyaa.comradfinder.viewmodel.CandidateModel;
 import org.tyaa.comradfinder.viewmodel.VariantModel;
 import org.xml.sax.SAXException;
 
@@ -122,72 +125,33 @@ public class HomeController implements
     @FXML
     private TableColumn scoreTableColumn;
     
-    //
-    /*@FXML
-    ListView waterTypesListView;
-    @FXML
-    ListView capacitiesListView;
-    
-    @FXML
-    CustomTextField waterTypeCTextField;
-    @FXML
-    CustomTextField capacityCTextField;
-    @FXML
-    CustomTextField сleaningTCTimeCTextField;
-    @FXML
-    CustomTextField сleaningOCTimeCTextField;
-    @FXML
-    CustomTextField allowedRestPercent;*/
-
-    
     //Флаг "кнопки активны"
     private boolean mButtonsEnable;
-    
-    //Объекты доступа к данным
-    //private SalesDAOImpl mSalesDAOImpl;
-    //private static ShopsDAOImpl mShopsDAOImpl;
-    //private BarrelsDAOImpl mBarrelsDAOImpl;
-//    private BarrelCapacitiesDAOImpl mBarrelCapacitiesDAOImpl;
-//    private WaterTypesDAOImpl mWaterTypesDAOImpl;
-//    
-//    private SettingsDAOImpl mSettingsDAOImpl;
-    //private DriversDAOImpl mDriversDAOImpl;
-    //private CarsDAOImpl mCarsDAOImpl;
     
     //Исходная модель типичных слов
     private TypicalWords mSrcTypicalWords;
     
     //Рабочая модель типичных слов
     private TypicalWords mWorkTypicalWords;
-    //private List<Barrel> mBarrels;
-    //private List<Barrel> mShopBarrels;
-//    private List<WaterType> mWaterTypes;
-//    private List<BarrelCapacity> mBarrelCapacities;
-    
-    //Наборы полей из объектов
-    //private Set<String> mShopNamesSet;
-    //private Set<String> mWaterTypesSet;
-    //private Set<String> mBarrelCapacitiesSet;
+    //Список кандидатов на приглашение
+    private List<VKCandidate> mVKCandidateList;
     
     //Выбранные объекты
     private VariantModel mSelectedVariantModel;
-    //private Barrel mSelectedBarrel;
-    //private WaterType mSelectedWaterType;
-    //private BarrelCapacity mSelectedBarrelCapacity;
     
     //Наблюдабельный список объектов VariantModel
     ObservableList<VariantModel> mSrcVariantObservableList;
     ObservableList<VariantModel> mWorkVariantObservableList;
-//    ObservableList<BarrelCapacityModel> mBarrelCapacitiesObservableList;
+    ObservableList<CandidateModel> mCandidateModelObservableList;
     
     ScreensController myController;
     ValidationSupport validationSupport;
+    
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
         
         //myLabel.setText("None");
         MainApp.homeControllerInstance = this;
@@ -196,93 +160,18 @@ public class HomeController implements
         groupIdLabel
             .textProperty()
             .bindBidirectional(MainApp.globalModel.groupIdProperty());
-//        mBarrelCapacitiesDAOImpl = new BarrelCapacitiesDAOImpl();
-//        mWaterTypesDAOImpl = new WaterTypesDAOImpl();
-//        
-//        mSettingsDAOImpl = new SettingsDAOImpl();
-        //mShops = mShopsDAOImpl.getAllShops();
-        //mShopNamesSet = new HashSet<>();
-        
-        //mBarrels = mBarrelsDAOImpl.getAllBarrels();
-        //mShopBarrels = new ArrayList();
-        
-        /*mWaterTypes = mWaterTypesDAOImpl.getAllWaterTypes();
-        mWaterTypesSet = new HashSet<>();
-        
-        mBarrelCapacities = mBarrelCapacitiesDAOImpl.getAllBarrelCapacities();
-        mBarrelCapacitiesSet = new HashSet<>();*/
         
         //Инициализация пустым наблюдабельным списком
         mSrcVariantObservableList = FXCollections.observableArrayList();
         mWorkVariantObservableList = FXCollections.observableArrayList();
+        mCandidateModelObservableList = FXCollections.observableArrayList();
         
         mSrcTypicalWords = new TypicalWords();
         mWorkTypicalWords = new TypicalWords();
         
         sourceModelTableView.setItems(mSrcVariantObservableList);
         workModelTableView.setItems(mWorkVariantObservableList);
-//        mBarrelCapacitiesObservableList = FXCollections.observableArrayList();
-//        
-//        waterTypesListView.setItems(mWaterTypesObservableList);
-//        capacitiesListView.setItems(mBarrelCapacitiesObservableList);
-        
-        //updateWaterTypes();
-        //updateBarrelCapacities();
-        
-        /*Приведение формы в исходное состояние*/
-        
-//        resetForm();
-//        
-//        allowedRestPercent.setText(String.valueOf((int)(Settings.getAllowedRestPecent() * 100)));
-//        сleaningOCTimeCTextField.setText(String.valueOf(Settings.getCleaningOverdueCycleTime() / 2592000000D));
-//        сleaningTCTimeCTextField.setText(String.valueOf(Settings.getCleaningTypicalCycleTime() / 2592000000D));
-//
-//        //Активация механизма валидации для элементов ввода типа CustomTextField
-//        ValueExtractor.addObservableValueExtractor(
-//                c -> c instanceof CustomTextField
-//                , c -> ((CustomTextField) c).textProperty());
-//        validationSupport = new ValidationSupport();
-//        //Явная настройка включения визуального оформления валидации
-//        validationSupport.setErrorDecorationEnabled(true);
-//        //Настройки валидации для каждого элемента ввода, подлежащего проверке
-//        validationSupport.registerValidator(
-//            waterTypeCTextField
-//            , Validator.createRegexValidator("Введите от одного до 50 символов", ".{1,50}", Severity.ERROR));
-//        validationSupport.registerValidator(
-//            capacityCTextField
-//            , Validator.createRegexValidator("Введите целое число от 0 до 9999", "[0-9]{1,4}", Severity.ERROR));
-//        
-//        waterTypesListView.setCellFactory((listView) -> {
-//        
-//            return new ListCell<WaterTypeModel>(){
-//                @Override
-//                protected void updateItem(WaterTypeModel item, boolean empty)
-//                {
-//                    super.updateItem(item, empty);
-//                    if (item == null || empty) {
-//                        setText(null);
-//                    } else {
-//                        setText(item.getName());
-//                    }
-//                }
-//            };
-//        });
-//        
-//        capacitiesListView.setCellFactory((listView) -> {
-//        
-//            return new ListCell<BarrelCapacityModel>(){
-//                @Override
-//                protected void updateItem(BarrelCapacityModel item, boolean empty)
-//                {
-//                    super.updateItem(item, empty);
-//                    if (item == null || empty) {
-//                        setText(null);
-//                    } else {
-//                        setText(String.valueOf(item.getCapacity()));
-//                    }
-//                }
-//            };
-//        });
+        usersTableView.setItems(mCandidateModelObservableList);
 
         /* Привязка полей источника данных типа VariantModel
         к колонкам исходной таблицы модели типичных слов */
@@ -310,20 +199,23 @@ public class HomeController implements
                 new PropertyValueFactory<VariantModel, String>("quantity")
         );
         
-        /* Привязка полей источника данных типа ...
+        /* Привязка полей источника данных типа CandidateModel
         к колонкам таблицы пользователей-кандидатов */
         
-        /*workCategoryTableColumn.setCellValueFactory(
-                new PropertyValueFactory<VariantModel, String>("category")
+        userIdTableColumn.setCellValueFactory(
+                new PropertyValueFactory<CandidateModel, String>("uid")
         );
-        workVariantTableColumn.setCellValueFactory(
-                new PropertyValueFactory<VariantModel, String>("variant")
+        fNameTableColumn.setCellValueFactory(
+                new PropertyValueFactory<CandidateModel, String>("fname")
         );
-        workQuantityTableColumn.setCellValueFactory(
-                new PropertyValueFactory<VariantModel, String>("quantity")
-        );*/
+        lNameTableColumn.setCellValueFactory(
+                new PropertyValueFactory<CandidateModel, String>("lname")
+        );
+        scoreTableColumn.setCellValueFactory(
+                new PropertyValueFactory<CandidateModel, String>("score")
+        );
         
-        //выводить цветами
+        //В таблицах моделей слов выводить названия категорий разными цветами
         /*srcVariantTableColumn.setCellFactory(column ->{
             
             return new TableCell<VariantModel, String>(){
@@ -416,7 +308,8 @@ public class HomeController implements
                             try {
                                 
                                 mSrcTypicalWords = XmlImporter.getTypicalWords("TypicalWords.xml");
-                                MainApp.globalModel.groupIdProperty().set(groupIdString);
+                                MainApp.globalModel.curerntTypicalWords = mSrcTypicalWords;
+                                MainApp.globalModel.groupIdProperty().setValue(groupIdString);
                             } catch (SAXException ex) {
                                 Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
                             } catch (ParserConfigurationException ex) {
@@ -580,13 +473,16 @@ public class HomeController implements
         if (selectedFile != null) {
 
             try {
+                
                 //System.out.println("File selected: " + selectedFile.getAbsolutePath());
                 mSrcTypicalWords =
                     XmlImporter.getTypicalWords(selectedFile.getAbsolutePath());
+                MainApp.globalModel.curerntTypicalWords = mSrcTypicalWords;
+                
                 if (mSrcTypicalWords != null) {
 
                     fillVariantObservableList(mSrcTypicalWords, mSrcVariantObservableList);
-                    MainApp.globalModel.groupIdProperty().set(mSrcTypicalWords.mGroupId);
+                    MainApp.globalModel.groupIdProperty().setValue(mSrcTypicalWords.mGroupId);
                 }
             } catch (IOException ex) {
                 Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
@@ -1188,8 +1084,17 @@ public class HomeController implements
     @FXML
     private void goToFindUsersScreen(){
         
-        if (MainApp.globalModel.groupIdProperty() != null 
-            && !MainApp.globalModel.groupIdProperty().equals("")) {
+        System.out.println(MainApp.globalModel.groupIdProperty().getValue());
+        System.out.println(MainApp.globalModel.curerntTypicalWords);
+        
+        if (MainApp.globalModel.groupIdProperty().getValue() != null 
+            && !MainApp.globalModel.groupIdProperty().getValue().equals("")
+                && MainApp.globalModel.curerntTypicalWords != null) {
+            
+            //TODO показать заставку и загрузить из локальной службы
+            //список пользователей, уже зарегистрированных в группе,
+            //и из удаленной службы - список пользователей,
+            //ранее отмеченных, как получившие приглашение
             
             myController.setScreen(MainApp.findUsersID);
             MainApp.primaryStage.setMaximized(false);
@@ -1198,7 +1103,12 @@ public class HomeController implements
             MainApp.primaryStage.setY(30);
         } else {
         
-            
+            Alert warningAlert =
+                new Alert(Alert.AlertType.WARNING);
+            warningAlert.setTitle("Предупреждение");
+            warningAlert.setHeaderText("Не загружена модель текстов пользователей группы");
+            warningAlert.setContentText("Воспользуйтесь кнопками Create model или Load model");
+            warningAlert.showAndWait();
         }
     }
     
@@ -1781,6 +1691,27 @@ public class HomeController implements
         );
     }
     
+    //Метод заполнения наблюдабельного списка из списка объектов кандидатов
+    private void fillCandidateObservableList(
+        List<VKCandidate> _vKCandidateList
+        , ObservableList<CandidateModel> _candidateObservableList
+    ){
+        
+        //TODO проверить актуальность кандидатов!
+    
+        for (VKCandidate vKCandidate : _vKCandidateList) {
+            
+            _candidateObservableList.add(
+            
+                new CandidateModel(
+                    vKCandidate.getUID()
+                    , vKCandidate.getFirstName()
+                    , vKCandidate.getLastName()
+                    , vKCandidate.getScore())
+            );
+        }
+    }
+    
     private void toggleButtonsEnable(){
     
         if (mButtonsEnable) {
@@ -1795,7 +1726,11 @@ public class HomeController implements
     @Override
     public void handleUpdateCandidatesEvent(EventObject e)
     {
-        System.out.println("Load new cand");
+        //System.out.println("Load new cand");
+        
+        mVKCandidateList = ((UpdateCandidatesEvent)e).vKCandidatesList;
+        
+        fillCandidateObservableList(mVKCandidateList, mCandidateModelObservableList);
     }
     
 }

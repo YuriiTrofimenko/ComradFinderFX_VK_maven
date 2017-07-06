@@ -60,6 +60,7 @@ import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
 import org.tyaa.comradfinder.MainApp;
 import org.tyaa.comradfinder.model.TypicalWords;
+import org.tyaa.comradfinder.model.VKCandidate;
 import org.tyaa.comradfinder.model.VKCity;
 import org.tyaa.comradfinder.model.VKCountry;
 import org.tyaa.comradfinder.model.VKRegion;
@@ -450,343 +451,6 @@ public class FindUsersController implements Initializable, ControlledScreen {
         validationSupport.registerValidator(
                 cityCTextField
                 , Validator.createEmptyValidator("Название населенного пункта обязательно"));
-        
-        /*Настраиваем способ отображения информации из объектов,
-        подключенных в составе коллекции-источника к контролам списочного типа*/
-        
-        //прорисовка выпадающего списка бочек
-        /*barrelComboBox.setCellFactory((comboBox) -> {
-            return new ListCell<Barrel>() {
-                @Override
-                protected void updateItem(Barrel barrelItem, boolean empty) {
-                    super.updateItem(barrelItem, empty);
-
-                    if (barrelItem == null || empty) {
-                        setText(null);
-                    } else {
-                        setText(
-                            barrelItem.getWhaterTId().getName()
-                            + ", "
-                            + mBarrelCapacitiesDAOImpl.getBarrelCapacity(
-                                    barrelItem.getCapacityId()
-                            ).getCapacity()
-                            + " л"
-                        );
-                    }
-                }
-            };
-        });
-        //прорисовка выбранного элемента выпадающего списка бочек
-        barrelComboBox.setConverter(new StringConverter<Barrel>() {
-            @Override
-            public String toString(Barrel barrel) {
-                if (barrel == null) {
-                    return null;
-                } else {
-                    return (
-                        barrel.getWhaterTId().getName()
-                        + ", "
-                        + mBarrelCapacitiesDAOImpl.getBarrelCapacity(
-                                barrel.getCapacityId()
-                        ).getCapacity()
-                        + " л"
-                    );
-                }
-            }
-
-            @Override
-            public Barrel fromString(String barrelString) {
-                return null; // No conversion fromString needed.
-            }
-        });
-        
-        //прорисовка выпадающего списка существующих долгов выбранного магазина
-        debtsComboBox.setCellFactory((comboBox) -> {
-            return new ListCell<DebtChange>() {
-                @Override
-                protected void updateItem(DebtChange debtChangeItem, boolean empty) {
-                    super.updateItem(debtChangeItem, empty);
-
-                    if (debtChangeItem == null || empty) {
-                        setText(null);
-                    } else {
-                        setText(
-                            debtChangeItem.getBalance()
-                            + " ("
-                            + debtChangeItem.getValue()
-                            + " грн "
-                            + new SimpleDateFormat("dd.MM.yyyy").format(debtChangeItem.getDate())
-                            + ")"
-                        );
-                    }
-                }
-            };
-        });
-        
-        //прорисовка выбранного элемента выпадающего списка
-        //существующих долгов выбранного магазина
-        debtsComboBox.setConverter(new StringConverter<DebtChange>() {
-            @Override
-            public String toString(DebtChange debtChangeItem) {
-                if (debtChangeItem == null) {
-                    return null;
-                } else {
-                    return (
-                        debtChangeItem.getBalance()
-                            + " ("
-                            + debtChangeItem.getValue()
-                            + " грн "
-                            + new SimpleDateFormat("dd.MM.yyyy").format(debtChangeItem.getDate())
-                            + ")"
-                    );
-                }
-            }
-
-            @Override
-            public DebtChange fromString(String debtChangeString) {
-                return null; // No conversion fromString needed.
-            }
-        });
-        */
-        /*Настраиваем здесь обработчики событий тех контрлов,
-        для которых это невозможно при помощи внедрения */
-        
-//        
-//        debtsComboBox.setOnKeyPressed((event) -> {
-//            
-//            if (event.getCode() == KeyCode.ENTER || event.getCode() == KeyCode.SPACE) {
-//                
-//                debtsComboBox.show();
-//            }
-//        });
-//                
-//        //обработка события "ввод текста в поле счетчик New"
-//        countNewCTextField.textProperty().addListener(new ChangeListener(){
-//            @Override
-//            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-//                
-//                //Копируем текст из поля "счетчик New"
-//                //в поле "счетчик NewAfter"
-//                //(в дальнейшем текст 3 поля можно изменить вручную)
-//                countNewAfterCTextField.textProperty().setValue(
-//                        countNewCTextField.textProperty().getValue()
-//                );               
-//                
-//                if (
-//                    !countNewCTextField.textProperty().getValue().equals("")
-//                    && mSelectedBarrel != null
-//                ) {
-//                    //рассчитываем количество потребленной ранее воды
-//                    int volume = 0;
-//                    try{
-//                    
-//                        volume = Integer.parseInt(
-//                            countNewCTextField.textProperty().getValue()
-//                        ) - Integer.parseInt(countOldCTextField.getText());
-//                    }catch(NumberFormatException ex){
-//
-//                        //volume = 0;
-//                    }
-//                    //System.out.println("voloume = " + volume);
-//                    //Если значение счетчика пересекло максимум,
-//                    //пересчитываем объем с учетом этой особенности
-//                    if (volume < 0) {
-//                        
-//                        volume =
-//                            (mCounterMaxNumber - mSelectedBarrel.getCounter())
-//                            + Integer.parseInt(countNewCTextField.textProperty().getValue())
-//                            + 1;
-//                        //Введено значение нового счетчика меньше значения старого,
-//                        //и при этом объем потребления оказался слишком большим
-//                        if (volume > 9999) {
-//                            
-//                            volume = 0;
-//                        }
-//                    }
-//                    
-//                    //
-//                    mNoProfitFieldChange = true;
-//                    
-//                    //и выводим его в поле "запрвлено",
-//                    //это же значение считаем объемом воды,
-//                    //на который была пополнена бочка при данной доставке
-//                    volumeCTextField.textProperty().setValue(
-//                        String.valueOf(volume)
-//                    );
-//                    
-//                    //рассчитываем сумму оплаты за потребленные литры...
-//                    
-//                    //base cost
-//                    BigDecimal profit =
-//                        BigDecimal.valueOf(
-//                            (double)volume).multiply(mSelectedBarrel.getPrice()
-//                        );
-//                    System.out.println("profit " + profit);
-//                    //cost - credit (if exists)
-//                    
-//                    /*Get credits*/
-//                    /*mShopActiveCredits.clear();
-//                    mShopActiveCredits =
-//                        mDebtChangesDAOImpl.getActiveCreditDebtChanges(
-//                            mSelectedShop.getId()
-//                            , true
-//                        );
-//                    System.out.println("mShopActiveCredits " + mShopActiveCredits);
-//                    System.out.println("mShopActiveCredits.size() " + mShopActiveCredits.size());
-//                    
-//                    String creditRestString = null;
-//                    Double initialProfit = profit.doubleValue();
-//                    Double diffProfit = 0.0d;
-//                    
-//                    if (mShopActiveCredits != null
-//                        && mShopActiveCredits.size() > 0) {
-//                        
-//                        double existingCreditSum = 0.0d;
-//                        
-//                        for (DebtChange creditDebtChange : mShopActiveCredits) {
-//                            
-//                            existingCreditSum +=
-//                                creditDebtChange.getBalance().doubleValue();
-//                        }
-//                        System.out.println("existingCreditSum " + existingCreditSum);
-//                        if(profit.doubleValue() > 0.0d
-//                            && existingCreditSum > 0.0d){
-//                            
-//                             //mNoProfitFieldChange = true;
-//                             mShopCreditApplied = true;
-//                        
-//                            double profitDouble = profit.doubleValue();
-//                            
-//                            Iterator creditIterator =
-//                                mShopActiveCredits.iterator();
-//                            
-//                            while (creditIterator.hasNext()) {
-//                            
-//                                DebtChange credit =
-//                                    (DebtChange)creditIterator.next();
-//                                
-//                                double creditRestDouble =
-//                                    credit.getBalance().doubleValue();
-//                                
-//                                if (creditRestDouble > 0.0d) {
-//                                    
-//                                    profitDouble =
-//                                        profitDouble - credit.getBalance().doubleValue();
-//
-//                                    System.out.println(profitDouble);
-//                                    if (profitDouble < 0.0d) {
-//
-//                                        creditRestDouble = - profitDouble;
-//                                        profitDouble = 0.0d;
-//                                    } else {
-//                                    
-//                                        creditRestDouble = 0;
-//                                    }
-//                                    System.out.println(creditRestDouble);
-//                                    System.out.println();
-//                                    credit.setBalance(BigDecimal.valueOf(creditRestDouble));
-//
-//                                    if (profitDouble == 0.0d) {
-//
-//                                        break;
-//                                    }
-//                                }
-//                            }
-//                            profit =
-//                                BigDecimal.valueOf(
-//                                    profitDouble
-//                                );
-//                        }
-//                    }
-//                    
-//                    if (mShopCreditApplied) {
-//                    
-//                        creditRestString = "";
-//                    }*/
-//                    
-//                    //... и выводим ее в поле "оплачено", ...
-//                    if (profit.doubleValue() > 0.0d) {
-//                        
-//                        profitCTextField.textProperty().setValue(
-//                            String.valueOf(profit).substring(0, String.valueOf(profit).length() - 1)
-//                        );
-//                    } else {
-//                    
-//                        profitCTextField.textProperty().setValue("0.0");
-//                    }
-//                    
-//                    
-//                    //... а также - на метку "к оплате"
-//                
-//                    //сохраняем в переменную должной оплаты
-//                    mMustPay = new BigDecimal(profit.doubleValue());
-//                    //
-//                    String toPayString = null;
-//                    /*if (creditRestString != null) {
-//                        
-//                        diffProfit = initialProfit - profit.doubleValue();
-//                        creditRestString = diffProfit.toString();
-//                        
-//                        toPayString = "к оплате: "
-//                            + mMustPay.toString()
-//                            + " (- "
-//                            + creditRestString
-//                            + " )";
-//                    } else {*/
-//                    
-//                        toPayString = "(к оплате: "
-//                            + new DecimalFormat("#0.00").format(mMustPay.doubleValue())
-//                            + " )";
-//                    //}
-//                    toPayLabel.setText(toPayString);
-//                }
-//            }
-//        });
-//        
-//        //обработка события "ввод текста в поле volume"
-//        volumeCTextField.textProperty().addListener(new ChangeListener() {
-//            
-//            @Override
-//            public void changed(ObservableValue observable, Object oldValue, Object newValue)
-//            {
-//
-//                //Реагируем, только если выбрана бочка и что-то введено
-//                //в поле объема воды
-//                if (
-//                    !volumeCTextField.textProperty().getValue().equals("")
-//                    && mSelectedBarrel != null
-//                ) {
-//                    //считываем количество потребленной ранее воды
-//                    int volume = 0;
-//                    try{
-//
-//                        volume = Integer.parseInt(volumeCTextField.getText());
-//                    }catch(NumberFormatException ex){
-//
-//                    }
-//
-//                    //рассчитываем сумму оплаты за потребленные литры
-//                    BigDecimal profit =
-//                        BigDecimal.valueOf(
-//                            (double)volume
-//                        ).multiply(mSelectedBarrel.getPrice());
-//
-//                    //
-//                    mNoProfitFieldChange = true;
-//                    
-//                    //и выводим ее в поле "оплачено"
-//                    profitCTextField.textProperty().setValue(
-//                        String.valueOf(profit).substring(0, String.valueOf(profit).length() - 1)
-//                    );
-//                    
-//                    //сохраняем в переменную должной оплаты
-//                    mMustPay = new BigDecimal(profit.doubleValue());
-//                    toPayLabel.setText("(к оплате: "
-//                            + new DecimalFormat("#0.00").format(mMustPay.doubleValue())
-//                            + " )");
-//                }
-//            }
-//        });
     }    
 
     @Override
@@ -888,19 +552,13 @@ public class FindUsersController implements Initializable, ControlledScreen {
                         //Закрываем окно отображения прогресса
                         pForm.getDialogStage().close();
                         
-                        //Информируем подписчиков об обновлении данных
-                        //о кандидатах
-                        MainApp.updateCandidatesGenerator.fire();
-                        
-                        //Переходим на главный экран приложения
-                        goHomeScreenAction();
-                        
-                        /*//Загружаем модель типичных слов в объект Java
+                        //Загружаем в список объектов Java данные о кандидатах
                         //из только что сохраненного файла
-                        //Читаем набор типичных слов из файла XML в Java объект
+                        //(этим осуществляентся проверка нормальной работы с файловой системой)
+                        List<VKCandidate> vKCandidateList = null;
                         try {
                             try {
-                                mSrcTypicalWords = XmlImporter.getTypicalWords("TypicalWords.xml");
+                                vKCandidateList = XmlImporter.getVKCandidates("VKCandidates.xml");
                             } catch (SAXException ex) {
                                 Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
                             } catch (ParserConfigurationException ex) {
@@ -909,11 +567,22 @@ public class FindUsersController implements Initializable, ControlledScreen {
                         } catch (IOException | XMLStreamException ex) {
                             Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                        if (mSrcTypicalWords != null) {
+                        if (vKCandidateList != null) {
 
-                            fillVariantObservableList(mSrcTypicalWords, mSrcVariantObservableList);
-                        }*/
-
+                            //Информируем подписчиков об обновлении данных
+                            //о кандидатах
+                            MainApp.updateCandidatesGenerator.fire(vKCandidateList);
+                        } else {
+                        
+                            Alert errorAlert =
+                                new Alert(Alert.AlertType.WARNING);
+                            errorAlert.setTitle("Ошибка");
+                            errorAlert.setHeaderText("Не загружен сформированный список кандидатов из файла");
+                            errorAlert.setContentText("Неизвестная проблема работы с файловой системой");
+                            errorAlert.showAndWait();
+                        }
+                        //Переходим на главный экран приложения
+                        goHomeScreenAction();
                     });
 
                     //Отображаем окно прогресса

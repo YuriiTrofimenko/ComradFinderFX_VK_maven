@@ -6,6 +6,8 @@
 package org.tyaa.comradfinder.modules.events;
 
 import java.util.EventObject;
+import java.util.List;
+import org.tyaa.comradfinder.model.VKCandidate;
 
 /**
  *
@@ -13,6 +15,7 @@ import java.util.EventObject;
  */
 public class UpdateCandidatesEvent extends EventObject
 {
+    public List<VKCandidate> vKCandidatesList;
     
     public UpdateCandidatesEvent(Object source)
     {

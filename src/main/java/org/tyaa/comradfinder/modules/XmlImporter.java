@@ -130,8 +130,15 @@ public class XmlImporter
                             String currentScore = "";
 
                             for (int j = 0; j < vKCandidateChildNodes.getLength(); j++) {
+                                
+                                System.out.println(vKCandidateItemChildNodes.item(j).getNodeType());
+                                System.out.println(vKCandidateItemChildNodes.item(j).getNodeName());
+                                System.out.println(vKCandidateItemChildNodes.item(j).getTextContent());
 
-                                if (vKCandidateChildNodes.item(j).getNodeType() == Node.ELEMENT_NODE) {
+                                if (vKCandidateItemChildNodes.item(j).getNodeType() == Node.ATTRIBUTE_NODE) {
+
+                                    currentId = vKCandidateItemChildNodes.item(j).getTextContent();
+                                } else if (vKCandidateChildNodes.item(j).getNodeType() == Node.ELEMENT_NODE) {
                             
                                     if (vKCandidateItemChildNodes.item(j).getNodeName().equals("fname")) {
 
@@ -143,9 +150,6 @@ public class XmlImporter
 
                                         currentScore = vKCandidateItemChildNodes.item(j).getTextContent();
                                     }
-                                } else if (vKCandidateItemChildNodes.item(j).getNodeType() == Node.ATTRIBUTE_NODE) {
-
-                                    currentId = vKCandidateItemChildNodes.item(j).getTextContent();
                                 }
                             }
                             

@@ -29,6 +29,7 @@ import org.tyaa.comradfinder.model.VKUser;
 import org.tyaa.comradfinder.modules.ExcelSaver;
 import org.tyaa.comradfinder.modules.JsonFetcher;
 import org.tyaa.comradfinder.modules.JsonParser;
+import org.tyaa.comradfinder.modules.XmlExporter;
 import org.tyaa.comradfinder.modules.XmlImporter;
 import org.tyaa.comradfinder.modules.exception.FailJsonFetchException;
 import org.xml.sax.SAXException;
@@ -70,7 +71,7 @@ public class ComradFinder {
 
                 //Читаем набор типичных слов из файла XML в Java объект
                 TypicalWords typicalWords = new TypicalWords();
-                try {
+                /*try {
                     try {
                         typicalWords = XmlImporter.getTypicalWords("TypicalWords.xml");
                     } catch (SAXException ex) {
@@ -80,7 +81,10 @@ public class ComradFinder {
                     }
                 } catch (IOException | XMLStreamException ex) {
                     Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                }*/
+                
+                typicalWords =
+                        MainApp.globalModel.curerntTypicalWords;
 
                 if (typicalWords != null) {
 
@@ -253,13 +257,18 @@ public class ComradFinder {
                         out.println();
                     });*/
 
-                    //Сохраняем результаты в таблицу
+                    /*//Сохраняем результаты в таблицу
                     ExcelSaver es = new ExcelSaver();
                     try {
                         es.saveCandidates(candidatesList);
                     } catch (IOException ex) {
                         Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    }*/
+                    
+                    //TODO проверить актуальность кандидатов!
+                    //Сохраняем результаты (список кандидатов) в xml файл
+                    
+                    XmlExporter.VKCandidatesToXml(candidatesList, "VKCandidates.xml");
                 }
                 //out.println(jsonString);
                 return true;
