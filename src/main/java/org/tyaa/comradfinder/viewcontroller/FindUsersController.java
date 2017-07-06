@@ -576,6 +576,11 @@ public class FindUsersController implements Initializable, ControlledScreen {
                         if (vKCandidateList != null) {
 
                             if (vKCandidateList.size() > 0) {
+                                
+                                for (VKCandidate vKCandidate : vKCandidateList) {
+
+                                    System.out.println("!" + vKCandidate.getUID());
+                                }
                             
                                 //Информируем подписчиков об обновлении данных
                                 //о кандидатах
@@ -584,6 +589,7 @@ public class FindUsersController implements Initializable, ControlledScreen {
                                 goHomeScreenAction();
                             } else {
                         
+                                MainApp.updateCandidatesGenerator.fire(vKCandidateList);
                                 Alert warningAlert =
                                     new Alert(Alert.AlertType.WARNING);
                                 warningAlert.setTitle("Предупреждение");

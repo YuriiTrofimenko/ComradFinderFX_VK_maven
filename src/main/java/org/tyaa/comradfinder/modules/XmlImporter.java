@@ -36,8 +36,6 @@ public class XmlImporter
     
     static {
     
-        mTypicalWords = new TypicalWords();
-        mVKCandidatesList = new ArrayList<>();
         mGroupId = "";
     }
     
@@ -48,7 +46,7 @@ public class XmlImporter
             , ParserConfigurationException {
                 
         //try {
-            
+            mTypicalWords = new TypicalWords();
             File fXmlFile = new File(_filePath);
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -91,7 +89,8 @@ public class XmlImporter
             , XMLStreamException
             , SAXException
             , ParserConfigurationException {
-                            
+        
+            mVKCandidatesList = new ArrayList<>();
             File fXmlFile = new File(_filePath);
             DocumentBuilderFactory dbFactory =
                 DocumentBuilderFactory.newInstance();

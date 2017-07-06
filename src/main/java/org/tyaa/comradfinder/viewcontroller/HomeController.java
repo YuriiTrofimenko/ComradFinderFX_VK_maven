@@ -1703,6 +1703,8 @@ public class HomeController implements
     
         for (VKCandidate vKCandidate : _vKCandidateList) {
             
+            System.out.println(vKCandidate.getUID());
+            
             _candidateObservableList.add(
             
                 new CandidateModel(
