@@ -470,6 +470,16 @@ public class FindUsersController implements Initializable, ControlledScreen {
     @FXML
     private void resetFormAction(){
        
+        countryCTextField.clear();
+        ageComboBox.getSelectionModel().select(null);
+        femaleCheckBox.indeterminateProperty().setValue(true);
+        maleCheckBox.indeterminateProperty().setValue(true);
+        
+        mSelectedCountry = null;
+        mSelectedRegion = null;
+        mSelectedCity = null;
+        mSelectedAge = 0;
+        mSelectedSex = null;
     }
     
     @FXML
@@ -499,8 +509,9 @@ public class FindUsersController implements Initializable, ControlledScreen {
                 hasErrors = true;
             }
             if (mSelectedAge == null) {
-                errorsString += "Не выбран возраст. ";
-                hasErrors = true;
+                //errorsString += "Не выбран возраст. ";
+                //hasErrors = true;
+                mSelectedAge = 0;
             }
             
             if (hasErrors) {
@@ -537,7 +548,7 @@ public class FindUsersController implements Initializable, ControlledScreen {
                                 , String.valueOf(mSelectedRegion.id)
                                 , String.valueOf(mSelectedCity.id)
                                 , String.valueOf(mSelectedAge)
-                                , mSelectedSex.toString()
+                                , mSelectedSex != null ? mSelectedSex.toString() : ""
                         );
 
                     ProgressForm pForm = new ProgressForm();
@@ -557,21 +568,30 @@ public class FindUsersController implements Initializable, ControlledScreen {
                         //(этим осуществляентся проверка нормальной работы с файловой системой)
                         List<VKCandidate> vKCandidateList = null;
                         try {
-                            try {
-                                vKCandidateList = XmlImporter.getVKCandidates("VKCandidates.xml");
-                            } catch (SAXException ex) {
-                                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-                            } catch (ParserConfigurationException ex) {
-                                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        } catch (IOException | XMLStreamException ex) {
-                            Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+                            vKCandidateList = XmlImporter.getVKCandidates("VKCandidates.xml");
+                        } catch (Exception ex) {
+                            
+                            vKCandidateList = null;
                         }
                         if (vKCandidateList != null) {
 
-                            //Информируем подписчиков об обновлении данных
-                            //о кандидатах
-                            MainApp.updateCandidatesGenerator.fire(vKCandidateList);
+                            if (vKCandidateList.size() > 0) {
+                            
+                                //Информируем подписчиков об обновлении данных
+                                //о кандидатах
+                                MainApp.updateCandidatesGenerator.fire(vKCandidateList);
+                                //Переходим на главный экран приложения
+                                goHomeScreenAction();
+                            } else {
+                        
+                                Alert warningAlert =
+                                    new Alert(Alert.AlertType.WARNING);
+                                warningAlert.setTitle("Предупреждение");
+                                warningAlert.setHeaderText("Ни один кандидат не найден");
+                                warningAlert.setContentText("Попробуйте изменить фильтр по возрасту и полу");
+                                warningAlert.showAndWait();
+                            }
+                            
                         } else {
                         
                             Alert errorAlert =
@@ -581,8 +601,6 @@ public class FindUsersController implements Initializable, ControlledScreen {
                             errorAlert.setContentText("Неизвестная проблема работы с файловой системой");
                             errorAlert.showAndWait();
                         }
-                        //Переходим на главный экран приложения
-                        goHomeScreenAction();
                     });
 
                     //Отображаем окно прогресса

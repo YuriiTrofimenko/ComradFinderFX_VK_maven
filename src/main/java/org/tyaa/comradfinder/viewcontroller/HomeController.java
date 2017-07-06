@@ -1698,6 +1698,8 @@ public class HomeController implements
     ){
         
         //TODO проверить актуальность кандидатов!
+        
+        _candidateObservableList.clear();
     
         for (VKCandidate vKCandidate : _vKCandidateList) {
             

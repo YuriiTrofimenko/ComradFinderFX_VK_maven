@@ -71,17 +71,28 @@ public class ComradFinder {
 
                 //Читаем набор типичных слов из файла XML в Java объект
                 TypicalWords typicalWords = new TypicalWords();
-                /*try {
-                    try {
-                        typicalWords = XmlImporter.getTypicalWords("TypicalWords.xml");
-                    } catch (SAXException ex) {
-                        Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ParserConfigurationException ex) {
-                        Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                } catch (IOException | XMLStreamException ex) {
-                    Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
-                }*/
+                
+                String sex = "";
+                String age1 = _age;
+                String age2 = _age;
+                
+                switch(_sex){
+                
+                    case "female" :
+                        sex = "1";
+                        break;
+                    case "male" :
+                        sex = "2";
+                        break;
+                    default :
+                        sex = "0";
+                }
+                
+                if (_age.equals("0")) {
+                    
+                    age1 = "14";
+                    age2 = "100";
+                }
                 
                 typicalWords =
                         MainApp.globalModel.curerntTypicalWords;
@@ -103,6 +114,12 @@ public class ComradFinder {
                                 + _countryId
                                 + "&city="
                                 + _cityId
+                                + "&age_from="
+                                + age1
+                                + "&age_to="
+                                + age2
+                                + "&sex="
+                                + sex
                         );
 
                         JSONArray usersItems = jsonParser.parseVKSearch(jsonString);

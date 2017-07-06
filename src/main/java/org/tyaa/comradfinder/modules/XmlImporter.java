@@ -56,6 +56,7 @@ public class XmlImporter
             doc.getDocumentElement().normalize();
             
             Node rootNode = doc.getDocumentElement();
+            mGroupId = rootNode.getAttributes().getNamedItem("group_id").getTextContent();
             NodeList rootChildNodes = rootNode.getChildNodes();
             ArrayList<Node> rootChildList = new ArrayList<>();
             
@@ -64,10 +65,6 @@ public class XmlImporter
                 if (rootChildNodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
                     
                     rootChildList.add(rootChildNodes.item(i));
-                } else if (rootChildNodes.item(i).getNodeType() == Node.ATTRIBUTE_NODE
-                        && rootChildNodes.item(i).getNodeName().equals("group_id")) {
-                    
-                    mGroupId = rootChildNodes.item(i).getTextContent();
                 }
             }
             
@@ -113,55 +110,49 @@ public class XmlImporter
             }
             
             for (Node currentNode : rootChildList) {
+                
+                String currentId = "";
+                String currentFName = "";
+                String currentLName = "";
+                String currentScore = "";
 
                 //String vKCandidateItemName = "candidate";
                 NodeList vKCandidateItemChildNodes = currentNode.getChildNodes();
+                
+                System.out.println(currentNode.getNodeType());
+                System.out.println(currentNode.getNodeName());
+                System.out.println(currentNode.getTextContent());
+
+                currentId =
+                    currentNode
+                        .getAttributes()
+                        .getNamedItem("id")
+                        .getTextContent();
                 
                 for (int i = 0; i < vKCandidateItemChildNodes.getLength(); i++) {
 
                     if (vKCandidateItemChildNodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
 
-                            NodeList vKCandidateChildNodes =
-                                vKCandidateItemChildNodes.item(i).getChildNodes();
-                            
-                            String currentId = "";
-                            String currentFName = "";
-                            String currentLName = "";
-                            String currentScore = "";
+                        if (vKCandidateItemChildNodes.item(i).getNodeName().equals("fname")) {
 
-                            for (int j = 0; j < vKCandidateChildNodes.getLength(); j++) {
-                                
-                                System.out.println(vKCandidateItemChildNodes.item(j).getNodeType());
-                                System.out.println(vKCandidateItemChildNodes.item(j).getNodeName());
-                                System.out.println(vKCandidateItemChildNodes.item(j).getTextContent());
+                            currentFName = vKCandidateItemChildNodes.item(i).getTextContent();
+                        } else if (vKCandidateItemChildNodes.item(i).getNodeName().equals("lname")) {
 
-                                if (vKCandidateItemChildNodes.item(j).getNodeType() == Node.ATTRIBUTE_NODE) {
+                            currentLName = vKCandidateItemChildNodes.item(i).getTextContent();
+                        } else if (vKCandidateItemChildNodes.item(i).getNodeName().equals("score")) {
 
-                                    currentId = vKCandidateItemChildNodes.item(j).getTextContent();
-                                } else if (vKCandidateChildNodes.item(j).getNodeType() == Node.ELEMENT_NODE) {
-                            
-                                    if (vKCandidateItemChildNodes.item(j).getNodeName().equals("fname")) {
-
-                                        currentFName = vKCandidateItemChildNodes.item(j).getTextContent();
-                                    } else if (vKCandidateItemChildNodes.item(j).getNodeName().equals("lname")) {
-
-                                        currentLName = vKCandidateItemChildNodes.item(j).getTextContent();
-                                    } else if (vKCandidateItemChildNodes.item(j).getNodeName().equals("score")) {
-
-                                        currentScore = vKCandidateItemChildNodes.item(j).getTextContent();
-                                    }
-                                }
-                            }
-                            
-                            VKCandidate newVKCandidate = new VKCandidate();
-                            newVKCandidate.setUID(Integer.parseInt(currentId));
-                            newVKCandidate.setFirstName(currentFName);
-                            newVKCandidate.setLastName(currentLName);
-                            newVKCandidate.setScore(Integer.parseInt(currentScore));
-                            
-                            mVKCandidatesList.add(newVKCandidate);
+                            currentScore = vKCandidateItemChildNodes.item(i).getTextContent();
+                        }
                     }
                 }
+                
+                VKCandidate newVKCandidate = new VKCandidate();
+                newVKCandidate.setUID(Integer.parseInt(currentId));
+                newVKCandidate.setFirstName(currentFName);
+                newVKCandidate.setLastName(currentLName);
+                newVKCandidate.setScore(Integer.parseInt(currentScore));
+
+                mVKCandidatesList.add(newVKCandidate);
             }
         
         return mVKCandidatesList;
