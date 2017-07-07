@@ -34,16 +34,14 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class ExcelSaver implements IResultSaver {
     
     private final String FILE_PATH_BASE =
-        "C:/VKParserDoc/ExcellResults/TodayResult_";
+        "ExcellResults/TodayResult_";
     private Calendar mCalendar;
 
     @Override
-    public boolean saveCandidates(List<VKCandidate> _candidatesList) throws IOException {
+    public boolean saveCandidates(List<VKCandidate> _candidatesList
+        , String _filePath) throws IOException {
         
         boolean result = false;
-        
-        mCalendar = Calendar.getInstance();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         
         try (Workbook book = new XSSFWorkbook()) {
             
@@ -114,23 +112,8 @@ public class ExcelSaver implements IResultSaver {
             
             // Записываем книгу в файл
             
-            //try{
-                
-                File directory1 = new File(String.valueOf("C:/VKParserDoc"));
-                if (!directory1.exists()){
-                    directory1.mkdir();
-                }
-                
-                File directory2 = new File(String.valueOf("C:/VKParserDoc/ExcellResults"));
-                if (!directory2.exists()){
-                    directory2.mkdir();
-                }
-                
-            try (FileOutputStream fileOutputStream = new FileOutputStream(
-                FILE_PATH_BASE
-                    + simpleDateFormat.format(mCalendar.getTime())
-                    + ".xlsx"
-            )) {
+            try (FileOutputStream fileOutputStream =
+                new FileOutputStream(_filePath)) {
                 
                 book.write(fileOutputStream);
                 result = true;
@@ -142,5 +125,29 @@ public class ExcelSaver implements IResultSaver {
         }
         
         return result;
+    }
+
+    @Override
+    public boolean saveCandidates(List<VKCandidate> _candidatesList) throws IOException
+    {
+        
+        mCalendar = Calendar.getInstance();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        
+        File directory1 = new File(String.valueOf("ExcellResults"));
+        if (!directory1.exists()){
+            directory1.mkdir();
+        }
+
+        /*File directory2 = new File(String.valueOf("C:/VKParserDoc/ExcellResults"));
+        if (!directory2.exists()){
+            directory2.mkdir();
+        }*/
+        
+        return saveCandidates(_candidatesList
+            , FILE_PATH_BASE
+                + simpleDateFormat.format(mCalendar.getTime())
+                + ".xlsx"
+        );
     }
 }

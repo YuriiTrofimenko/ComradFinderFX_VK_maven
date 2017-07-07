@@ -98,7 +98,7 @@
                                           </RadialGradient>
                                        </textFill>
                                           </Button>
-                                          <Button mnemonicParsing="false" text="Save users">
+                                          <Button mnemonicParsing="false" onAction="#showSaveUserslDialog" text="Save users">
                                                <font>
                                                   <Font size="14.0" />
                                                </font>
@@ -111,7 +111,7 @@
                                           </RadialGradient>
                                        </textFill>
                                           </Button>
-                                          <Button mnemonicParsing="false" text="Load users">
+                                          <Button mnemonicParsing="false" onAction="#loadUsersAction" text="Load users">
                                                <font>
                                                   <Font size="14.0" />
                                                </font>
@@ -124,7 +124,7 @@
                                           </RadialGradient>
                                        </textFill>
                                           </Button>
-                                          <Button mnemonicParsing="false" text="Export users">
+                                          <Button mnemonicParsing="false" onAction="#showExportUserslDialog" text="Export users">
                                                <font>
                                                   <Font size="14.0" />
                                                </font>

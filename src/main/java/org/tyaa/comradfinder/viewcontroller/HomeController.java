@@ -56,6 +56,7 @@ import org.controlsfx.validation.Validator;
 import org.tyaa.comradfinder.MainApp;
 import org.tyaa.comradfinder.model.TypicalWords;
 import org.tyaa.comradfinder.model.VKCandidate;
+import org.tyaa.comradfinder.modules.ExcelSaver;
 import org.tyaa.comradfinder.modules.XmlExporter;
 import org.tyaa.comradfinder.modules.XmlImporter;
 import org.tyaa.comradfinder.modules.events.UpdateCandidatesEvent;
@@ -267,6 +268,11 @@ public class HomeController implements
         myController = screenParent;
     }
     
+    /*
+    * Действия с моделью типичных слов
+    * наличных пользователей выбранной группы
+    */
+    
     //Действие отображения диалогового окна создания модели
     //по заданной группе
     @FXML
@@ -446,7 +452,7 @@ public class HomeController implements
                 Alert errorAlert =
                     new Alert(Alert.AlertType.ERROR);
                 errorAlert.setTitle("Ощибка");
-                errorAlert.setHeaderText("Модель сохранена в файл");
+                errorAlert.setHeaderText("Модель не сохранена в файл");
                 errorAlert.setContentText("При попытке сохранить файл произошла ошибка");
                 errorAlert.showAndWait();
             }
@@ -518,6 +524,204 @@ public class HomeController implements
             fillVariantObservableList(mWorkTypicalWords, mWorkVariantObservableList);
         }
     }
+    
+    /*
+    * Действия со списком кандидатов
+    */
+    
+    //Действие отображения диалогового окна сохранения списка кандидатов
+    //в файл XML в указанной папке файловой системы
+    @FXML
+    private void showSaveUserslDialog(){
+        
+        //TODO Добавить диалог, предлагающий сохранение данных при выходе
+        //из приложения
+        
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+            new ExtensionFilter("XML Files", "*.xml")
+                ,new ExtensionFilter("All Files", "*.*"));
+        fileChooser.setTitle("Сохранение файла кандидатов");
+        fileChooser.setInitialFileName("VKCandidates.xml");
+        File savedFile = fileChooser.showSaveDialog(null);
+
+        if (savedFile != null) {
+            
+            int savingResult = 0;
+
+            try {
+                
+                if (mVKCandidateList != null
+                    && mVKCandidateList.size() > 0) {
+                    
+                    XmlExporter.VKCandidatesToXml(
+                        mVKCandidateList
+                            , savedFile.getAbsolutePath());
+                } else {
+                
+                    Alert warningAlert =
+                        new Alert(Alert.AlertType.INFORMATION);
+                    warningAlert.setTitle("Предупреждение");
+                    warningAlert.setHeaderText("Список не сохранен в файл");
+                    warningAlert.setContentText("Нечего сохранять");
+                    warningAlert.showAndWait();
+                    return;
+                }
+            }
+            catch(IOException | XMLStreamException e) {
+
+                savingResult = -1;
+            }
+            
+            if (savingResult == 0) {
+                
+                Alert infoAlert =
+                    new Alert(Alert.AlertType.INFORMATION);
+                infoAlert.setTitle("Информация");
+                infoAlert.setHeaderText("Список сохранен в файл");
+                infoAlert.setContentText(
+                    "Сохранение файла списка "
+                    + savedFile.toString()
+                    + " завершено успешно"
+                );
+                infoAlert.showAndWait();
+            } else {
+            
+                Alert errorAlert =
+                    new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Ощибка");
+                errorAlert.setHeaderText("Список не сохранен в файл");
+                errorAlert.setContentText("При попытке сохранить файл произошла ошибка");
+                errorAlert.showAndWait();
+            }
+        } else {
+            
+            Alert infoAlert =
+                new Alert(Alert.AlertType.INFORMATION);
+            infoAlert.setTitle("Информация");
+            infoAlert.setHeaderText("Список не сохранен в файл");
+            infoAlert.setContentText("Сохранение файла списка отменено");
+            infoAlert.showAndWait();
+        }
+    }
+    
+    //TODO add validation XML by XSD
+    @FXML
+    private void loadUsersAction(ActionEvent event){
+    
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+            new ExtensionFilter("XML Files", "*.xml")
+                ,new ExtensionFilter("All Files", "*.*"));
+        File selectedFile = fileChooser.showOpenDialog(null);
+
+        if (selectedFile != null) {
+
+            try {
+                
+                //System.out.println("File selected: " + selectedFile.getAbsolutePath());
+                mVKCandidateList =
+                    XmlImporter.getVKCandidates(selectedFile.getAbsolutePath());
+                
+                if (mVKCandidateList != null) {
+
+                    fillCandidateObservableList(mVKCandidateList, mCandidateModelObservableList);
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (XMLStreamException ex) {
+                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SAXException ex) {
+                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParserConfigurationException ex) {
+                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else {
+            
+            Alert infoAlert =
+                new Alert(Alert.AlertType.INFORMATION);
+            infoAlert.setTitle("Информация");
+            infoAlert.setHeaderText("Список не загружен");
+            infoAlert.setContentText("Загрузка списка кандидатов из файла отменен");
+            infoAlert.showAndWait();
+        }
+    }
+    
+    //Действие отображения диалогового окна сохранения списка кандидатов
+    //в файл Excell в указанной папке файловой системы
+    @FXML
+    private void showExportUserslDialog(){
+        
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+            new ExtensionFilter("XML Files", "*.xlsx")
+                ,new ExtensionFilter("All Files", "*.*"));
+        fileChooser.setTitle("Экспорт файла кандидатов в Excell");
+        fileChooser.setInitialFileName("VKCandidates.xlsx");
+        File savedFile = fileChooser.showSaveDialog(null);
+
+        if (savedFile != null) {
+            
+            int savingResult = 0;
+
+            try {
+                
+                if (mVKCandidateList != null
+                    && mVKCandidateList.size() > 0) {
+                    
+                    (new ExcelSaver()).saveCandidates(
+                        mVKCandidateList
+                            , savedFile.getAbsolutePath());
+                } else {
+                
+                    Alert warningAlert =
+                        new Alert(Alert.AlertType.INFORMATION);
+                    warningAlert.setTitle("Предупреждение");
+                    warningAlert.setHeaderText("Список не экспортирован в Excell");
+                    warningAlert.setContentText("Нечего сохранять");
+                    warningAlert.showAndWait();
+                    return;
+                }
+            }
+            catch(IOException e) {
+
+                savingResult = -1;
+            }
+            
+            if (savingResult == 0) {
+                
+                Alert infoAlert =
+                    new Alert(Alert.AlertType.INFORMATION);
+                infoAlert.setTitle("Информация");
+                infoAlert.setHeaderText("Список экспортирован в Excell");
+                infoAlert.setContentText(
+                    "Экспорт файла списка "
+                    + savedFile.toString()
+                    + " завершен успешно"
+                );
+                infoAlert.showAndWait();
+            } else {
+            
+                Alert errorAlert =
+                    new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Ощибка");
+                errorAlert.setHeaderText("Список не экспортирован в Excell");
+                errorAlert.setContentText("При попытке сохранить файл произошла ошибка");
+                errorAlert.showAndWait();
+            }
+        } else {
+            
+            Alert infoAlert =
+                new Alert(Alert.AlertType.INFORMATION);
+            infoAlert.setTitle("Информация");
+            infoAlert.setHeaderText("Список не экспортирован в Excell");
+            infoAlert.setContentText("Экспорт файла списка отменен");
+            infoAlert.showAndWait();
+        }
+    }
+    
+    /**/
     
     @FXML
     private void showEditVariantDlgAction(ActionEvent event){

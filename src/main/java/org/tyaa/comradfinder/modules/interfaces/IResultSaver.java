@@ -18,5 +18,8 @@ import org.tyaa.comradfinder.model.VKCandidate;
  */
 public interface IResultSaver {
     
+    boolean saveCandidates(List<VKCandidate> candidatesList
+        , String _filePath) throws IOException;
+    
     boolean saveCandidates(List<VKCandidate> candidatesList) throws IOException;
 }
