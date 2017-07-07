@@ -5,6 +5,8 @@
  */
 package org.tyaa.comradfinder.viewmodel;
 
+import java.util.ArrayList;
+import java.util.List;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -19,33 +21,24 @@ import org.tyaa.comradfinder.model.TypicalWords;
  */
 public class GlobalModel
 {
-    //private IntegerProperty uid;
+    //Идентификатор текущей группы
     private StringProperty groupId;
+    //Список иденитификаторов наличных пользователей текущей группы
+    public List<String> groupMembersIds;
+    //Список иденитификаторов ранее приглашенных пользователей текущей группы
+    public List<String> groupInvitedUsersIds;
     //Текущий путь к xml - файлу модели типичных слов
     public TypicalWords curerntTypicalWords;
-    //private IntegerProperty score;
     
     public GlobalModel(
-        //int _uid,
         String _groupId
-        //String _lname,
-        //int _score
     ){
     
-        //uid = new SimpleIntegerProperty(_uid);
         groupId = new SimpleStringProperty(_groupId);
-        //lname = new SimpleStringProperty(_lname);
-        //score = new SimpleIntegerProperty(_score);
-    }
-    
-    /*public Integer getUid() {
-        return uid.getValue();
+        groupMembersIds = new ArrayList<>();
+        groupInvitedUsersIds = new ArrayList<>();
     }
 
-    public IntegerProperty uidProperty() {
-        return uid;
-    }*/
-    
     public String getGroupId() {
         return groupId.getValue();
     }
@@ -53,20 +46,4 @@ public class GlobalModel
     public StringProperty groupIdProperty() {
         return groupId;
     }
-    
-    /*public String getLname() {
-        return lname.getValue();
-    }
-
-    public StringProperty lnameProperty() {
-        return lname;
-    }
-    
-    public int getScore() {
-        return score.getValue();
-    }
-
-    public IntegerProperty scoreProperty() {
-        return score;
-    }*/
 }

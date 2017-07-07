@@ -98,6 +98,13 @@ public class ComradFinder {
                         MainApp.globalModel.curerntTypicalWords;
 
                 if (typicalWords != null) {
+                    
+                    List<String> groupMembersIds = new ArrayList<>();
+                    
+                    if(MainApp.globalModel.groupMembersIds != null) {
+                    
+                        groupMembersIds = MainApp.globalModel.groupMembersIds;
+                    }
 
                     for (int i_status = 1; i_status <= 8; i_status++) {
 
@@ -131,131 +138,139 @@ public class ComradFinder {
                             int score = 0;
 
                             //Получаем id текущего пользователя
+                            String userIdString =
+                                ((JSONObject)usersItems.get(i)).get("uid").toString();
                             Integer userId =
-                                Integer.parseInt(((JSONObject)usersItems.get(i)).get("uid").toString());
+                                Integer.parseInt(userIdString);
                                 //(JSONObject)((JSONArray)usersItems.get(i)).get(0);
                             //out.println(userId);
 
-                            //Получаем более полную информацию о текущем пользователе
-                            jsonString = jsonFetcher.fetchByUrl(
-                                "https://api.vk.com/method/users.get"
-                                +"?user_ids="
-                                + userId
-                                +"&fields=about,activities,interests,personal,books,music,movies"
-                            );
-                            //out.println(jsonString);
+                            //Рассматриваем кандидатуру пользователя с текущим
+                            //идент-м только если он:
+                            //- не состоит в текущей группе;
+                            //- его никто не пришлашал (отсутствует в удаленной БД)
+                            if(!groupMembersIds.contains(userIdString)) {
+                                //Получаем более полную информацию о текущем пользователе
+                                jsonString = jsonFetcher.fetchByUrl(
+                                    "https://api.vk.com/method/users.get"
+                                    +"?user_ids="
+                                    + userId
+                                    +"&fields=about,activities,interests,personal,books,music,movies"
+                                );
+                                //out.println(jsonString);
 
-                            //Переводим информацию о пользователе из json в 
-                            vKUser = jsonParser.parseVKUser(jsonString);
-                            //out.println(jsonString);
+                                //Переводим информацию о пользователе из json в 
+                                vKUser = jsonParser.parseVKUser(jsonString);
+                                //out.println(jsonString);
 
-                            //Проверяем тексты разделов личной информации пользователя
-                            //на наличие слова из соответствующего раздела модели
-                            //Если нашли - добавляем баллы (частоту встречи этого слова в 
-                            //разделе модели)
+                                //Проверяем тексты разделов личной информации пользователя
+                                //на наличие слова из соответствующего раздела модели
+                                //Если нашли - добавляем баллы (частоту встречи этого слова в 
+                                //разделе модели)
 
-                            for (Map.Entry<String, Integer> interestItem : typicalWords.mInterestMap.entrySet()) {
+                                for (Map.Entry<String, Integer> interestItem : typicalWords.mInterestMap.entrySet()) {
 
-                                if (vKUser.getInterests().contains(interestItem.getKey())) {
-                                    score += interestItem.getValue();
+                                    if (vKUser.getInterests().contains(interestItem.getKey())) {
+                                        score += interestItem.getValue();
+                                    }
                                 }
-                            }
 
-                            for (Map.Entry<String, Integer> activityItem : typicalWords.mActivityMap.entrySet()) {
+                                for (Map.Entry<String, Integer> activityItem : typicalWords.mActivityMap.entrySet()) {
 
-                                if (vKUser.getActivities().contains(activityItem.getKey())) {
-                                    score += activityItem.getValue();
+                                    if (vKUser.getActivities().contains(activityItem.getKey())) {
+                                        score += activityItem.getValue();
+                                    }
                                 }
-                            }
 
-                            for (Map.Entry<String, Integer> aboutItem : typicalWords.mAboutMap.entrySet()) {
+                                for (Map.Entry<String, Integer> aboutItem : typicalWords.mAboutMap.entrySet()) {
 
-                                if (vKUser.getAbout().contains(aboutItem.getKey())) {
-                                    score += aboutItem.getValue();
+                                    if (vKUser.getAbout().contains(aboutItem.getKey())) {
+                                        score += aboutItem.getValue();
+                                    }
                                 }
-                            }
 
-                            for (Map.Entry<String, Integer> booksItem : typicalWords.mBooksMap.entrySet()) {
+                                for (Map.Entry<String, Integer> booksItem : typicalWords.mBooksMap.entrySet()) {
 
-                                if (vKUser.getBooks().contains(booksItem.getKey())) {
-                                    score += booksItem.getValue();
+                                    if (vKUser.getBooks().contains(booksItem.getKey())) {
+                                        score += booksItem.getValue();
+                                    }
                                 }
-                            }
 
-                            for (Map.Entry<String, Integer> musicItem : typicalWords.mMusicMap.entrySet()) {
+                                for (Map.Entry<String, Integer> musicItem : typicalWords.mMusicMap.entrySet()) {
 
-                                if (vKUser.getMusic().contains(musicItem.getKey())) {
-                                    score += musicItem.getValue();
+                                    if (vKUser.getMusic().contains(musicItem.getKey())) {
+                                        score += musicItem.getValue();
+                                    }
                                 }
-                            }
 
-                            for (Map.Entry<String, Integer> moviesItem : typicalWords.mMoviesMap.entrySet()) {
+                                for (Map.Entry<String, Integer> moviesItem : typicalWords.mMoviesMap.entrySet()) {
 
-                                if (vKUser.getMovies().contains(moviesItem.getKey())) {
-                                    score += moviesItem.getValue();
+                                    if (vKUser.getMovies().contains(moviesItem.getKey())) {
+                                        score += moviesItem.getValue();
+                                    }
                                 }
-                            }
 
-                            for (Map.Entry<Integer, Integer> politicalItem : typicalWords.mPoliticalMap.entrySet()) {
+                                for (Map.Entry<Integer, Integer> politicalItem : typicalWords.mPoliticalMap.entrySet()) {
 
-                                if (vKUser.getPolitical().intValue() == politicalItem.getKey().intValue()) {
-                                    score += politicalItem.getValue();
+                                    if (vKUser.getPolitical().intValue() == politicalItem.getKey().intValue()) {
+                                        score += politicalItem.getValue();
+                                    }
                                 }
-                            }
 
-                            for (Map.Entry<String, Integer> religionItem : typicalWords.mReligionMap.entrySet()) {
+                                for (Map.Entry<String, Integer> religionItem : typicalWords.mReligionMap.entrySet()) {
 
-                                if (vKUser.getReligion().contains(religionItem.getKey())) {
-                                    score += religionItem.getValue();
+                                    if (vKUser.getReligion().contains(religionItem.getKey())) {
+                                        score += religionItem.getValue();
+                                    }
                                 }
-                            }
 
-                            for (Map.Entry<String, Integer> inspiredItem : typicalWords.mInspiredByMap.entrySet()) {
+                                for (Map.Entry<String, Integer> inspiredItem : typicalWords.mInspiredByMap.entrySet()) {
 
-                                if (vKUser.getInspiredBy().contains(inspiredItem.getKey())) {
-                                    score += inspiredItem.getValue();
+                                    if (vKUser.getInspiredBy().contains(inspiredItem.getKey())) {
+                                        score += inspiredItem.getValue();
+                                    }
                                 }
-                            }
 
-                            for (Map.Entry<Integer, Integer> peopleItem : typicalWords.mPeopleMainMap.entrySet()) {
+                                for (Map.Entry<Integer, Integer> peopleItem : typicalWords.mPeopleMainMap.entrySet()) {
 
-                                if (vKUser.getPeopleMain().intValue() == peopleItem.getKey().intValue()) {
-                                    score += peopleItem.getValue();
+                                    if (vKUser.getPeopleMain().intValue() == peopleItem.getKey().intValue()) {
+                                        score += peopleItem.getValue();
+                                    }
                                 }
-                            }
 
-                            for (Map.Entry<Integer, Integer> lifeMainItem : typicalWords.mLifeMainMap.entrySet()) {
+                                for (Map.Entry<Integer, Integer> lifeMainItem : typicalWords.mLifeMainMap.entrySet()) {
 
-                                if (vKUser.getLifeMain().intValue() == lifeMainItem.getKey().intValue()) {
-                                    score += lifeMainItem.getValue();
+                                    if (vKUser.getLifeMain().intValue() == lifeMainItem.getKey().intValue()) {
+                                        score += lifeMainItem.getValue();
+                                    }
                                 }
-                            }
 
-                            for (Map.Entry<Integer, Integer> smokingItem : typicalWords.mSmokingMap.entrySet()) {
+                                for (Map.Entry<Integer, Integer> smokingItem : typicalWords.mSmokingMap.entrySet()) {
 
-                                if (vKUser.getSmoking().intValue() == smokingItem.getKey().intValue()) {
-                                    score += smokingItem.getValue();
+                                    if (vKUser.getSmoking().intValue() == smokingItem.getKey().intValue()) {
+                                        score += smokingItem.getValue();
+                                    }
                                 }
-                            }
 
-                            for (Map.Entry<Integer, Integer> alcoholItem : typicalWords.mAlcoholMap.entrySet()) {
+                                for (Map.Entry<Integer, Integer> alcoholItem : typicalWords.mAlcoholMap.entrySet()) {
 
-                                if (vKUser.getAlcohol().intValue() == alcoholItem.getKey().intValue()) {
-                                    score += alcoholItem.getValue();
+                                    if (vKUser.getAlcohol().intValue() == alcoholItem.getKey().intValue()) {
+                                        score += alcoholItem.getValue();
+                                    }
                                 }
-                            }
 
-                            //Если набранные пользователем баллы больше нуля,
-                            //заносим его в кандидаты на приглашение
-                            if (score != 0) {
+                                //Если набранные пользователем баллы больше нуля,
+                                //заносим его в кандидаты на приглашение
+                                if (score != 0) {
 
-                                VKCandidate vKCandidate = new VKCandidate();
-                                vKCandidate.setUID((Integer) ((JSONObject)usersItems.get(i)).get("uid"));
-                                vKCandidate.setFirstName((String) ((JSONObject)usersItems.get(i)).get("first_name"));
-                                vKCandidate.setLastName((String) ((JSONObject)usersItems.get(i)).get("last_name"));
-                                vKCandidate.setScore(score);
+                                    VKCandidate vKCandidate = new VKCandidate();
+                                    vKCandidate.setUID((Integer) ((JSONObject)usersItems.get(i)).get("uid"));
+                                    vKCandidate.setFirstName((String) ((JSONObject)usersItems.get(i)).get("first_name"));
+                                    vKCandidate.setLastName((String) ((JSONObject)usersItems.get(i)).get("last_name"));
+                                    vKCandidate.setScore(score);
 
-                                candidatesList.add(vKCandidate);
+                                    candidatesList.add(vKCandidate);
+                                }
                             }
                             updateProgress(i, usersItems.length());
                         }

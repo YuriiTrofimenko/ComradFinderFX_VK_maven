@@ -61,6 +61,7 @@ import org.tyaa.comradfinder.modules.XmlExporter;
 import org.tyaa.comradfinder.modules.XmlImporter;
 import org.tyaa.comradfinder.modules.events.UpdateCandidatesEvent;
 import org.tyaa.comradfinder.modules.events.interfaces.UpdateCandidatesListener;
+import org.tyaa.comradfinder.modules.exception.FailJsonFetchException;
 import org.tyaa.comradfinder.modules.facades.ModelBuilder;
 import org.tyaa.comradfinder.screensframework.ProgressForm;
 import org.tyaa.comradfinder.utils.Cloner;
@@ -329,6 +330,17 @@ public class HomeController implements
                             fillVariantObservableList(mSrcTypicalWords, mSrcVariantObservableList);
                         }
 
+                        try {
+                            ModelBuilder.fillGroupInvitedUsersIds(groupIdString);
+                        } catch (FailJsonFetchException ex) {
+                            
+                            Alert warningAlert =
+                                new Alert(Alert.AlertType.INFORMATION);
+                            warningAlert.setTitle("Предупреждение");
+                            warningAlert.setHeaderText("Не был получен список ранее приглашенных");
+                            warningAlert.setContentText("Не удалось получить по сети список пользователей, ранее отмеченных как пришлашенные в группу. Возможно, таковых еще нет в удаленной БД");
+                            warningAlert.showAndWait();
+                        }
                     });
 
                     toggleButtonsEnable();
@@ -489,15 +501,27 @@ public class HomeController implements
 
                     fillVariantObservableList(mSrcTypicalWords, mSrcVariantObservableList);
                     MainApp.globalModel.groupIdProperty().setValue(mSrcTypicalWords.mGroupId);
+                    try {
+                        //
+                        ModelBuilder.fillGroupMembersIds(mSrcTypicalWords.mGroupId);
+                    } catch (Exception ex) {
+                        
+                        Alert warningAlert =
+                            new Alert(Alert.AlertType.INFORMATION);
+                        warningAlert.setTitle("Предупреждение");
+                        warningAlert.setHeaderText("Не был получен список участников группы");
+                        warningAlert.setContentText("Не удалось получить по сети список наличных участников группы");
+                        warningAlert.showAndWait();
+                    }
                 }
-            } catch (IOException ex) {
-                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (XMLStreamException ex) {
-                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SAXException ex) {
-                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ParserConfigurationException ex) {
-                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException | XMLStreamException | SAXException | ParserConfigurationException ex) {
+                
+                Alert errorAlert =
+                    new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Ощибка");
+                errorAlert.setHeaderText("Модель не загружена");
+                errorAlert.setContentText("При попытке прочесть файл произошла ошибка");
+                errorAlert.showAndWait();
             }
         }
         else {

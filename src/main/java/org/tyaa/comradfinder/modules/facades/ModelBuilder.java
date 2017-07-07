@@ -18,11 +18,13 @@ import java.util.stream.Collectors;
 import javafx.concurrent.Task;
 import javax.xml.stream.XMLStreamException;
 import org.json.JSONArray;
+import org.tyaa.comradfinder.MainApp;
 import org.tyaa.comradfinder.model.TypicalWords;
 import org.tyaa.comradfinder.model.VKUser;
 import org.tyaa.comradfinder.modules.JsonFetcher;
 import org.tyaa.comradfinder.modules.JsonParser;
 import org.tyaa.comradfinder.modules.XmlExporter;
+import org.tyaa.comradfinder.modules.exception.FailJsonFetchException;
 
 /**
  *
@@ -75,12 +77,18 @@ public class ModelBuilder {
                     "https://api.vk.com/method/groups.getMembers?group_id=" + _groupId
                 );
                 JSONArray usersIds = jsonParser.parseVKGroup(jsonString);
+                
+                //
+                MainApp.globalModel.groupMembersIds.clear();
+                
                 //перебираем userId
                 for (int i = 0; i < usersIds.length(); i++) {
 
                     //if (i > 5) break;
 
                     String userId = usersIds.get(i).toString();
+                    //
+                    MainApp.globalModel.groupMembersIds.add(userId);
                     //out.println(usersIds.get(i));
 
                     //Получаем более полную информацию о текущем пользователе
@@ -525,5 +533,58 @@ public class ModelBuilder {
         return Comparator.<Map.Entry<Integer, Integer>>comparingInt(Map.Entry::getValue)
                 .reversed();
                 //.thenComparing(Map.Entry::getKey);
+    }
+    
+    public static void fillGroupMembersIds(String _groupId)
+        throws FailJsonFetchException
+    {
+        String jsonString = "";
+        JsonFetcher jsonFetcher = new JsonFetcher();
+        JsonParser jsonParser = new JsonParser();
+        
+        jsonString = jsonFetcher.fetchByUrl(
+            "https://api.vk.com/method/groups.getMembers?group_id=" + _groupId
+        );
+        JSONArray usersIds = jsonParser.parseVKGroup(jsonString);
+
+        //
+        MainApp.globalModel.groupMembersIds.clear();
+
+        //перебираем userId
+        for (int i = 0; i < usersIds.length(); i++) {
+
+            //if (i > 5) break;
+
+            String userId = usersIds.get(i).toString();
+            //
+            MainApp.globalModel.groupMembersIds.add(userId);
+        }
+    }
+    
+    public static void fillGroupInvitedUsersIds(String _groupId)
+        throws FailJsonFetchException
+    {
+        List<String> groupInvitedUsersIds = new ArrayList<>();
+        String jsonString = "";
+        JsonFetcher jsonFetcher = new JsonFetcher();
+        JsonParser jsonParser = new JsonParser();
+        
+        jsonString = jsonFetcher.fetchByUrl(
+            "http://1-dot-comradfinder.appspot.com/comradfinder?action=get-ivited-users&groupid=" + _groupId
+        );
+        JSONArray usersIds = jsonParser.parseGAEIvitedUsers(jsonString);
+
+        //
+        MainApp.globalModel.groupInvitedUsersIds.clear();
+
+        //перебираем userId
+        for (int i = 0; i < usersIds.length(); i++) {
+
+            //if (i > 5) break;
+
+            String userId = usersIds.get(i).toString();
+            //
+            MainApp.globalModel.groupInvitedUsersIds.add(userId);
+        }
     }
 }

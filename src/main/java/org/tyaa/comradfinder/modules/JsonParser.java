@@ -126,13 +126,26 @@ public class JsonParser
         return jsonStringToJSONArray(_jsonString);
     }
     
-    private JSONArray jsonStringToJSONArray(String _jsonString){
+    public JSONArray parseGAEIvitedUsers(String _jsonString){
     
         JSONArray items = null;
 
         try {
             JSONObject responseJSONObject = new JSONObject(_jsonString);
             items = responseJSONObject.getJSONArray("response");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        
+        return items;
+    }
+    
+    private JSONArray jsonStringToJSONArray(String _jsonString){
+    
+        JSONArray items = null;
+
+        try {
+            items = new JSONArray(_jsonString);
         } catch (JSONException e) {
             e.printStackTrace();
         }
