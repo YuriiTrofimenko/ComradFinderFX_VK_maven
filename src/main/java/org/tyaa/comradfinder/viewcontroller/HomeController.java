@@ -140,6 +140,7 @@ public class HomeController implements
     
     //Выбранные объекты
     private VariantModel mSelectedVariantModel;
+    private CandidateModel mSelectedCandidateModel;
     
     //Наблюдабельный список объектов VariantModel
     ObservableList<VariantModel> mSrcVariantObservableList;
@@ -513,6 +514,18 @@ public class HomeController implements
                         warningAlert.setContentText("Не удалось получить по сети список наличных участников группы");
                         warningAlert.showAndWait();
                     }
+                    
+                    try {
+                        ModelBuilder.fillGroupInvitedUsersIds(mSrcTypicalWords.mGroupId);
+                    } catch (FailJsonFetchException ex) {
+
+                        Alert warningAlert =
+                            new Alert(Alert.AlertType.INFORMATION);
+                        warningAlert.setTitle("Предупреждение");
+                        warningAlert.setHeaderText("Не был получен список ранее приглашенных");
+                        warningAlert.setContentText("Не удалось получить по сети список пользователей, ранее отмеченных как пришлашенные в группу. Возможно, таковых еще нет в удаленной БД");
+                        warningAlert.showAndWait();
+                    }
                 }
             } catch (IOException | XMLStreamException | SAXException | ParserConfigurationException ex) {
                 
@@ -745,6 +758,103 @@ public class HomeController implements
         }
     }
     
+    @FXML
+    private void addUserToInvited(ActionEvent event){
+    
+        mSelectedCandidateModel =
+            (CandidateModel) usersTableView.getSelectionModel().getSelectedItem();
+        
+        if (mSelectedCandidateModel != null) {
+            
+            final Integer uidInteger = mSelectedCandidateModel.getUid();
+            VKCandidate selectedVKCandidate = null;
+            for (VKCandidate vKCandidate : mVKCandidateList) {
+                if (vKCandidate.getUID().intValue() == uidInteger.intValue()) {
+                    selectedVKCandidate = vKCandidate;
+                }
+            }
+
+            if (uidInteger != null && selectedVKCandidate != null) {
+
+                boolean delResult = false;
+
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Отметить кандидата как приглашенного");
+                alert.setHeaderText("Требуется подтверждение");
+                alert.setContentText("Вы действительно хотите занести данного пользователя в список приглашенных в удаленной БД?");
+
+                Optional<ButtonType> result = alert.showAndWait();
+
+                if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
+                    
+                    boolean addGroupInvitedUserResult = false;
+                    
+                    try {
+                        addGroupInvitedUserResult =
+                                ModelBuilder.addGroupInvitedUser(
+                                        MainApp.globalModel.getGroupId()
+                                        , selectedVKCandidate
+                                );
+                    } catch (FailJsonFetchException ex) {
+                        addGroupInvitedUserResult = false;
+                    }
+                    
+                    if(addGroupInvitedUserResult){
+
+                        delResult = mVKCandidateList.remove(selectedVKCandidate);
+
+                        if (delResult != false) {
+
+                            fillCandidateObservableList(
+                                mVKCandidateList
+                                , mCandidateModelObservableList);
+
+                            alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Информация");
+                            alert.setHeaderText("Выбранный кандидат успешно занесен в удаленную БД приглашенных");
+                            //Показать сообщение и ждать клика по кнопке Ok
+                            alert.showAndWait();
+                        } else {
+
+                            alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Ошибка");
+                            alert.setHeaderText("Произошел сбой в работе приложения. Действие не выполнено");
+                            alert.showAndWait();
+                        }
+                    } else {
+
+                        alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Ошибка");
+                        alert.setHeaderText("Произошел сбой при отправке данных в удаленную БД. Действие не выполнено");
+                        alert.showAndWait();
+                    }
+                } else {
+
+                    Alert infoAlert = new Alert(Alert.AlertType.INFORMATION);
+                    infoAlert.setTitle("Информация");
+                    infoAlert.setHeaderText("Процесс занесения в приглашенные отменен");
+                    infoAlert.setContentText("Действие не выполнено");
+                    infoAlert.showAndWait();
+                }
+            } else {
+
+                Alert infoAlert = new Alert(Alert.AlertType.INFORMATION);
+                infoAlert.setTitle("Информация");
+                infoAlert.setHeaderText("Процесс удаления отменен автоматически");
+                infoAlert.setContentText("Удаляемый объект отсутствует в объекте-списке");
+                infoAlert.showAndWait();
+            }
+        } else {
+        
+            Alert warningAlert =
+                new Alert(Alert.AlertType.WARNING);
+            warningAlert.setTitle("Предупреждение");
+            warningAlert.setHeaderText("Не выбрана ни одна строка в таблице кандидатов");
+            warningAlert.setContentText("Выделите одну строку");
+            warningAlert.showAndWait();
+        }
+    }
+    
     /**/
     
     @FXML
@@ -802,8 +912,8 @@ public class HomeController implements
 
                     final Field field = fieldTry;
                     Class fieldType = field.getType(); 
-                    System.out.println("Имя: " + field.getName()); 
-                    System.out.println("Тип: " + fieldType.getName());
+                    //System.out.println("Имя: " + field.getName()); 
+                    //System.out.println("Тип: " + fieldType.getName());
 
                     try {
                         if (field.get(mWorkTypicalWords) instanceof Map<?,?>) {
@@ -974,8 +1084,8 @@ public class HomeController implements
                             FOR_LABEL : for (Field field : publicFields) {
 
                                 Class fieldType = field.getType(); 
-                                System.out.println("Имя: " + field.getName()); 
-                                System.out.println("Тип: " + fieldType.getName());
+                                //System.out.println("Имя: " + field.getName()); 
+                                //System.out.println("Тип: " + fieldType.getName());
 
                                 try {
                                     if (field.get(mWorkTypicalWords) instanceof Map<?,?>) {
@@ -1100,8 +1210,8 @@ public class HomeController implements
 
                     final Field field = fieldTry;
                     Class fieldType = field.getType(); 
-                    System.out.println("Имя: " + field.getName()); 
-                    System.out.println("Тип: " + fieldType.getName());
+                    //System.out.println("Имя: " + field.getName()); 
+                    //System.out.println("Тип: " + fieldType.getName());
 
                     try {
                         if (field.get(mWorkTypicalWords) instanceof Map<?,?>) {
@@ -1221,8 +1331,8 @@ public class HomeController implements
                     FOR_LABEL : for (Field field : publicFields) {
 
                         Class fieldType = field.getType(); 
-                        System.out.println("Имя: " + field.getName()); 
-                        System.out.println("Тип: " + fieldType.getName());
+                        //System.out.println("Имя: " + field.getName()); 
+                        //System.out.println("Тип: " + fieldType.getName());
 
                         try {
                             if (field.get(mWorkTypicalWords) instanceof Map<?,?>) {
@@ -1312,8 +1422,8 @@ public class HomeController implements
     @FXML
     private void goToFindUsersScreen(){
         
-        System.out.println(MainApp.globalModel.groupIdProperty().getValue());
-        System.out.println(MainApp.globalModel.curerntTypicalWords);
+        //System.out.println(MainApp.globalModel.groupIdProperty().getValue());
+        //System.out.println(MainApp.globalModel.curerntTypicalWords);
         
         if (MainApp.globalModel.groupIdProperty().getValue() != null 
             && !MainApp.globalModel.groupIdProperty().getValue().equals("")
@@ -1931,7 +2041,7 @@ public class HomeController implements
     
         for (VKCandidate vKCandidate : _vKCandidateList) {
             
-            System.out.println(vKCandidate.getUID());
+            //System.out.println(vKCandidate.getUID());
             
             _candidateObservableList.add(
             

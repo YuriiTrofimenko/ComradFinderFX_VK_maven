@@ -6,7 +6,9 @@
 package org.tyaa.comradfinder.modules.facades;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import static java.lang.System.out;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -14,12 +16,16 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javafx.concurrent.Task;
 import javax.xml.stream.XMLStreamException;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.tyaa.comradfinder.MainApp;
 import org.tyaa.comradfinder.model.TypicalWords;
+import org.tyaa.comradfinder.model.VKCandidate;
 import org.tyaa.comradfinder.model.VKUser;
 import org.tyaa.comradfinder.modules.JsonFetcher;
 import org.tyaa.comradfinder.modules.JsonParser;
@@ -572,19 +578,73 @@ public class ModelBuilder {
         jsonString = jsonFetcher.fetchByUrl(
             "http://1-dot-comradfinder.appspot.com/comradfinder?action=get-ivited-users&groupid=" + _groupId
         );
-        JSONArray usersIds = jsonParser.parseGAEIvitedUsers(jsonString);
+        JSONArray users = jsonParser.parseGAEIvitedUsers(jsonString);
 
+        System.out.println("http://1-dot-comradfinder.appspot.com/comradfinder?action=get-ivited-users&groupid=" + _groupId);
+        System.out.println(jsonString);
         //
         MainApp.globalModel.groupInvitedUsersIds.clear();
 
         //перебираем userId
-        for (int i = 0; i < usersIds.length(); i++) {
+        for (int i = 0; i < users.length(); i++) {
 
             //if (i > 5) break;
+            
+            JSONObject userDataJSONObject = users.getJSONObject(i);
+            
+            String userId = "";
+            
+            if(userDataJSONObject.has("vkUid"))
+                userId = String.valueOf(userDataJSONObject.getInt("vkUid"));
 
-            String userId = usersIds.get(i).toString();
             //
             MainApp.globalModel.groupInvitedUsersIds.add(userId);
         }
+    }
+    
+    public static boolean addGroupInvitedUser(String _groupId, VKCandidate _vKCandidate)
+        throws FailJsonFetchException
+    {
+        boolean result = false;
+        String jsonString = "";
+        JsonFetcher jsonFetcher = new JsonFetcher();
+        //JsonParser jsonParser = new JsonParser();
+        String uid = _vKCandidate.getUID().toString();
+        String fname = "";
+        String lname = "";
+        String score = _vKCandidate.getScore().toString();
+        try {
+            fname = URLEncoder.encode(_vKCandidate.getFirstName(), "UTF-8");
+            lname = URLEncoder.encode(_vKCandidate.getLastName(), "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            fname = "";
+            lname = "";
+            return false;
+        }
+        
+        //https://1-dot-comradfinder.appspot.com/comradfinder?action=add-user&groupid=cult_rev&vkuid=201378344&fname=qwe&lname=asd&score=30
+        
+        jsonString = jsonFetcher.fetchByUrl(
+            "http://1-dot-comradfinder.appspot.com/comradfinder?action=add-user&groupid="
+                    + _groupId
+                    + "&vkuid="
+                    + uid
+                    + "&fname="
+                    + fname
+                    + "&lname="
+                    + lname
+                    + "&score="
+                    + score
+        );
+
+        System.out.println(jsonString);
+        //
+        if (jsonString != null && !jsonString.equals("")) {
+            
+            //
+            MainApp.globalModel.groupInvitedUsersIds.add(uid);
+            result = true;
+        }
+        return result;
     }
 }

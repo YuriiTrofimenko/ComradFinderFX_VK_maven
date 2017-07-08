@@ -149,7 +149,8 @@ public class ComradFinder {
                             //идент-м только если он:
                             //- не состоит в текущей группе;
                             //- его никто не пришлашал (отсутствует в удаленной БД)
-                            if(!groupMembersIds.contains(userIdString)) {
+                            if(!groupMembersIds.contains(userIdString)
+                                && !MainApp.globalModel.groupInvitedUsersIds.contains(userIdString)) {
                                 //Получаем более полную информацию о текущем пользователе
                                 jsonString = jsonFetcher.fetchByUrl(
                                     "https://api.vk.com/method/users.get"
@@ -371,7 +372,7 @@ public class ComradFinder {
         if (_q != null) {
             
             String q = URLEncoder.encode(_q, "UTF-8");
-            System.out.println("_q " + _q);
+            //System.out.println("_q " + _q);
             //https://api.vk.com/method/database.getCities?country_id=1&region_id=1053480&q=%D0%BC%D0%BE&need_all=1&count=1000
             jsonString = jsonFetcher.fetchByUrl(
                 "https://api.vk.com/method/database.getCities?country_id="

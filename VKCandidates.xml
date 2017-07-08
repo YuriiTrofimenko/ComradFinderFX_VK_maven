@@ -1,8 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <candidates>
-  <candidate id="264636687">
-    <fname>Елена</fname>
-    <lname>Лукина</lname>
-    <score>34</score>
+  <candidate id="226116961">
+    <fname>Тоха</fname>
+    <lname>Губарь</lname>
+    <score>43</score>
+  </candidate>
+  <candidate id="201378344">
+    <fname>Паша</fname>
+    <lname>Мироненко</lname>
+    <score>31</score>
+  </candidate>
+  <candidate id="248323398">
+    <fname>Вячеслав</fname>
+    <lname>Черевко</lname>
+    <score>20</score>
   </candidate>
 </candidates>

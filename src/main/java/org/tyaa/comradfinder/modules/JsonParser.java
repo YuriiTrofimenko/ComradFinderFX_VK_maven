@@ -131,8 +131,7 @@ public class JsonParser
         JSONArray items = null;
 
         try {
-            JSONObject responseJSONObject = new JSONObject(_jsonString);
-            items = responseJSONObject.getJSONArray("response");
+            items = new JSONArray(_jsonString);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -145,7 +144,8 @@ public class JsonParser
         JSONArray items = null;
 
         try {
-            items = new JSONArray(_jsonString);
+            JSONObject responseJSONObject = new JSONObject(_jsonString);
+            items = responseJSONObject.getJSONArray("response");
         } catch (JSONException e) {
             e.printStackTrace();
         }

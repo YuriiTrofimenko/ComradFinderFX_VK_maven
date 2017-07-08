@@ -312,15 +312,15 @@ public class FindUsersController implements Initializable, ControlledScreen {
                     
                     
                     try {
-                        System.out.println("mSelectedCountry.id is " + mSelectedCountry.id + mSelectedCountry.name);
-                        System.out.println("mSelectedRegion.id is " + mSelectedRegion.id + mSelectedRegion.name);
+                        //System.out.println("mSelectedCountry.id is " + mSelectedCountry.id + mSelectedCountry.name);
+                        //System.out.println("mSelectedRegion.id is " + mSelectedRegion.id + mSelectedRegion.name);
                         mVKCountryRegionCities =
                             ComradFinder.getCitiesByCountryRegionIds(
                                 mSelectedCountry.id
                                 , mSelectedRegion.id
                                 , cityCTextField.getText()
                             );
-                        System.out.println("mVKCountryRegionCities is " + mVKCountryRegionCities);
+                        //System.out.println("mVKCountryRegionCities is " + mVKCountryRegionCities);
                     } catch (FailJsonFetchException ex) {
 
                         showJsonFetchErrorMsg();
@@ -336,10 +336,10 @@ public class FindUsersController implements Initializable, ControlledScreen {
                         cityCTextField.setDisable(false);
                         
                         /*Выбираем city*/
-                        for (VKCity vKCity : mVKCountryRegionCities) {
+                        /*for (VKCity vKCity : mVKCountryRegionCities) {
 
                                 System.out.println("vKCity.name " + vKCity.name);
-                        }
+                        }*/
 
                         if (!cityCTextField.textProperty().getValue().equals("")
                                 && mCityNamesSet.contains(cityCTextField.textProperty().getValue())) {
@@ -373,12 +373,12 @@ public class FindUsersController implements Initializable, ControlledScreen {
                         }
                     }
                 }
-                if (mSelectedCity != null) {
+                /*if (mSelectedCity != null) {
                     System.out.println("mSelectedCity is " + mSelectedCity.name);
                 } else {
                 
                     System.out.println("mSelectedCity is null");
-                }
+                }*/
                 
             }
         });
@@ -523,13 +523,13 @@ public class FindUsersController implements Initializable, ControlledScreen {
             } else {
                 
                 //Не было ошибок - начинаем поиск
-                System.out.println("countryCTextField " + countryCTextField.getText());
-                System.out.println("regionCTextField " + regionCTextField.getText());
-                System.out.println("cityCTextField " + cityCTextField.getText());
+                //System.out.println("countryCTextField " + countryCTextField.getText());
+                //System.out.println("regionCTextField " + regionCTextField.getText());
+                //System.out.println("cityCTextField " + cityCTextField.getText());
                 
-                System.out.println("ageComboBox " + ageComboBox.getSelectionModel().getSelectedItem());
+                //System.out.println("ageComboBox " + ageComboBox.getSelectionModel().getSelectedItem());
                 
-                System.out.println("mSelectedSex " + mSelectedSex);
+                //System.out.println("mSelectedSex " + mSelectedSex);
                 
                 Alert infoAalert = new Alert(Alert.AlertType.INFORMATION);
                 infoAalert.setTitle("Информация");
@@ -577,10 +577,10 @@ public class FindUsersController implements Initializable, ControlledScreen {
 
                             if (vKCandidateList.size() > 0) {
                                 
-                                for (VKCandidate vKCandidate : vKCandidateList) {
+                                /*for (VKCandidate vKCandidate : vKCandidateList) {
 
                                     System.out.println("!" + vKCandidate.getUID());
-                                }
+                                }*/
                             
                                 //Информируем подписчиков об обновлении данных
                                 //о кандидатах

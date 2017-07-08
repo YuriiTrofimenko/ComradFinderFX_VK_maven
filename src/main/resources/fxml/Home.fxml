@@ -137,7 +137,7 @@
                                           </RadialGradient>
                                        </textFill>
                                           </Button>
-                                          <Button mnemonicParsing="false" text="To processed">
+                                          <Button mnemonicParsing="false" onAction="#addUserToInvited" text="To processed">
                                                <font>
                                                   <Font size="14.0" />
                                                </font>

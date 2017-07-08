@@ -18,6 +18,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
+import org.tyaa.comradfinder.MainApp;
 import org.tyaa.comradfinder.model.VKCandidate;
 import org.xml.sax.SAXException;
 
@@ -118,9 +119,9 @@ public class XmlImporter
                 //String vKCandidateItemName = "candidate";
                 NodeList vKCandidateItemChildNodes = currentNode.getChildNodes();
                 
-                System.out.println(currentNode.getNodeType());
-                System.out.println(currentNode.getNodeName());
-                System.out.println(currentNode.getTextContent());
+                //System.out.println(currentNode.getNodeType());
+                //System.out.println(currentNode.getNodeName());
+                //System.out.println(currentNode.getTextContent());
 
                 currentId =
                     currentNode
@@ -128,30 +129,40 @@ public class XmlImporter
                         .getNamedItem("id")
                         .getTextContent();
                 
-                for (int i = 0; i < vKCandidateItemChildNodes.getLength(); i++) {
-
-                    if (vKCandidateItemChildNodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
-
-                        if (vKCandidateItemChildNodes.item(i).getNodeName().equals("fname")) {
-
-                            currentFName = vKCandidateItemChildNodes.item(i).getTextContent();
-                        } else if (vKCandidateItemChildNodes.item(i).getNodeName().equals("lname")) {
-
-                            currentLName = vKCandidateItemChildNodes.item(i).getTextContent();
-                        } else if (vKCandidateItemChildNodes.item(i).getNodeName().equals("score")) {
-
-                            currentScore = vKCandidateItemChildNodes.item(i).getTextContent();
-                        }
-                    }
+                System.out.println("currentId " + currentId);
+                for (String uid : MainApp.globalModel.groupInvitedUsersIds) {
+                    System.out.println("uid " + uid);
                 }
                 
-                VKCandidate newVKCandidate = new VKCandidate();
-                newVKCandidate.setUID(Integer.parseInt(currentId));
-                newVKCandidate.setFirstName(currentFName);
-                newVKCandidate.setLastName(currentLName);
-                newVKCandidate.setScore(Integer.parseInt(currentScore));
+                if (!MainApp.globalModel
+                        .groupInvitedUsersIds
+                        .contains(currentId)) {
+                    
+                    for (int i = 0; i < vKCandidateItemChildNodes.getLength(); i++) {
 
-                mVKCandidatesList.add(newVKCandidate);
+                        if (vKCandidateItemChildNodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
+
+                            if (vKCandidateItemChildNodes.item(i).getNodeName().equals("fname")) {
+
+                                currentFName = vKCandidateItemChildNodes.item(i).getTextContent();
+                            } else if (vKCandidateItemChildNodes.item(i).getNodeName().equals("lname")) {
+
+                                currentLName = vKCandidateItemChildNodes.item(i).getTextContent();
+                            } else if (vKCandidateItemChildNodes.item(i).getNodeName().equals("score")) {
+
+                                currentScore = vKCandidateItemChildNodes.item(i).getTextContent();
+                            }
+                        }
+                    }
+
+                    VKCandidate newVKCandidate = new VKCandidate();
+                    newVKCandidate.setUID(Integer.parseInt(currentId));
+                    newVKCandidate.setFirstName(currentFName);
+                    newVKCandidate.setLastName(currentLName);
+                    newVKCandidate.setScore(Integer.parseInt(currentScore));
+
+                    mVKCandidatesList.add(newVKCandidate);
+                }
             }
         
         return mVKCandidatesList;

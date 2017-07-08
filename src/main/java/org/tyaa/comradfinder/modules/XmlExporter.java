@@ -52,7 +52,7 @@ public class XmlExporter
                 xsw.writeStartDocument("utf-8", "1.0");
                 xsw.writeStartElement("infoitems");
                 xsw.writeAttribute("group_id", _typicalWords.mGroupId);
-                System.out.println("group_id " + _typicalWords.mGroupId);
+                //System.out.println("group_id " + _typicalWords.mGroupId);
                 
                     xsw.writeStartElement("interest");
                     for(Entry<String, Integer> variantEntry : _typicalWords.mInterestMap.entrySet()) {
