@@ -25,6 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -43,6 +44,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -54,6 +60,7 @@ import org.controlsfx.validation.Severity;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
 import org.tyaa.comradfinder.MainApp;
+import static org.tyaa.comradfinder.MainApp.homeControllerInstance;
 import org.tyaa.comradfinder.model.TypicalWords;
 import org.tyaa.comradfinder.model.VKCandidate;
 import org.tyaa.comradfinder.modules.ExcelSaver;
@@ -66,6 +73,7 @@ import org.tyaa.comradfinder.modules.facades.ModelBuilder;
 import org.tyaa.comradfinder.screensframework.ProgressForm;
 import org.tyaa.comradfinder.utils.Cloner;
 import org.tyaa.comradfinder.utils.MapUtils;
+import org.tyaa.comradfinder.utils.XSDValidator;
 import org.tyaa.comradfinder.viewmodel.CandidateModel;
 import org.tyaa.comradfinder.viewmodel.VariantModel;
 import org.xml.sax.SAXException;
@@ -217,7 +225,33 @@ public class HomeController implements
         scoreTableColumn.setCellValueFactory(
                 new PropertyValueFactory<CandidateModel, String>("score")
         );
-        
+        //
+        Platform.runLater(() -> {
+            MainApp.primaryStage.getScene().getAccelerators()
+                .put(new KeyCodeCombination(KeyCode.C, KeyCombination.CONTROL_ANY), new Runnable() {
+                    @Override
+                    public void run() {
+
+
+                        if (usersTableView.getSelectionModel().getSelectedItem() != null) {
+
+                            int rowIndex = usersTableView.getSelectionModel().getSelectedIndex();
+                            CandidateModel dataRow = (CandidateModel) usersTableView.getItems().get(rowIndex);
+                            final Clipboard clipboard = Clipboard.getSystemClipboard();
+                            final ClipboardContent content = new ClipboardContent();
+                            if(usersTableView.getSelectionModel().isSelected(rowIndex, userIdTableColumn)){
+                                System.out.println(dataRow.getUid());
+                                content.putString(dataRow.getUid().toString());
+                            }
+                            else{
+                                //System.out.println(dataRow.getSelected());
+                                //content.putString(dataRow.getSelected());
+                            }
+                            clipboard.setContent(content);
+                        }
+                    }
+                });
+            });
         //В таблицах моделей слов выводить названия категорий разными цветами
         /*srcVariantTableColumn.setCellFactory(column ->{
             
@@ -295,6 +329,8 @@ public class HomeController implements
 
                 try{
 
+                    //Получение списка наличных пользователей группы
+                    //происходит внутри метода вызываемого здесь задания
                     Task buildModelTask =
                         ModelBuilder.buildModel(groupIdString);
 
@@ -332,7 +368,29 @@ public class HomeController implements
                         }
 
                         try {
-                            ModelBuilder.fillGroupInvitedUsersIds(groupIdString);
+                            
+                            Task fillGroupInvitedTask =
+                                ModelBuilder.fillGroupInvitedUsersIds(mSrcTypicalWords.mGroupId);
+
+                            ProgressForm pForm2 = new ProgressForm();
+
+                            // binds progress of progress bars to progress of task:
+                            pForm2.activateProgressBar(fillGroupInvitedTask);
+
+                            // this method would get the result of the task
+                            // and update the UI based on its value
+                            fillGroupInvitedTask.setOnSucceeded(event4 -> {
+                                pForm2.getDialogStage().close();
+                            });
+
+                            toggleButtonsEnable();
+
+                            pForm2.getDialogStage().show();
+
+                            Thread thread = new Thread(fillGroupInvitedTask);
+                            thread.setDaemon(true);
+                            thread.start();
+                            
                         } catch (FailJsonFetchException ex) {
                             
                             Alert warningAlert =
@@ -490,50 +548,108 @@ public class HomeController implements
         File selectedFile = fileChooser.showOpenDialog(null);
 
         if (selectedFile != null) {
+            
+            if (
+                XSDValidator.validateXMLSchema(
+                    XSDValidator.DEFAULT_XSD_PATH + "TypicalWords.xsd"
+                    , selectedFile.getAbsolutePath())
+                ) {
 
-            try {
-                
-                //System.out.println("File selected: " + selectedFile.getAbsolutePath());
-                mSrcTypicalWords =
-                    XmlImporter.getTypicalWords(selectedFile.getAbsolutePath());
-                MainApp.globalModel.curerntTypicalWords = mSrcTypicalWords;
-                
-                if (mSrcTypicalWords != null) {
+                try {
 
-                    fillVariantObservableList(mSrcTypicalWords, mSrcVariantObservableList);
-                    MainApp.globalModel.groupIdProperty().setValue(mSrcTypicalWords.mGroupId);
-                    try {
-                        //
-                        ModelBuilder.fillGroupMembersIds(mSrcTypicalWords.mGroupId);
-                    } catch (Exception ex) {
-                        
-                        Alert warningAlert =
-                            new Alert(Alert.AlertType.INFORMATION);
-                        warningAlert.setTitle("Предупреждение");
-                        warningAlert.setHeaderText("Не был получен список участников группы");
-                        warningAlert.setContentText("Не удалось получить по сети список наличных участников группы");
-                        warningAlert.showAndWait();
+                    //System.out.println("File selected: " + selectedFile.getAbsolutePath());
+                    mSrcTypicalWords =
+                        XmlImporter.getTypicalWords(selectedFile.getAbsolutePath());
+                    MainApp.globalModel.curerntTypicalWords = mSrcTypicalWords;
+
+                    if (mSrcTypicalWords != null) {
+
+                        fillVariantObservableList(mSrcTypicalWords, mSrcVariantObservableList);
+                        MainApp.globalModel.groupIdProperty().setValue(mSrcTypicalWords.mGroupId);
+                        try {
+                            //
+                            Task fillGroupMembersTask =
+                                ModelBuilder.fillGroupMembersIds(mSrcTypicalWords.mGroupId);
+
+                            ProgressForm pForm = new ProgressForm();
+
+                            // binds progress of progress bars to progress of task:
+                            pForm.activateProgressBar(fillGroupMembersTask);
+
+                            // this method would get the result of the task
+                            // and update the UI based on its value
+                            fillGroupMembersTask.setOnSucceeded(event2 -> {
+                                pForm.getDialogStage().close();
+                            });
+
+                            toggleButtonsEnable();
+
+                            pForm.getDialogStage().show();
+
+                            Thread thread = new Thread(fillGroupMembersTask);
+                            thread.setDaemon(true);
+                            thread.start();
+
+                        } catch (Exception ex) {
+
+                            Alert warningAlert =
+                                new Alert(Alert.AlertType.INFORMATION);
+                            warningAlert.setTitle("Предупреждение");
+                            warningAlert.setHeaderText("Не был получен список участников группы");
+                            warningAlert.setContentText("Не удалось получить по сети список наличных участников группы");
+                            warningAlert.showAndWait();
+                        }
+
+                        try {
+
+                            Task fillGroupInvitedTask =
+                                ModelBuilder.fillGroupInvitedUsersIds(mSrcTypicalWords.mGroupId);
+
+                            ProgressForm pForm = new ProgressForm();
+
+                            // binds progress of progress bars to progress of task:
+                            pForm.activateProgressBar(fillGroupInvitedTask);
+
+                            // this method would get the result of the task
+                            // and update the UI based on its value
+                            fillGroupInvitedTask.setOnSucceeded(event3 -> {
+                                pForm.getDialogStage().close();
+                            });
+
+                            toggleButtonsEnable();
+
+                            pForm.getDialogStage().show();
+
+                            Thread thread = new Thread(fillGroupInvitedTask);
+                            thread.setDaemon(true);
+                            thread.start();
+
+                        } catch (FailJsonFetchException ex) {
+
+                            Alert warningAlert =
+                                new Alert(Alert.AlertType.INFORMATION);
+                            warningAlert.setTitle("Предупреждение");
+                            warningAlert.setHeaderText("Не был получен список ранее приглашенных");
+                            warningAlert.setContentText("Не удалось получить по сети список пользователей, ранее отмеченных как пришлашенные в группу. Возможно, таковых еще нет в удаленной БД");
+                            warningAlert.showAndWait();
+                        }
                     }
-                    
-                    try {
-                        ModelBuilder.fillGroupInvitedUsersIds(mSrcTypicalWords.mGroupId);
-                    } catch (FailJsonFetchException ex) {
+                } catch (IOException | XMLStreamException | SAXException | ParserConfigurationException ex) {
 
-                        Alert warningAlert =
-                            new Alert(Alert.AlertType.INFORMATION);
-                        warningAlert.setTitle("Предупреждение");
-                        warningAlert.setHeaderText("Не был получен список ранее приглашенных");
-                        warningAlert.setContentText("Не удалось получить по сети список пользователей, ранее отмеченных как пришлашенные в группу. Возможно, таковых еще нет в удаленной БД");
-                        warningAlert.showAndWait();
-                    }
+                    Alert errorAlert =
+                        new Alert(Alert.AlertType.ERROR);
+                    errorAlert.setTitle("Ощибка");
+                    errorAlert.setHeaderText("Модель не загружена");
+                    errorAlert.setContentText("При попытке прочесть файл произошла ошибка");
+                    errorAlert.showAndWait();
                 }
-            } catch (IOException | XMLStreamException | SAXException | ParserConfigurationException ex) {
-                
+            } else {
+            
                 Alert errorAlert =
                     new Alert(Alert.AlertType.ERROR);
                 errorAlert.setTitle("Ощибка");
                 errorAlert.setHeaderText("Модель не загружена");
-                errorAlert.setContentText("При попытке прочесть файл произошла ошибка");
+                errorAlert.setContentText("Некорректная структура файла");
                 errorAlert.showAndWait();
             }
         }
@@ -653,25 +769,40 @@ public class HomeController implements
         File selectedFile = fileChooser.showOpenDialog(null);
 
         if (selectedFile != null) {
+            
+            if (
+                XSDValidator.validateXMLSchema(
+                    XSDValidator.DEFAULT_XSD_PATH + "VKCandidates.xsd"
+                    , selectedFile.getAbsolutePath())
+                ) {
 
-            try {
-                
-                //System.out.println("File selected: " + selectedFile.getAbsolutePath());
-                mVKCandidateList =
-                    XmlImporter.getVKCandidates(selectedFile.getAbsolutePath());
-                
-                if (mVKCandidateList != null) {
+                try {
 
-                    fillCandidateObservableList(mVKCandidateList, mCandidateModelObservableList);
+                    //System.out.println("File selected: " + selectedFile.getAbsolutePath());
+                    mVKCandidateList =
+                        XmlImporter.getVKCandidates(selectedFile.getAbsolutePath());
+
+                    if (mVKCandidateList != null) {
+
+                        fillCandidateObservableList(mVKCandidateList, mCandidateModelObservableList);
+                    }
+                } catch (IOException | XMLStreamException | SAXException | ParserConfigurationException ex) {
+                    
+                    Alert errorAlert =
+                        new Alert(Alert.AlertType.ERROR);
+                    errorAlert.setTitle("Ощибка");
+                    errorAlert.setHeaderText("Список не загружен");
+                    errorAlert.setContentText("При попытке прочесть файл произошла ошибка");
+                    errorAlert.showAndWait();
                 }
-            } catch (IOException ex) {
-                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (XMLStreamException ex) {
-                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SAXException ex) {
-                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ParserConfigurationException ex) {
-                Logger.getLogger(HomeController.class.getName()).log(Level.SEVERE, null, ex);
+            } else {
+            
+                Alert errorAlert =
+                    new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Ощибка");
+                errorAlert.setHeaderText("Список не загружен");
+                errorAlert.setContentText("Некорректная структура файла");
+                errorAlert.showAndWait();
             }
         }
         else {

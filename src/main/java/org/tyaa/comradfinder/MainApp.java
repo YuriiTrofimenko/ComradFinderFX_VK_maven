@@ -64,6 +64,7 @@ public class MainApp extends Application {
         updateCandidatesGenerator = new UpdateCandidatesGenerator();
         updateCandidatesGenerator.addListener(homeControllerInstance);
         
+        
         //Создаем корневой контейнер, помещаем в него наш контейнер представлений,
         //на его базе - сцену, которую подключаем в главный стейдж и отображаем стейдж
         

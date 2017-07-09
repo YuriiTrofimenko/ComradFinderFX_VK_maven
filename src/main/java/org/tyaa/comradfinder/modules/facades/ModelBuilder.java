@@ -541,65 +541,82 @@ public class ModelBuilder {
                 //.thenComparing(Map.Entry::getKey);
     }
     
-    public static void fillGroupMembersIds(String _groupId)
+    public static Task fillGroupMembersIds(String _groupId)
         throws FailJsonFetchException
     {
-        String jsonString = "";
-        JsonFetcher jsonFetcher = new JsonFetcher();
-        JsonParser jsonParser = new JsonParser();
+        return new Task() {
+            
+            @Override
+            protected Object call() throws Exception {
         
-        jsonString = jsonFetcher.fetchByUrl(
-            "https://api.vk.com/method/groups.getMembers?group_id=" + _groupId
-        );
-        JSONArray usersIds = jsonParser.parseVKGroup(jsonString);
+                String jsonString = "";
+                JsonFetcher jsonFetcher = new JsonFetcher();
+                JsonParser jsonParser = new JsonParser();
 
-        //
-        MainApp.globalModel.groupMembersIds.clear();
+                jsonString = jsonFetcher.fetchByUrl(
+                    "https://api.vk.com/method/groups.getMembers?group_id=" + _groupId
+                );
+                JSONArray usersIds = jsonParser.parseVKGroup(jsonString);
 
-        //перебираем userId
-        for (int i = 0; i < usersIds.length(); i++) {
+                //
+                MainApp.globalModel.groupMembersIds.clear();
 
-            //if (i > 5) break;
+                //перебираем userId
+                for (int i = 0; i < usersIds.length(); i++) {
 
-            String userId = usersIds.get(i).toString();
-            //
-            MainApp.globalModel.groupMembersIds.add(userId);
-        }
+                    //if (i > 5) break;
+
+                    String userId = usersIds.get(i).toString();
+                    //
+                    MainApp.globalModel.groupMembersIds.add(userId);
+                }
+                return true;
+            }
+        };
     }
     
-    public static void fillGroupInvitedUsersIds(String _groupId)
+    public static Task fillGroupInvitedUsersIds(String _groupId)
         throws FailJsonFetchException
     {
-        List<String> groupInvitedUsersIds = new ArrayList<>();
-        String jsonString = "";
-        JsonFetcher jsonFetcher = new JsonFetcher();
-        JsonParser jsonParser = new JsonParser();
-        
-        jsonString = jsonFetcher.fetchByUrl(
-            "http://1-dot-comradfinder.appspot.com/comradfinder?action=get-ivited-users&groupid=" + _groupId
-        );
-        JSONArray users = jsonParser.parseGAEIvitedUsers(jsonString);
-
-        System.out.println("http://1-dot-comradfinder.appspot.com/comradfinder?action=get-ivited-users&groupid=" + _groupId);
-        System.out.println(jsonString);
-        //
-        MainApp.globalModel.groupInvitedUsersIds.clear();
-
-        //перебираем userId
-        for (int i = 0; i < users.length(); i++) {
-
-            //if (i > 5) break;
+        return new Task() {
             
-            JSONObject userDataJSONObject = users.getJSONObject(i);
-            
-            String userId = "";
-            
-            if(userDataJSONObject.has("vkUid"))
-                userId = String.valueOf(userDataJSONObject.getInt("vkUid"));
+            @Override
+            protected Object call() throws Exception {
 
-            //
-            MainApp.globalModel.groupInvitedUsersIds.add(userId);
-        }
+                List<String> groupInvitedUsersIds = new ArrayList<>();
+                String jsonString = "";
+                JsonFetcher jsonFetcher = new JsonFetcher();
+                JsonParser jsonParser = new JsonParser();
+
+                jsonString = jsonFetcher.fetchByUrl(
+                    "http://1-dot-comradfinder.appspot.com/comradfinder?action=get-ivited-users&groupid=" + _groupId
+                );
+                JSONArray users = jsonParser.parseGAEIvitedUsers(jsonString);
+
+                //System.out.println("http://1-dot-comradfinder.appspot.com/comradfinder?action=get-ivited-users&groupid=" + _groupId);
+                //System.out.println(jsonString);
+                //
+                MainApp.globalModel.groupInvitedUsersIds.clear();
+
+                //перебираем userId
+                for (int i = 0; i < users.length(); i++) {
+
+                    //if (i > 5) break;
+
+                    JSONObject userDataJSONObject = users.getJSONObject(i);
+
+                    String userId = "";
+
+                    if(userDataJSONObject.has("vkUid"))
+                        userId = String.valueOf(userDataJSONObject.getInt("vkUid"));
+
+                    //
+                    MainApp.globalModel.groupInvitedUsersIds.add(userId);
+                }
+                
+                return true;
+            }
+        };
     }
     
     public static boolean addGroupInvitedUser(String _groupId, VKCandidate _vKCandidate)
