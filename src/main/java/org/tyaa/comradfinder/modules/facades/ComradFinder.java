@@ -143,7 +143,7 @@ public class ComradFinder {
                             Integer userId =
                                 Integer.parseInt(userIdString);
                                 //(JSONObject)((JSONArray)usersItems.get(i)).get(0);
-                            //out.println(userId);
+                            out.println(userIdString);
 
                             //Рассматриваем кандидатуру пользователя с текущим
                             //идент-м только если он:
@@ -220,6 +220,8 @@ public class ComradFinder {
 
                                 for (Map.Entry<String, Integer> religionItem : typicalWords.mReligionMap.entrySet()) {
 
+                                    out.println("rel1 " + vKUser.getReligion());
+                                    out.println("rel2 " + religionItem.getKey());
                                     if (vKUser.getReligion().contains(religionItem.getKey())) {
                                         score += religionItem.getValue();
                                     }
@@ -260,10 +262,12 @@ public class ComradFinder {
                                     }
                                 }
 
+                                out.println("qwe1" + ((JSONObject)usersItems.get(i)).get("uid"));
                                 //Если набранные пользователем баллы больше нуля,
                                 //заносим его в кандидаты на приглашение
                                 if (score != 0) {
 
+                                    out.println("qwe2" + ((JSONObject)usersItems.get(i)).get("uid"));
                                     VKCandidate vKCandidate = new VKCandidate();
                                     vKCandidate.setUID((Integer) ((JSONObject)usersItems.get(i)).get("uid"));
                                     vKCandidate.setFirstName((String) ((JSONObject)usersItems.get(i)).get("first_name"));

@@ -8,6 +8,7 @@ package org.tyaa.comradfinder.modules;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import static java.lang.System.out;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import org.tyaa.comradfinder.modules.exception.FailJsonFetchException;
@@ -35,8 +36,26 @@ public class JsonFetcher
             urlConnection.setRequestMethod("GET");
             urlConnection.setRequestProperty("Accept-Charset", "UTF-8");
             urlConnection.setRequestProperty("charset", "UTF-8");
-            urlConnection.connect();
+            
+            
+            int tryCounter = 0;
+            while (tryCounter < 30) {                
+                
+                try {
 
+                    tryCounter++;
+                    urlConnection.connect();
+                    break;
+                } catch (Exception ex) {
+                    
+                    if (tryCounter > 29) {
+                        
+                        out.println("Great fatal net error!");
+                        throw ex;
+                    }
+                }
+            }
+            
             InputStream inputStream = urlConnection.getInputStream();
             StringBuffer buffer = new StringBuffer();
 
