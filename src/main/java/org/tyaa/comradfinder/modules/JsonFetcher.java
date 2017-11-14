@@ -31,7 +31,7 @@ public class JsonFetcher
         try {
             
             URL url = new URL(_urlString);
-
+            System.out.println("_urlString = " + _urlString);
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.setRequestProperty("Accept-Charset", "UTF-8");

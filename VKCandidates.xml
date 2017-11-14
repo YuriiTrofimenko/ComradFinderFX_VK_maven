@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <candidates>
-  <candidate id="248323398">
-    <fname>Вячеслав</fname>
-    <lname>Черевко</lname>
-    <score>19</score>
-  </candidate>
   <candidate id="226116961">
     <fname>Тоха</fname>
     <lname>Губарь</lname>
-    <score>14</score>
+    <score>205</score>
+  </candidate>
+  <candidate id="248323398">
+    <fname>Вячеслав</fname>
+    <lname>Черевко</lname>
+    <score>141</score>
   </candidate>
   <candidate id="201378344">
     <fname>Паша</fname>
     <lname>Мироненко</lname>
-    <score>2</score>
+    <score>124</score>
+  </candidate>
+  <candidate id="37132500">
+    <fname>Георгий</fname>
+    <lname>Бережной</lname>
+    <score>78</score>
   </candidate>
 </candidates>

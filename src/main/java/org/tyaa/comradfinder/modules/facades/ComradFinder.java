@@ -114,7 +114,7 @@ public class ComradFinder {
                         //с заданными страной и городом
                         /* tested with parameters values country=2&city=455*/
                         jsonString = jsonFetcher.fetchByUrl(
-                            "https://api.vk.com/method/users.search?access_token=5e8976369e5ba9ffa778029ccd5792e36b99c236870d62f1e4b442af1b5bdd1c360d25fa264daafb6288d&photo=1&count=1000"
+                            "https://api.vk.com/method/users.search?access_token=d7fb9514f94034d935117ee8b0416018a4cbddf070232e7f961bc84a82baa0b278815effa3b58aa22687b&photo=1&count=1000"
                                 + "&status="
                                 + statusString
                                 + "&country="

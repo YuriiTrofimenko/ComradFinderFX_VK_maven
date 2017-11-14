@@ -145,8 +145,10 @@ public class JsonParser
 
         try {
             JSONObject responseJSONObject = new JSONObject(_jsonString);
+            
             items = responseJSONObject.getJSONArray("response");
         } catch (JSONException e) {
+            System.out.println("_jsonString = " + _jsonString);
             e.printStackTrace();
         }
         
