@@ -5,20 +5,16 @@
  */
 package org.tyaa.comradfinder.modules.facades;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import static java.lang.System.out;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.concurrent.Task;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.stream.XMLStreamException;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.tyaa.comradfinder.Globals;
 import org.tyaa.comradfinder.MainApp;
 import org.tyaa.comradfinder.model.TypicalWords;
 import org.tyaa.comradfinder.model.VKCandidate;
@@ -26,13 +22,10 @@ import org.tyaa.comradfinder.model.VKCity;
 import org.tyaa.comradfinder.model.VKCountry;
 import org.tyaa.comradfinder.model.VKRegion;
 import org.tyaa.comradfinder.model.VKUser;
-import org.tyaa.comradfinder.modules.ExcelSaver;
 import org.tyaa.comradfinder.modules.JsonFetcher;
 import org.tyaa.comradfinder.modules.JsonParser;
 import org.tyaa.comradfinder.modules.XmlExporter;
-import org.tyaa.comradfinder.modules.XmlImporter;
 import org.tyaa.comradfinder.modules.exception.FailJsonFetchException;
-import org.xml.sax.SAXException;
 
 /**
  *
@@ -114,7 +107,8 @@ public class ComradFinder {
                         //с заданными страной и городом
                         /* tested with parameters values country=2&city=455*/
                         jsonString = jsonFetcher.fetchByUrl(
-                            "https://api.vk.com/method/users.search?access_token=d7fb9514f94034d935117ee8b0416018a4cbddf070232e7f961bc84a82baa0b278815effa3b58aa22687b&photo=1&count=1000"
+                            Globals.BASE_VK_API_URL + "/method/users.search"
+                                +"?photo=1&count=1000"
                                 + "&status="
                                 + statusString
                                 + "&country="
@@ -127,6 +121,8 @@ public class ComradFinder {
                                 + age2
                                 + "&sex="
                                 + sex
+                                + "&" + Globals.ACCESS_TOCKEN
+                                + "&" + Globals.VK_API_VERSION
                         );
 
                         JSONArray usersItems = jsonParser.parseVKSearch(jsonString);
@@ -153,10 +149,12 @@ public class ComradFinder {
                                 && !MainApp.globalModel.groupInvitedUsersIds.contains(userIdString)) {
                                 //Получаем более полную информацию о текущем пользователе
                                 jsonString = jsonFetcher.fetchByUrl(
-                                    "https://api.vk.com/method/users.get"
+                                    Globals.BASE_VK_API_URL + "/method/users.get"
                                     +"?user_ids="
                                     + userId
                                     +"&fields=about,activities,interests,personal,books,music,movies"
+                                    + "&" + Globals.ACCESS_TOCKEN
+                                    + "&" + Globals.VK_API_VERSION
                                 );
                                 //out.println(jsonString);
 
@@ -262,12 +260,12 @@ public class ComradFinder {
                                     }
                                 }
 
-                                out.println("qwe1" + ((JSONObject)usersItems.get(i)).get("uid"));
+                                //out.println("qwe1" + ((JSONObject)usersItems.get(i)).get("uid"));
                                 //Если набранные пользователем баллы больше нуля,
                                 //заносим его в кандидаты на приглашение
                                 if (score != 0) {
 
-                                    out.println("qwe2" + ((JSONObject)usersItems.get(i)).get("uid"));
+                                    //out.println("qwe2" + ((JSONObject)usersItems.get(i)).get("uid"));
                                     VKCandidate vKCandidate = new VKCandidate();
                                     vKCandidate.setUID((Integer) ((JSONObject)usersItems.get(i)).get("uid"));
                                     vKCandidate.setFirstName((String) ((JSONObject)usersItems.get(i)).get("first_name"));
@@ -279,6 +277,7 @@ public class ComradFinder {
                             }
                             updateProgress(i, usersItems.length());
                         }
+                        Thread.sleep(1000);
                     }
 
 
@@ -321,7 +320,10 @@ public class ComradFinder {
         List<VKCountry> mVKCountries = new ArrayList<>();
         
         jsonString = jsonFetcher.fetchByUrl(
-            "https://api.vk.com/method/database.getCountries?need_all=1&count=1000"
+            Globals.BASE_VK_API_URL + "/method/database.getCountries"
+                + "?need_all=1&count=1000"
+                + "&" + Globals.ACCESS_TOCKEN
+                + "&" + Globals.VK_API_VERSION
         );
         
         JSONArray countriesItems = jsonParser.parseVKSearch(jsonString);
@@ -348,7 +350,11 @@ public class ComradFinder {
         List<VKRegion> mVKRegions = new ArrayList<>();
         
         jsonString = jsonFetcher.fetchByUrl(
-            "https://api.vk.com/method/database.getRegions?country_id=" + _countryId + "&count=1000"
+            Globals.BASE_VK_API_URL + "/method/database.getRegions"
+                +"?country_id=" + _countryId
+                + "&count=1000"
+                + "&" + Globals.ACCESS_TOCKEN
+                + "&" + Globals.VK_API_VERSION
         );
         
         JSONArray regionsItems = jsonParser.parseVKSearch(jsonString);
@@ -379,22 +385,28 @@ public class ComradFinder {
             //System.out.println("_q " + _q);
             //https://api.vk.com/method/database.getCities?country_id=1&region_id=1053480&q=%D0%BC%D0%BE&need_all=1&count=1000
             jsonString = jsonFetcher.fetchByUrl(
-                "https://api.vk.com/method/database.getCities?country_id="
+                Globals.BASE_VK_API_URL + "/method/database.getCities"
+                    +"?country_id="
                     + _countryId
                     + "&region_id="
                     + _regionId
                     + "&q="
                     + q
                     + "&need_all=1&count=1000"
+                    + "&" + Globals.ACCESS_TOCKEN
+                    + "&" + Globals.VK_API_VERSION
             );
         } else {
         
             jsonString = jsonFetcher.fetchByUrl(
-                "https://api.vk.com/method/database.getCities?country_id="
+                Globals.BASE_VK_API_URL + "/method/database.getCities"
+                    +"?country_id="
                     + _countryId
                     + "&region_id="
                     + _regionId
                     + "&need_all=1&count=1000"
+                    + "&" + Globals.ACCESS_TOCKEN
+                    + "&" + Globals.VK_API_VERSION
             );
         }
         

@@ -7,7 +7,6 @@ package org.tyaa.comradfinder.modules.facades;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import static java.lang.System.out;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,13 +15,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import javafx.concurrent.Task;
 import javax.xml.stream.XMLStreamException;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.tyaa.comradfinder.Globals;
 import org.tyaa.comradfinder.MainApp;
 import org.tyaa.comradfinder.model.TypicalWords;
 import org.tyaa.comradfinder.model.VKCandidate;
@@ -80,7 +78,11 @@ public class ModelBuilder {
                 //java.net.UnknownHostException
                 //cult_rev
                 jsonString = jsonFetcher.fetchByUrl(
-                    "https://api.vk.com/method/groups.getMembers?group_id=" + _groupId
+                    Globals.BASE_VK_API_URL
+                        + "/method/groups.getMembers"
+                        +"?group_id=" + _groupId
+                        + "&" + Globals.ACCESS_TOCKEN
+                        + "&" + Globals.VK_API_VERSION
                 );
                 JSONArray usersIds = jsonParser.parseVKGroup(jsonString);
                 
@@ -99,10 +101,11 @@ public class ModelBuilder {
 
                     //Получаем более полную информацию о текущем пользователе
                     jsonString = jsonFetcher.fetchByUrl(
-                        "https://api.vk.com/method/users.get"
-                        +"?user_ids="
-                        + userId
-                        +"&fields=about,activities,interests,personal,books,music,movies"
+                        Globals.BASE_VK_API_URL + "/method/users.get"
+                        + "?user_ids=" + userId
+                        + "&fields=about,activities,interests,personal,books,music,movies"
+                        + "&" + Globals.ACCESS_TOCKEN
+                        + "&" + Globals.VK_API_VERSION
                     );
                     //out.println(jsonString);
 
@@ -554,7 +557,11 @@ public class ModelBuilder {
                 JsonParser jsonParser = new JsonParser();
 
                 jsonString = jsonFetcher.fetchByUrl(
-                    "https://api.vk.com/method/groups.getMembers?group_id=" + _groupId
+                    Globals.BASE_VK_API_URL + "/method/groups.getMembers"
+                        +"?group_id=" + _groupId
+                        + "&" + Globals.ACCESS_TOCKEN
+                        + "&" + Globals.VK_API_VERSION
+                        
                 );
                 JSONArray usersIds = jsonParser.parseVKGroup(jsonString);
 

@@ -1,23 +1,768 @@
 <?xml version="1.0" encoding="utf-8"?>
 <candidates>
-  <candidate id="226116961">
-    <fname>Тоха</fname>
+  <candidate id="166532907">
+    <fname>Валерия</fname>
+    <lname>Винченко</lname>
+    <score>240</score>
+  </candidate>
+  <candidate id="232793437">
+    <fname>Вика</fname>
+    <lname>Дигтярь</lname>
+    <score>219</score>
+  </candidate>
+  <candidate id="243263151">
+    <fname>Ангелина</fname>
+    <lname>Каракосова</lname>
+    <score>211</score>
+  </candidate>
+  <candidate id="231612370">
+    <fname>Вера</fname>
+    <lname>Долгая</lname>
+    <score>207</score>
+  </candidate>
+  <candidate id="143174968">
+    <fname>Света</fname>
+    <lname>Власова</lname>
+    <score>182</score>
+  </candidate>
+  <candidate id="258178376">
+    <fname>Оля</fname>
+    <lname>Каракачёва</lname>
+    <score>177</score>
+  </candidate>
+  <candidate id="178850665">
+    <fname>Rita</fname>
+    <lname>Romanenko</lname>
+    <score>177</score>
+  </candidate>
+  <candidate id="150083607">
+    <fname>Лера</fname>
+    <lname>Грозная</lname>
+    <score>175</score>
+  </candidate>
+  <candidate id="175281119">
+    <fname>Виктория</fname>
+    <lname>Бобырь</lname>
+    <score>172</score>
+  </candidate>
+  <candidate id="160002010">
+    <fname>Лера</fname>
+    <lname>Алексеева</lname>
+    <score>168</score>
+  </candidate>
+  <candidate id="485825587">
+    <fname>Карина</fname>
+    <lname>Петренко</lname>
+    <score>168</score>
+  </candidate>
+  <candidate id="409454010">
+    <fname>Алёна</fname>
+    <lname>Ткаченко</lname>
+    <score>160</score>
+  </candidate>
+  <candidate id="471060666">
+    <fname>Alisa</fname>
+    <lname>Fox</lname>
+    <score>156</score>
+  </candidate>
+  <candidate id="63238167">
+    <fname>Наташа</fname>
+    <lname>Никулина</lname>
+    <score>50</score>
+  </candidate>
+  <candidate id="279173811">
+    <fname>Анастасия</fname>
+    <lname>Демченко</lname>
+    <score>48</score>
+  </candidate>
+  <candidate id="136323275">
+    <fname>Динуська</fname>
+    <lname>Игнатенко</lname>
+    <score>47</score>
+  </candidate>
+  <candidate id="139771948">
+    <fname>Юля</fname>
+    <lname>Ставицкая</lname>
+    <score>46</score>
+  </candidate>
+  <candidate id="172512154">
+    <fname>Ната</fname>
+    <lname>Нарядная</lname>
+    <score>46</score>
+  </candidate>
+  <candidate id="217827062">
+    <fname>Рита</fname>
+    <lname>Пуличукова</lname>
+    <score>46</score>
+  </candidate>
+  <candidate id="342834036">
+    <fname>Вероника</fname>
+    <lname>Герасина</lname>
+    <score>43</score>
+  </candidate>
+  <candidate id="253891322">
+    <fname>Анастасия</fname>
+    <lname>Мешкова</lname>
+    <score>42</score>
+  </candidate>
+  <candidate id="181799035">
+    <fname>Танічка</fname>
+    <lname>Качанюк</lname>
+    <score>40</score>
+  </candidate>
+  <candidate id="244495057">
+    <fname>Мария</fname>
+    <lname>Боцарова</lname>
+    <score>40</score>
+  </candidate>
+  <candidate id="101821682">
+    <fname>Надя</fname>
+    <lname>Чернявская</lname>
+    <score>40</score>
+  </candidate>
+  <candidate id="168360460">
+    <fname>Натуська</fname>
+    <lname>Юдина</lname>
+    <score>40</score>
+  </candidate>
+  <candidate id="243669542">
+    <fname>Зинаида</fname>
+    <lname>Корженюк</lname>
+    <score>40</score>
+  </candidate>
+  <candidate id="274781461">
+    <fname>Соня</fname>
+    <lname>Копачёва</lname>
+    <score>40</score>
+  </candidate>
+  <candidate id="229613420">
+    <fname>Алиса</fname>
+    <lname>Рунина</lname>
+    <score>38</score>
+  </candidate>
+  <candidate id="175073414">
+    <fname>Элария</fname>
+    <lname>Старкова</lname>
+    <score>37</score>
+  </candidate>
+  <candidate id="217853348">
+    <fname>Мария</fname>
+    <lname>Платошина</lname>
+    <score>35</score>
+  </candidate>
+  <candidate id="165504478">
+    <fname>Оля</fname>
+    <lname>Івасик</lname>
+    <score>34</score>
+  </candidate>
+  <candidate id="197229961">
+    <fname>Анастасия</fname>
+    <lname>Солнцева</lname>
+    <score>34</score>
+  </candidate>
+  <candidate id="169336136">
+    <fname>Танюшка</fname>
+    <lname>Страчкова</lname>
+    <score>34</score>
+  </candidate>
+  <candidate id="167753638">
+    <fname>Анастасия</fname>
+    <lname>Радачинская</lname>
+    <score>34</score>
+  </candidate>
+  <candidate id="240211920">
+    <fname>Надя</fname>
+    <lname>Дворцевая</lname>
+    <score>34</score>
+  </candidate>
+  <candidate id="349997894">
+    <fname>Любовь</fname>
+    <lname>Бурлакова</lname>
+    <score>34</score>
+  </candidate>
+  <candidate id="155741442">
+    <fname>Анастасия</fname>
+    <lname>Плиска</lname>
+    <score>34</score>
+  </candidate>
+  <candidate id="345541694">
+    <fname>Алина</fname>
+    <lname>Войнова</lname>
+    <score>32</score>
+  </candidate>
+  <candidate id="134442719">
+    <fname>Анастасия</fname>
+    <lname>Хрипкова</lname>
+    <score>32</score>
+  </candidate>
+  <candidate id="374243724">
+    <fname>Людмила</fname>
+    <lname>Липунова</lname>
+    <score>32</score>
+  </candidate>
+  <candidate id="184811685">
+    <fname>Алинка</fname>
+    <lname>Нестеренко</lname>
+    <score>31</score>
+  </candidate>
+  <candidate id="133902141">
+    <fname>Диана</fname>
+    <lname>Мержиевская</lname>
+    <score>31</score>
+  </candidate>
+  <candidate id="401053590">
+    <fname>Оля</fname>
+    <lname>Марченко</lname>
+    <score>31</score>
+  </candidate>
+  <candidate id="392097638">
+    <fname>Кристина</fname>
+    <lname>Волкова</lname>
+    <score>31</score>
+  </candidate>
+  <candidate id="255242990">
+    <fname>Даша</fname>
+    <lname>Гайчева</lname>
+    <score>31</score>
+  </candidate>
+  <candidate id="227635578">
+    <fname>Оля</fname>
+    <lname>Попруженко</lname>
+    <score>30</score>
+  </candidate>
+  <candidate id="193830280">
+    <fname>Лилия</fname>
+    <lname>Слипченко</lname>
+    <score>29</score>
+  </candidate>
+  <candidate id="191736870">
+    <fname>Анюточка</fname>
+    <lname>Власова</lname>
+    <score>29</score>
+  </candidate>
+  <candidate id="175411799">
+    <fname>Кира</fname>
+    <lname>Остапенко</lname>
+    <score>28</score>
+  </candidate>
+  <candidate id="168242542">
+    <fname>Александра</fname>
+    <lname>Смиян</lname>
+    <score>28</score>
+  </candidate>
+  <candidate id="247770201">
+    <fname>Алина</fname>
+    <lname>Зорина</lname>
+    <score>28</score>
+  </candidate>
+  <candidate id="150564925">
+    <fname>Карина</fname>
+    <lname>Сухова</lname>
+    <score>28</score>
+  </candidate>
+  <candidate id="228707185">
+    <fname>Кристина</fname>
+    <lname>Петровская</lname>
+    <score>28</score>
+  </candidate>
+  <candidate id="197594054">
+    <fname>Снежана</fname>
+    <lname>Павлюк</lname>
+    <score>28</score>
+  </candidate>
+  <candidate id="283945493">
+    <fname>Алёна</fname>
+    <lname>Создателева</lname>
+    <score>28</score>
+  </candidate>
+  <candidate id="180745253">
+    <fname>Натали</fname>
+    <lname>Гончаренко</lname>
+    <score>27</score>
+  </candidate>
+  <candidate id="398703979">
+    <fname>Наталья</fname>
+    <lname>Кочеватая</lname>
+    <score>27</score>
+  </candidate>
+  <candidate id="270432684">
+    <fname>Елизавета</fname>
+    <lname>Пономарёва</lname>
+    <score>27</score>
+  </candidate>
+  <candidate id="120458693">
+    <fname>Лиза</fname>
+    <lname>Бизякина</lname>
+    <score>27</score>
+  </candidate>
+  <candidate id="185714410">
+    <fname>Тоня</fname>
+    <lname>Лобода</lname>
+    <score>27</score>
+  </candidate>
+  <candidate id="479293013">
+    <fname>Кристина</fname>
+    <lname>Ангелис</lname>
+    <score>27</score>
+  </candidate>
+  <candidate id="217340001">
+    <fname>Аня</fname>
+    <lname>Гызылова</lname>
+    <score>27</score>
+  </candidate>
+  <candidate id="210081192">
+    <fname>Диана</fname>
+    <lname>Холод</lname>
+    <score>27</score>
+  </candidate>
+  <candidate id="88498992">
+    <fname>Дарина</fname>
+    <lname>Дидык</lname>
+    <score>25</score>
+  </candidate>
+  <candidate id="155358138">
+    <fname>Лена</fname>
+    <lname>Калачева</lname>
+    <score>25</score>
+  </candidate>
+  <candidate id="239005193">
+    <fname>Мишель</fname>
+    <lname>Асканели</lname>
+    <score>25</score>
+  </candidate>
+  <candidate id="157235662">
+    <fname>Асия</fname>
+    <lname>Широ</lname>
+    <score>25</score>
+  </candidate>
+  <candidate id="169188121">
+    <fname>Евгения</fname>
+    <lname>Варикова</lname>
+    <score>25</score>
+  </candidate>
+  <candidate id="196104570">
+    <fname>Екатерина</fname>
+    <lname>Ефимцева</lname>
+    <score>25</score>
+  </candidate>
+  <candidate id="301667204">
+    <fname>София</fname>
+    <lname>Шевченко</lname>
+    <score>25</score>
+  </candidate>
+  <candidate id="470426631">
+    <fname>Ульяна</fname>
+    <lname>Смирновская</lname>
+    <score>25</score>
+  </candidate>
+  <candidate id="224850789">
+    <fname>Валерия</fname>
+    <lname>Шаповалова</lname>
+    <score>25</score>
+  </candidate>
+  <candidate id="364317310">
+    <fname>Нинуся</fname>
+    <lname>Борисенко</lname>
+    <score>25</score>
+  </candidate>
+  <candidate id="410203951">
+    <fname>Анна</fname>
+    <lname>Андреева</lname>
+    <score>25</score>
+  </candidate>
+  <candidate id="242220513">
+    <fname>Алина</fname>
+    <lname>Усатенко</lname>
+    <score>25</score>
+  </candidate>
+  <candidate id="219593900">
+    <fname>Вика</fname>
+    <lname>Кузьменко</lname>
+    <score>25</score>
+  </candidate>
+  <candidate id="204756482">
+    <fname>Кристина</fname>
+    <lname>Цицвира</lname>
+    <score>25</score>
+  </candidate>
+  <candidate id="158593216">
+    <fname>Елизавета</fname>
+    <lname>Клименко</lname>
+    <score>25</score>
+  </candidate>
+  <candidate id="308883433">
+    <fname>Dasha</fname>
+    <lname>Parush</lname>
+    <score>25</score>
+  </candidate>
+  <candidate id="168248602">
+    <fname>Маша</fname>
+    <lname>Зеленина</lname>
+    <score>25</score>
+  </candidate>
+  <candidate id="201594526">
+    <fname>Анна</fname>
+    <lname>Мельникова</lname>
+    <score>25</score>
+  </candidate>
+  <candidate id="271328407">
+    <fname>Дарья</fname>
+    <lname>Бердникова</lname>
+    <score>24</score>
+  </candidate>
+  <candidate id="254721494">
+    <fname>Олечка</fname>
+    <lname>Тороус</lname>
+    <score>24</score>
+  </candidate>
+  <candidate id="374890901">
+    <fname>Карина</fname>
+    <lname>Сотова</lname>
+    <score>24</score>
+  </candidate>
+  <candidate id="156328714">
+    <fname>Анастасия</fname>
+    <lname>Блокова</lname>
+    <score>23</score>
+  </candidate>
+  <candidate id="91431723">
+    <fname>Мария</fname>
+    <lname>Горячева</lname>
+    <score>22</score>
+  </candidate>
+  <candidate id="263566989">
+    <fname>Лилит</fname>
+    <lname>Павленко</lname>
+    <score>21</score>
+  </candidate>
+  <candidate id="305873688">
+    <fname>Анастасия</fname>
+    <lname>Власова</lname>
+    <score>21</score>
+  </candidate>
+  <candidate id="181662185">
+    <fname>Богданка</fname>
+    <lname>Самойлова</lname>
+    <score>21</score>
+  </candidate>
+  <candidate id="277902939">
+    <fname>Марьяна</fname>
+    <lname>Ротер</lname>
+    <score>21</score>
+  </candidate>
+  <candidate id="74198254">
+    <fname>Юлия</fname>
+    <lname>Максимова</lname>
+    <score>20</score>
+  </candidate>
+  <candidate id="462576581">
+    <fname>Милана</fname>
+    <lname>Цимбал</lname>
+    <score>20</score>
+  </candidate>
+  <candidate id="229662408">
+    <fname>Кристина</fname>
+    <lname>Савельева</lname>
+    <score>20</score>
+  </candidate>
+  <candidate id="141856286">
+    <fname>Полина</fname>
+    <lname>Ковальчук</lname>
+    <score>20</score>
+  </candidate>
+  <candidate id="280234734">
+    <fname>Ариша</fname>
+    <lname>Ильченко</lname>
+    <score>20</score>
+  </candidate>
+  <candidate id="250597395">
+    <fname>Кристина</fname>
+    <lname>Вдовенко</lname>
+    <score>20</score>
+  </candidate>
+  <candidate id="212052998">
+    <fname>Алина</fname>
+    <lname>Петренко</lname>
+    <score>20</score>
+  </candidate>
+  <candidate id="278481076">
+    <fname>Наташа</fname>
+    <lname>Алексеева</lname>
+    <score>20</score>
+  </candidate>
+  <candidate id="239346244">
+    <fname>Валерия</fname>
+    <lname>Яковлева</lname>
+    <score>19</score>
+  </candidate>
+  <candidate id="375138225">
+    <fname>Екатерина</fname>
+    <lname>Тузова</lname>
+    <score>19</score>
+  </candidate>
+  <candidate id="249072443">
+    <fname>Валерия</fname>
+    <lname>Курилова</lname>
+    <score>19</score>
+  </candidate>
+  <candidate id="166687375">
+    <fname>Алина</fname>
+    <lname>Кацай</lname>
+    <score>19</score>
+  </candidate>
+  <candidate id="275775360">
+    <fname>Екатерина</fname>
+    <lname>Тузова</lname>
+    <score>19</score>
+  </candidate>
+  <candidate id="161276335">
+    <fname>Кристина</fname>
+    <lname>Вдовенко</lname>
+    <score>19</score>
+  </candidate>
+  <candidate id="153984083">
+    <fname>Вика</fname>
+    <lname>Клименко</lname>
+    <score>19</score>
+  </candidate>
+  <candidate id="501569351">
+    <fname>Татьяна</fname>
+    <lname>Алексеевна</lname>
+    <score>19</score>
+  </candidate>
+  <candidate id="231505405">
+    <fname>Камилла</fname>
+    <lname>Ворон</lname>
+    <score>18</score>
+  </candidate>
+  <candidate id="240738563">
+    <fname>Милана</fname>
+    <lname>Яценко</lname>
+    <score>18</score>
+  </candidate>
+  <candidate id="143019402">
+    <fname>Виктория</fname>
+    <lname>Козак</lname>
+    <score>17</score>
+  </candidate>
+  <candidate id="149178933">
+    <fname>Лена</fname>
+    <lname>Самокиша</lname>
+    <score>16</score>
+  </candidate>
+  <candidate id="239718217">
+    <fname>Ирина</fname>
+    <lname>Соколовская</lname>
+    <score>16</score>
+  </candidate>
+  <candidate id="275393954">
+    <fname>Анютка</fname>
+    <lname>Савченко</lname>
+    <score>15</score>
+  </candidate>
+  <candidate id="250460050">
+    <fname>Илона</fname>
+    <lname>Любищева</lname>
+    <score>15</score>
+  </candidate>
+  <candidate id="248113681">
+    <fname>Дария</fname>
+    <lname>Карташова</lname>
+    <score>14</score>
+  </candidate>
+  <candidate id="168044149">
+    <fname>Ольга</fname>
+    <lname>Марченко</lname>
+    <score>13</score>
+  </candidate>
+  <candidate id="237762738">
+    <fname>Викулик</fname>
+    <lname>Карпенко</lname>
+    <score>13</score>
+  </candidate>
+  <candidate id="238124062">
+    <fname>София</fname>
     <lname>Губарь</lname>
-    <score>205</score>
+    <score>13</score>
   </candidate>
-  <candidate id="248323398">
-    <fname>Вячеслав</fname>
-    <lname>Черевко</lname>
-    <score>141</score>
+  <candidate id="209556649">
+    <fname>Карина</fname>
+    <lname>Швецкая</lname>
+    <score>13</score>
   </candidate>
-  <candidate id="201378344">
-    <fname>Паша</fname>
-    <lname>Мироненко</lname>
-    <score>124</score>
+  <candidate id="228797377">
+    <fname>Олександра</fname>
+    <lname>Пуляева</lname>
+    <score>13</score>
   </candidate>
-  <candidate id="37132500">
-    <fname>Георгий</fname>
-    <lname>Бережной</lname>
-    <score>78</score>
+  <candidate id="154931831">
+    <fname>Лера</fname>
+    <lname>Даниленко</lname>
+    <score>13</score>
+  </candidate>
+  <candidate id="376275674">
+    <fname>Нора</fname>
+    <lname>Волкова</lname>
+    <score>13</score>
+  </candidate>
+  <candidate id="161489713">
+    <fname>Анастасия</fname>
+    <lname>Бородулина</lname>
+    <score>12</score>
+  </candidate>
+  <candidate id="385134659">
+    <fname>Skiniya</fname>
+    <lname>Svytogo-Duha</lname>
+    <score>12</score>
+  </candidate>
+  <candidate id="238803018">
+    <fname>Мария</fname>
+    <lname>Овчар</lname>
+    <score>11</score>
+  </candidate>
+  <candidate id="164453917">
+    <fname>Каролина</fname>
+    <lname>Болховитина</lname>
+    <score>11</score>
+  </candidate>
+  <candidate id="307161397">
+    <fname>Ася</fname>
+    <lname>Малая</lname>
+    <score>11</score>
+  </candidate>
+  <candidate id="254352644">
+    <fname>Милана</fname>
+    <lname>Сиренева</lname>
+    <score>11</score>
+  </candidate>
+  <candidate id="258358075">
+    <fname>Влада</fname>
+    <lname>Ермакова</lname>
+    <score>10</score>
+  </candidate>
+  <candidate id="104790796">
+    <fname>Анастасия</fname>
+    <lname>Романюк</lname>
+    <score>9</score>
+  </candidate>
+  <candidate id="160945765">
+    <fname>Лилиана</fname>
+    <lname>Мудренко</lname>
+    <score>9</score>
+  </candidate>
+  <candidate id="478491072">
+    <fname>Лера</fname>
+    <lname>Власова</lname>
+    <score>9</score>
+  </candidate>
+  <candidate id="234885168">
+    <fname>Кристина</fname>
+    <lname>Гильдман</lname>
+    <score>9</score>
+  </candidate>
+  <candidate id="347716452">
+    <fname>Анна</fname>
+    <lname>Ранковская</lname>
+    <score>9</score>
+  </candidate>
+  <candidate id="242500395">
+    <fname>Сашенька</fname>
+    <lname>Острянина</lname>
+    <score>9</score>
+  </candidate>
+  <candidate id="221326963">
+    <fname>Валерия</fname>
+    <lname>Дешко</lname>
+    <score>9</score>
+  </candidate>
+  <candidate id="375123547">
+    <fname>Аполлинария</fname>
+    <lname>Сямина</lname>
+    <score>9</score>
+  </candidate>
+  <candidate id="317091199">
+    <fname>Валерия</fname>
+    <lname>Корнева</lname>
+    <score>8</score>
+  </candidate>
+  <candidate id="136966429">
+    <fname>Галина</fname>
+    <lname>Фомкина</lname>
+    <score>8</score>
+  </candidate>
+  <candidate id="166497266">
+    <fname>Алина</fname>
+    <lname>Вершинская</lname>
+    <score>7</score>
+  </candidate>
+  <candidate id="267341885">
+    <fname>Евгения</fname>
+    <lname>Сокол</lname>
+    <score>7</score>
+  </candidate>
+  <candidate id="167659741">
+    <fname>Елена</fname>
+    <lname>Миронова</lname>
+    <score>6</score>
+  </candidate>
+  <candidate id="200342932">
+    <fname>Юлия</fname>
+    <lname>Рукосуева</lname>
+    <score>6</score>
+  </candidate>
+  <candidate id="109593774">
+    <fname>Ангелина</fname>
+    <lname>Котова</lname>
+    <score>6</score>
+  </candidate>
+  <candidate id="136713882">
+    <fname>Виктория</fname>
+    <lname>Шульц</lname>
+    <score>6</score>
+  </candidate>
+  <candidate id="282521931">
+    <fname>Валерия</fname>
+    <lname>Теленкова</lname>
+    <score>5</score>
+  </candidate>
+  <candidate id="344059500">
+    <fname>Елизавета</fname>
+    <lname>Гронская</lname>
+    <score>5</score>
+  </candidate>
+  <candidate id="195232749">
+    <fname>Настя</fname>
+    <lname>Алексюк</lname>
+    <score>4</score>
+  </candidate>
+  <candidate id="261436784">
+    <fname>Я-Знаю</fname>
+    <lname>Всё-И-Всегда</lname>
+    <score>4</score>
+  </candidate>
+  <candidate id="243052288">
+    <fname>Лариса</fname>
+    <lname>Черкез</lname>
+    <score>3</score>
+  </candidate>
+  <candidate id="237921616">
+    <fname>Алина</fname>
+    <lname>Кирякулова</lname>
+    <score>3</score>
+  </candidate>
+  <candidate id="167862692">
+    <fname>Илона-И-Алина</fname>
+    <lname>Рожко-Шкиндер</lname>
+    <score>3</score>
+  </candidate>
+  <candidate id="157946731">
+    <fname>Вероника</fname>
+    <lname>Катрич</lname>
+    <score>1</score>
+  </candidate>
+  <candidate id="160103911">
+    <fname>Мария</fname>
+    <lname>Бойко</lname>
+    <score>1</score>
   </candidate>
 </candidates>

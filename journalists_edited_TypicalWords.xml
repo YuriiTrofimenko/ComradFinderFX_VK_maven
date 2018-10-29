@@ -41,47 +41,75 @@
       <value>музыка</value>
       <count>20</count>
     </variant>
+	<variant id="11">
+      <value>марксизм</value>
+      <count>25</count>
+    </variant>
+	<variant id="12">
+      <value>коммунизм</value>
+      <count>25</count>
+    </variant>
+	<variant id="13">
+      <value>революция</value>
+      <count>25</count>
+    </variant>
+	<variant id="14">
+      <value>прогресс</value>
+      <count>25</count>
+    </variant>
+	<variant id="15">
+      <value>борьба</value>
+      <count>25</count>
+    </variant>
   </interest>
   <activity>
     <variant id="0">
-      <value>как-нибудь</value>
-      <count>2</count>
-    </variant>
-    <variant id="1">
       <value>школа</value>
       <count>3</count>
     </variant>
-    <variant id="2">
+    <variant id="1">
       <value>фотограф</value>
       <count>3</count>
     </variant>
-    <variant id="3">
+    <variant id="2">
       <value>индивидуальные</value>
       <count>2</count>
     </variant>
-    <variant id="4">
+    <variant id="3">
       <value>pr-специалист</value>
-      <count>2</count>
+      <count>100</count>
     </variant>
-    <variant id="5">
+    <variant id="4">
       <value>работаю</value>
       <count>3</count>
     </variant>
-    <variant id="6">
+    <variant id="5">
       <value>журналист</value>
-      <count>3</count>
+      <count>100</count>
     </variant>
-    <variant id="7">
-      <value>================================</value>
-      <count>2</count>
-    </variant>
-    <variant id="8">
+    <variant id="6">
       <value>организация</value>
       <count>3</count>
     </variant>
-    <variant id="9">
+    <variant id="7">
       <value>член</value>
       <count>2</count>
+    </variant>
+	<variant id="8">
+      <value>ведущий</value>
+      <count>100</count>
+    </variant>
+	<variant id="9">
+      <value>продюсер</value>
+      <count>100</count>
+    </variant>
+	<variant id="10">
+      <value>диктор</value>
+      <count>100</count>
+    </variant>
+	<variant id="11">
+      <value>сми</value>
+      <count>100</count>
     </variant>
   </activity>
   <about>
@@ -125,6 +153,34 @@
       <value>говорю</value>
       <count>5</count>
     </variant>
+	<variant id="10">
+      <value>pr-специалист</value>
+      <count>100</count>
+    </variant>
+    <variant id="11">
+      <value>работаю</value>
+      <count>3</count>
+    </variant>
+    <variant id="12">
+      <value>журналист</value>
+      <count>100</count>
+    </variant>
+	<variant id="13">
+      <value>ведущий</value>
+      <count>100</count>
+    </variant>
+	<variant id="14">
+      <value>продюсер</value>
+      <count>100</count>
+    </variant>
+	<variant id="15">
+      <value>диктор</value>
+      <count>100</count>
+    </variant>
+	<variant id="16">
+      <value>сми</value>
+      <count>100</count>
+    </variant>
   </about>
   <books>
     <variant id="0">
@@ -166,6 +222,42 @@
     <variant id="9">
       <value>гюго</value>
       <count>4</count>
+    </variant>
+	<variant id="10">
+      <value>маркс</value>
+      <count>100</count>
+    </variant>
+	<variant id="11">
+      <value>ленин</value>
+      <count>100</count>
+    </variant>
+	<variant id="12">
+      <value>гегель</value>
+      <count>50</count>
+    </variant>
+	<variant id="13">
+      <value>босенко</value>
+      <count>50</count>
+    </variant>
+	<variant id="14">
+      <value>канарский</value>
+      <count>50</count>
+    </variant>
+	<variant id="15">
+      <value>ильенков</value>
+      <count>50</count>
+    </variant>
+	<variant id="16">
+      <value>семенов</value>
+      <count>50</count>
+    </variant>
+	<variant id="17">
+      <value>бурик</value>
+      <count>50</count>
+    </variant>
+	<variant id="18">
+      <value>ефремов</value>
+      <count>50</count>
     </variant>
   </books>
   <music>
@@ -228,26 +320,22 @@
       <count>7</count>
     </variant>
     <variant id="4">
-      <value>(реж.</value>
-      <count>4</count>
-    </variant>
-    <variant id="5">
       <value>фильмы</value>
       <count>6</count>
     </variant>
-    <variant id="6">
+    <variant id="5">
       <value>любовь</value>
       <count>5</count>
     </variant>
-    <variant id="7">
+    <variant id="6">
       <value>чистого</value>
       <count>3</count>
     </variant>
-    <variant id="8">
+    <variant id="7">
       <value>"хористы"</value>
       <count>3</count>
     </variant>
-    <variant id="9">
+    <variant id="8">
       <value>достучаться</value>
       <count>3</count>
     </variant>
@@ -255,67 +343,23 @@
   <political>
     <variant id="0">
       <value>1</value>
-      <count>2</count>
+      <count>200</count>
     </variant>
     <variant id="1">
       <value>2</value>
-      <count>3</count>
-    </variant>
-    <variant id="2">
-      <value>3</value>
-      <count>11</count>
-    </variant>
-    <variant id="3">
-      <value>4</value>
-      <count>15</count>
-    </variant>
-    <variant id="4">
-      <value>6</value>
-      <count>8</count>
-    </variant>
-    <variant id="5">
-      <value>8</value>
-      <count>10</count>
+      <count>150</count>
     </variant>
   </political>
   <religion>
     <variant id="0">
-      <value>православие</value>
-      <count>14</count>
+      <value>атеист</value>
+      <count>25</count>
     </variant>
     <variant id="1">
-      <value>православные</value>
-      <count>2</count>
-    </variant>
-    <variant id="2">
-      <value>атеист</value>
-      <count>4</count>
-    </variant>
-    <variant id="3">
-      <value>(ч.5</value>
-      <count>1</count>
-    </variant>
-    <variant id="4">
-      <value>православный</value>
-      <count>2</count>
-    </variant>
-    <variant id="5">
       <value>гуманизм</value>
       <count>3</count>
     </variant>
-    <variant id="6">
-      <value>верю</value>
-      <count>4</count>
-    </variant>
-    <variant id="7">
-      <value>от26.09.97</value>
-      <count>1</count>
-    </variant>
-    <variant id="8">
-      <value>есть</value>
-      <count>2</count>
-    </variant>
-    <variant id="9">
+    <variant id="2">
       <value>светский</value>
       <count>3</count>
     </variant>
